@@ -39,7 +39,7 @@ add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 set(PROJECT_SOURCES
     ${srcs}
     ${components}
-    # ${qrcs}
+    ${qrcs}
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -74,7 +74,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     MACOSX_BUNDLE TRUE
-    WIN32_EXECUTABLE TRUE
+    # WIN32_EXECUTABLE TRUE
 )
 
 install(TARGETS ${PROJECT_NAME}
@@ -84,3 +84,6 @@ install(TARGETS ${PROJECT_NAME}
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(${PROJECT_NAME})
 endif()
+
+file(COPY data DESTINATION ${CMAKE_BINARY_DIR}/Debug)
+file(COPY data DESTINATION ${CMAKE_BINARY_DIR})
