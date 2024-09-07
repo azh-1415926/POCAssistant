@@ -1,21 +1,161 @@
-<ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>widget</class>
- <widget class="widget" name="widget" >
-  <property name="geometry" >
+ <widget class="widget" name="widget">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>800</width>
+    <height>600</height>
    </rect>
   </property>
-  <property name="windowTitle" >
-   <string>Form</string>
+  <property name="windowTitle">
+   <string>编译原理小助手</string>
   </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QLabel" name="CurrPage">
+          <property name="text">
+           <string>当前页面</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="CurrIcon">
+          <property name="text">
+           <string>图标</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="CurrInfo">
+          <property name="text">
+           <string>当前用户信息</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QStackedWidget" name="AllPages">
+        <widget class="basepage" name="MainPage">
+         <widget class="clicklabel" name="course">
+          <property name="geometry">
+           <rect>
+            <x>210</x>
+            <y>120</y>
+            <width>151</width>
+            <height>61</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>课程学习</string>
+          </property>
+         </widget>
+         <widget class="clicklabel" name="program">
+          <property name="geometry">
+           <rect>
+            <x>170</x>
+            <y>310</y>
+            <width>54</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>课程实践</string>
+          </property>
+         </widget>
+         <widget class="clicklabel" name="question">
+          <property name="geometry">
+           <rect>
+            <x>460</x>
+            <y>200</y>
+            <width>81</width>
+            <height>51</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>课后习题</string>
+          </property>
+         </widget>
+        </widget>
+        <widget class="coursepage" name="CoursePage"/>
+        <widget class="programpage" name="ProgramPage"/>
+        <widget class="questionpage" name="QuestionPage"/>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="clicklabel" name="HomeIcon">
+          <property name="text">
+           <string>返回主页</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="clicklabel" name="BackIcon">
+          <property name="text">
+           <string>返回上一级</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
  </widget>
- <pixmapfunction></pixmapfunction>
+ <customwidgets>
+  <customwidget>
+   <class>widget</class>
+   <extends>QWidget</extends>
+   <header>widget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>basepage</class>
+   <extends>QWidget</extends>
+   <header>basepage.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>clicklabel</class>
+   <extends>QLabel</extends>
+   <header>clicklabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>coursepage</class>
+   <extends>QWidget</extends>
+   <header>coursepage.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>programpage</class>
+   <extends>QWidget</extends>
+   <header>programpage.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>questionpage</class>
+   <extends>QWidget</extends>
+   <header>questionpage.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
  <connections/>
 </ui>
