@@ -1,4 +1,5 @@
 /build
+/build-wasm
 CMakeLists.txt.user
 /.cache
 /.vscode
