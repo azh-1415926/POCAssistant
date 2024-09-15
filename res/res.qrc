@@ -1,5 +1,13 @@
 <RCC>
-    <qresource prefix="/text">
-        <file alias="test.text">text/test.txt</file>
+    <qresource prefix="/font">
+        <file alias="Alibaba-PuHuiTi-Light.otf">font/Alibaba-PuHuiTi-Light.otf</file>
+    </qresource>
+
+    <qresource prefix="/style">
+        <file alias="Aqua.qss">style/Aqua.qss</file>
+    </qresource>
+
+    <qresource prefix="/sample-code">
+        <file alias="test.cpp">sample-code/test.cpp</file>
     </qresource>
 </RCC>

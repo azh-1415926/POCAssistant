@@ -22,15 +22,23 @@ class widget : public QWidget
         ~widget();
 
     protected:
-        // bool eventFilter(QObject* obj,QEvent* e) override;
+        bool eventFilter(QObject* obj,QEvent* e) override;
 
     public slots:
+        void showLoginPage();
+        void hideLoginPage();
+
         void setPageStatus(const StatusOfPage& status);
         void goToBack();
         void selectPage(int i);
         void selectPage(const clicklabel* label);
 
+    signals:
+        ;
+
     private:
         void initalWidget();
+        void initalTopPages();
+        void initalAllPages();
         void initalMainPage();
 };

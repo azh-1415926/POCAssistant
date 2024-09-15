@@ -14,8 +14,26 @@
    <string>编译原理小助手</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QFrame" name="frame">
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
      </property>
@@ -23,96 +41,356 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <property name="spacing">
+       <number>15</number>
+      </property>
+      <property name="leftMargin">
+       <number>15</number>
+      </property>
+      <property name="topMargin">
+       <number>15</number>
+      </property>
+      <property name="rightMargin">
+       <number>15</number>
+      </property>
+      <property name="bottomMargin">
+       <number>15</number>
+      </property>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QLabel" name="CurrPage">
-          <property name="text">
-           <string>当前页面</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="CurrIcon">
-          <property name="text">
-           <string>图标</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="CurrInfo">
-          <property name="text">
-           <string>当前用户信息</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <widget class="QStackedWidget" name="AllPages">
-        <widget class="basepage" name="MainPage">
-         <widget class="clicklabel" name="course">
-          <property name="geometry">
-           <rect>
-            <x>210</x>
-            <y>120</y>
-            <width>151</width>
-            <height>61</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>课程学习</string>
-          </property>
-         </widget>
-         <widget class="clicklabel" name="program">
-          <property name="geometry">
-           <rect>
-            <x>170</x>
-            <y>310</y>
-            <width>54</width>
-            <height>16</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>课程实践</string>
-          </property>
-         </widget>
-         <widget class="clicklabel" name="question">
-          <property name="geometry">
-           <rect>
-            <x>460</x>
-            <y>200</y>
-            <width>81</width>
-            <height>51</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>课后习题</string>
-          </property>
-         </widget>
+       <widget class="QStackedWidget" name="TopPages">
+        <widget class="basepage" name="Login">
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <spacer name="horizontalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="loginpage" name="LoginPage" native="true"/>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
         </widget>
-        <widget class="coursepage" name="CoursePage"/>
-        <widget class="programpage" name="ProgramPage"/>
-        <widget class="questionpage" name="QuestionPage"/>
+        <widget class="QWidget" name="Main">
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="QLabel" name="CurrPage">
+              <property name="font">
+               <font>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;当前页面&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="CurrIcon">
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>图标</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="CurrInfo">
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>当前用户信息</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QStackedWidget" name="AllPages">
+            <widget class="basepage" name="MainPage">
+             <widget class="QWidget" name="containerOfMain" native="true">
+              <property name="geometry">
+               <rect>
+                <x>30</x>
+                <y>70</y>
+                <width>703</width>
+                <height>371</height>
+               </rect>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QWidget#containerOfMain
+{
+	background-color: rgb(182, 194, 154);
+	border-radius: 10px;
+}
+
+QLabel
+{
+	background-color: rgb(240, 240, 240);
+	border-radius: 15px;
+}</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_5">
+               <item>
+                <layout class="QGridLayout" name="gridLayout" rowstretch="1,2,1" columnstretch="1,1,1" rowminimumheight="1,2,1" columnminimumwidth="1,1,1">
+                 <property name="leftMargin">
+                  <number>20</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>30</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>20</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>30</number>
+                 </property>
+                 <property name="spacing">
+                  <number>20</number>
+                 </property>
+                 <item row="0" column="2">
+                  <widget class="clicklabel" name="test">
+                   <property name="font">
+                    <font>
+                     <bold>true</bold>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;在线测试&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QLabel" name="label_2">
+                   <property name="text">
+                    <string>在线编写代码并运行，结合所学的知识，加以运用</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                   <property name="indent">
+                    <number>10</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="label">
+                   <property name="text">
+                    <string>系统学习编译原理知识，以便于在后续实验、测试中如鱼得水</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                   <property name="indent">
+                    <number>10</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="clicklabel" name="program">
+                   <property name="font">
+                    <font>
+                     <bold>true</bold>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;在线实验&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="0">
+                  <widget class="clicklabel" name="course">
+                   <property name="font">
+                    <font>
+                     <bold>true</bold>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;在线学习&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="2">
+                  <widget class="QLabel" name="label_3">
+                   <property name="text">
+                    <string>完成编译原理的课程练习，加深巩固理论知识</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                   <property name="indent">
+                    <number>10</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="iconOfCourse">
+                   <property name="text">
+                    <string>icon1</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="QLabel" name="iconOfProgram">
+                   <property name="text">
+                    <string>icon2</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="2">
+                  <widget class="QLabel" name="iconOfQuestion">
+                   <property name="text">
+                    <string>icon3</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+            <widget class="coursepage" name="CoursePage"/>
+            <widget class="programpage" name="ProgramPage"/>
+            <widget class="questionpage" name="TestPage"/>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <widget class="clicklabel" name="HomeIcon">
+              <property name="font">
+               <font>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;返回主页&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="clicklabel" name="BackIcon">
+              <property name="font">
+               <font>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;返回上一级&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
        </widget>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <widget class="clicklabel" name="HomeIcon">
-          <property name="text">
-           <string>返回主页</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="clicklabel" name="BackIcon">
-          <property name="text">
-           <string>返回上一级</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
       </item>
      </layout>
     </widget>
@@ -120,6 +398,12 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>programpage</class>
+   <extends>QWidget</extends>
+   <header>programpage.h</header>
+   <container>1</container>
+  </customwidget>
   <customwidget>
    <class>widget</class>
    <extends>QWidget</extends>
@@ -144,18 +428,20 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>programpage</class>
-   <extends>QWidget</extends>
-   <header>programpage.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>questionpage</class>
    <extends>QWidget</extends>
    <header>questionpage.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>loginpage</class>
+   <extends>QWidget</extends>
+   <header>loginpage.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../res/res.qrc"/>
+ </resources>
  <connections/>
 </ui>

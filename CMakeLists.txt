@@ -9,23 +9,20 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # 请自行填写 qt 工具链所在路径
-set(CMAKE_PREFIX_PATH "D:/Qt/6.5.3/msvc2019_64") # Qt Kit Dir
+# set(CMAKE_PREFIX_PATH "D:/Qt/6.5.3/msvc2019_64") # Qt Kit Dir
 
 # 默认使用 Qt6 版本，其次 Qt5(用Qt5的时候不要打开中文路径的题库)
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Network )
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network )
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core5Compat) 
-endif()
-if(WIN32)
-    find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS AxContainer)
 endif()
 
 set(ROOT_DIR .)
 
 # 搜寻源文件
-aux_source_directory(${ROOT_DIR}/src srcs)
-aux_source_directory(${ROOT_DIR}/component components)
+
+file(GLOB_RECURSE srcs ${ROOT_DIR}/src/*.c* ${ROOT_DIR}/src/*.h*)
 file(GLOB_RECURSE qrcs ${CMAKE_CURRENT_SOURCE_DIR}/*.qrc)
 
 # ui 文件路径
@@ -37,7 +34,6 @@ add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 
 set(PROJECT_SOURCES
     ${srcs}
-    ${components}
     ${qrcs}
 )
 
@@ -60,13 +56,8 @@ else()
 endif()
 
 # 链接的头文件、库
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
-target_include_directories(${PROJECT_NAME} PRIVATE ${ROOT_DIR}/component)
-target_include_directories(${PROJECT_NAME} PRIVATE ${ROOT_DIR}/src)
-
-if(WIN32)
-    target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::AxContainer)
-endif()
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network )
+target_include_directories(${PROJECT_NAME} PRIVATE ${ROOT_DIR}/src ${ROOT_DIR}/src/base ${ROOT_DIR}/src/pages ${ROOT_DIR}/src/tools ${ROOT_DIR}/src/modules)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
@@ -83,6 +74,3 @@ install(TARGETS ${PROJECT_NAME}
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(${PROJECT_NAME})
 endif()
-
-file(COPY data DESTINATION ${CMAKE_BINARY_DIR}/Debug)
-file(COPY data DESTINATION ${CMAKE_BINARY_DIR})

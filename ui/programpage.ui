@@ -1,21 +1,134 @@
-<ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>programpage</class>
- <widget class="programpage" name="programpage" >
-  <property name="geometry" >
+ <widget class="programpage" name="programpage">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>528</width>
+    <height>396</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>programpage</string>
   </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QWidget" name="centerWidget" native="true">
+        <widget class="QTextEdit" name="CodeEdit">
+         <property name="geometry">
+          <rect>
+           <x>90</x>
+           <y>60</y>
+           <width>361</width>
+           <height>131</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QWidget" name="horizontalLayoutWidget">
+         <property name="geometry">
+          <rect>
+           <x>40</x>
+           <y>10</y>
+           <width>131</width>
+           <height>41</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>载入示例代码</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBox"/>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QPushButton" name="pushButton">
+         <property name="geometry">
+          <rect>
+           <x>380</x>
+           <y>10</y>
+           <width>75</width>
+           <height>24</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>运行</string>
+         </property>
+        </widget>
+        <widget class="QScrollArea" name="scrollArea">
+         <property name="geometry">
+          <rect>
+           <x>60</x>
+           <y>220</y>
+           <width>391</width>
+           <height>121</height>
+          </rect>
+         </property>
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>372</width>
+            <height>258</height>
+           </rect>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <item>
+            <widget class="QLabel" name="label_2">
+             <property name="text">
+              <string>[proc] 执行命令: D:localScoopshimscmake.EXE --build d:/code/QtProject/POCAssistant/build --config Debug --target ALL_BUILD -j 18 --
+[build] 閫傜敤浜� .NET Framework MSBuild 鐗堟湰 17.10.4+10fbfbf2e
+[build] 
+[build]   Automatic MOC and UIC for target POCAssistant
+[build]   widget.cpp
+[build]   POCAssistant.vcxproj -&gt; D:codeQtProjectPOCAssistantbuildDebugPOCAssistant.exe
+[build]   'pwsh.exe' 涓嶆槸鍐呴儴鎴栧�栭儴鍛戒护锛屼篃涓嶆槸鍙�杩愯�岀殑绋嬪簭
+[build]   鎴栨壒澶勭悊鏂囦欢銆�
+[driver] 生成完毕: 00:00:04.010
+[build] 生成已完成，退出代码为 0</string>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
  </widget>
- <pixmapfunction></pixmapfunction>
+ <customwidgets>
+  <customwidget>
+   <class>programpage</class>
+   <extends>QWidget</extends>
+   <header>programpage.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
  <connections/>
 </ui>

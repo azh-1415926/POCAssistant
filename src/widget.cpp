@@ -1,22 +1,67 @@
 #include "widget.h"
 #include "ui_widget.h"
 
+#include "basesocket.h"
+
+#define RegisterPage(pageName) \
+    connect(pageName,&basepage::refreshStatus,this,&widget::setPageStatus); \
+    connect(pageName,&basepage::logon,this,&widget::hideLoginPage); \
+    connect(pageName,&basepage::logoff,this,&widget::showLoginPage);
+
+// #define 
+
 widget::widget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::widget)
     , m_FlagOfInit(false)
 {
     initalWidget();
-    initalMainPage();
 
     m_FlagOfInit=true;
+
+    basesocket s;
+    auto socket=s.getInstance();
+
+    QString response;
+    socket->recv(response);
+    
+    qDebug()<<"Recv:"<<response;
 }
 
 widget::~widget()
 {
+    basesocket s;
+    delete s.getInstance();
 }
 
-void widget::setPageStatus(const StatusOfPage& status)
+bool widget::eventFilter(QObject *obj, QEvent *e)
+{
+    if(obj==this&&e->type()==QEvent::Close)
+    {
+        if(ui->TopPages->currentIndex()==1)
+        {
+            e->ignore();
+
+            showLoginPage();
+            
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void widget::showLoginPage()
+{
+    ui->TopPages->setCurrentIndex(0);
+}
+
+void widget::hideLoginPage()
+{
+    ui->TopPages->setCurrentIndex(1);
+}
+
+void widget::setPageStatus(const StatusOfPage &status)
 {
     ui->CurrPage->setText(status.currPage);
     ui->CurrIcon->setPixmap(status.currPage);
@@ -57,22 +102,42 @@ void widget::selectPage(const clicklabel *label)
 void widget::initalWidget()
 {
     ui->setupUi(this);
+    installEventFilter(this);
 
+    ui->frame->setStyleSheet("QFrame#frame{background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(251,102,102, 200), stop:1 rgba(20,196,188, 210));}");
+
+    initalTopPages();
+    initalAllPages();
+
+    showLoginPage();
+}
+
+void widget::initalTopPages()
+{
+    connect(ui->LoginPage,&basepage::logon,this,&widget::hideLoginPage);
+    connect(ui->LoginPage,&basepage::logoff,this,&widget::showLoginPage); 
+}
+
+void widget::initalAllPages()
+{
     connect(ui->HomeIcon,&clicklabel::clicked,this,[=]()
     {
         selectPage(0);
     });
     connect(ui->BackIcon,&clicklabel::clicked,this,&widget::goToBack);
+
+    initalMainPage();
 }
 
 void widget::initalMainPage()
 {
     ui->MainPage->setStatus("主页","");
-    connect(ui->MainPage,&basepage::refreshStatus,this,&widget::setPageStatus);
 
-    connect(ui->CoursePage,&basepage::refreshStatus,this,&widget::setPageStatus);
-    connect(ui->ProgramPage,&basepage::refreshStatus,this,&widget::setPageStatus);
-    connect(ui->QuestionPage,&basepage::refreshStatus,this,&widget::setPageStatus);
+    RegisterPage(ui->MainPage)
+
+    RegisterPage(ui->CoursePage)
+    RegisterPage(ui->ProgramPage)
+    RegisterPage(ui->QuestionPage)
 
     connect(ui->course,&clicklabel::clicked,this,QOverload<const clicklabel*>::of(&widget::selectPage));
     connect(ui->program,&clicklabel::clicked,this,QOverload<const clicklabel*>::of(&widget::selectPage));
