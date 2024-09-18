@@ -180,178 +180,10 @@
           </item>
           <item>
            <widget class="QStackedWidget" name="AllPages">
-            <widget class="basepage" name="MainPage">
-             <widget class="QWidget" name="containerOfMain" native="true">
-              <property name="geometry">
-               <rect>
-                <x>30</x>
-                <y>70</y>
-                <width>703</width>
-                <height>371</height>
-               </rect>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">QWidget#containerOfMain
-{
-	background-color: rgb(182, 194, 154);
-	border-radius: 10px;
-}
-
-QLabel
-{
-	background-color: rgb(240, 240, 240);
-	border-radius: 15px;
-}</string>
-              </property>
-              <layout class="QVBoxLayout" name="verticalLayout_5">
-               <item>
-                <layout class="QGridLayout" name="gridLayout" rowstretch="1,2,1" columnstretch="1,1,1" rowminimumheight="1,2,1" columnminimumwidth="1,1,1">
-                 <property name="leftMargin">
-                  <number>20</number>
-                 </property>
-                 <property name="topMargin">
-                  <number>30</number>
-                 </property>
-                 <property name="rightMargin">
-                  <number>20</number>
-                 </property>
-                 <property name="bottomMargin">
-                  <number>30</number>
-                 </property>
-                 <property name="spacing">
-                  <number>20</number>
-                 </property>
-                 <item row="0" column="2">
-                  <widget class="clicklabel" name="test">
-                   <property name="font">
-                    <font>
-                     <bold>true</bold>
-                    </font>
-                   </property>
-                   <property name="text">
-                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;在线测试&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                   </property>
-                   <property name="alignment">
-                    <set>Qt::AlignCenter</set>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="1">
-                  <widget class="QLabel" name="label_2">
-                   <property name="text">
-                    <string>在线编写代码并运行，结合所学的知识，加以运用</string>
-                   </property>
-                   <property name="alignment">
-                    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-                   </property>
-                   <property name="wordWrap">
-                    <bool>true</bool>
-                   </property>
-                   <property name="indent">
-                    <number>10</number>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="0">
-                  <widget class="QLabel" name="label">
-                   <property name="text">
-                    <string>系统学习编译原理知识，以便于在后续实验、测试中如鱼得水</string>
-                   </property>
-                   <property name="alignment">
-                    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-                   </property>
-                   <property name="wordWrap">
-                    <bool>true</bool>
-                   </property>
-                   <property name="indent">
-                    <number>10</number>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="1">
-                  <widget class="clicklabel" name="program">
-                   <property name="font">
-                    <font>
-                     <bold>true</bold>
-                    </font>
-                   </property>
-                   <property name="text">
-                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;在线实验&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                   </property>
-                   <property name="alignment">
-                    <set>Qt::AlignCenter</set>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="0">
-                  <widget class="clicklabel" name="course">
-                   <property name="font">
-                    <font>
-                     <bold>true</bold>
-                    </font>
-                   </property>
-                   <property name="text">
-                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;在线学习&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                   </property>
-                   <property name="alignment">
-                    <set>Qt::AlignCenter</set>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="2">
-                  <widget class="QLabel" name="label_3">
-                   <property name="text">
-                    <string>完成编译原理的课程练习，加深巩固理论知识</string>
-                   </property>
-                   <property name="alignment">
-                    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-                   </property>
-                   <property name="wordWrap">
-                    <bool>true</bool>
-                   </property>
-                   <property name="indent">
-                    <number>10</number>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="0">
-                  <widget class="QLabel" name="iconOfCourse">
-                   <property name="text">
-                    <string>icon1</string>
-                   </property>
-                   <property name="alignment">
-                    <set>Qt::AlignCenter</set>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="1">
-                  <widget class="QLabel" name="iconOfProgram">
-                   <property name="text">
-                    <string>icon2</string>
-                   </property>
-                   <property name="alignment">
-                    <set>Qt::AlignCenter</set>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="2">
-                  <widget class="QLabel" name="iconOfQuestion">
-                   <property name="text">
-                    <string>icon3</string>
-                   </property>
-                   <property name="alignment">
-                    <set>Qt::AlignCenter</set>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-              </layout>
-             </widget>
-            </widget>
+            <widget class="mainpage" name="MainPage"/>
             <widget class="coursepage" name="CoursePage"/>
             <widget class="programpage" name="ProgramPage"/>
-            <widget class="questionpage" name="TestPage"/>
+            <widget class="quizpage" name="QuizPage"/>
            </widget>
           </item>
           <item>
@@ -428,15 +260,21 @@ QLabel
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>questionpage</class>
-   <extends>QWidget</extends>
-   <header>questionpage.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>loginpage</class>
    <extends>QWidget</extends>
    <header>loginpage.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>mainpage</class>
+   <extends>QWidget</extends>
+   <header>mainpage.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>quizpage</class>
+   <extends>QWidget</extends>
+   <header>quizpage.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

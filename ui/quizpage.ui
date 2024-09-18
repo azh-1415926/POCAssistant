@@ -2,8 +2,8 @@
  <author></author>
  <comment></comment>
  <exportmacro></exportmacro>
- <class>questionpage</class>
- <widget class="questionpage" name="questionpage" >
+ <class>quizpage</class>
+ <widget class="quizpage" name="quizpage" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -13,7 +13,7 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>questionpage</string>
+   <string>quizpage</string>
   </property>
  </widget>
  <pixmapfunction></pixmapfunction>

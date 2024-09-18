@@ -31,7 +31,6 @@ class widget : public QWidget
         void setPageStatus(const StatusOfPage& status);
         void goToBack();
         void selectPage(int i);
-        void selectPage(const clicklabel* label);
 
     signals:
         ;

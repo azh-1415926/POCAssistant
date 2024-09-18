@@ -85,20 +85,6 @@ void widget::selectPage(int i)
     static_cast<basepage*>(page)->select();
 }
 
-void widget::selectPage(const clicklabel *label)
-{
-    static QList<clicklabel*> list=
-    {
-        ui->course,ui->program,ui->question
-    };
-
-    int i=list.indexOf(label);
-    if(i==-1)
-        return;
-
-    selectPage(i+1);
-}
-
 void widget::initalWidget()
 {
     ui->setupUi(this);
@@ -131,17 +117,12 @@ void widget::initalAllPages()
 
 void widget::initalMainPage()
 {
-    ui->MainPage->setStatus("主页","");
-
     RegisterPage(ui->MainPage)
-
     RegisterPage(ui->CoursePage)
     RegisterPage(ui->ProgramPage)
-    RegisterPage(ui->QuestionPage)
+    RegisterPage(ui->QuizPage)
 
-    connect(ui->course,&clicklabel::clicked,this,QOverload<const clicklabel*>::of(&widget::selectPage));
-    connect(ui->program,&clicklabel::clicked,this,QOverload<const clicklabel*>::of(&widget::selectPage));
-    connect(ui->question,&clicklabel::clicked,this,QOverload<const clicklabel*>::of(&widget::selectPage));
+    connect(ui->MainPage,&mainpage::selectPage,this,&widget::selectPage);
 
     selectPage(0);
 }

@@ -3,22 +3,22 @@
 #include "basepage.h"
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class questionpage; }
+namespace Ui { class quizpage; }
 QT_END_NAMESPACE
 
-class questionpage : public basepage
+class quizpage : public basepage
 {
     Q_OBJECT
 
     private:
-        Ui::questionpage* ui;
+        Ui::quizpage* ui;
 
     protected:
         ;
 
     public:
-        explicit questionpage(basepage* parent = nullptr);
-        ~questionpage();
+        explicit quizpage(basepage* parent = nullptr);
+        ~quizpage();
 
     protected:
         // bool eventFilter(QObject* obj,QEvent* e) override;
@@ -32,5 +32,5 @@ class questionpage : public basepage
         ;
 
     private:
-        void initalQuestionPage();
+        void initalquizpage();
 };
