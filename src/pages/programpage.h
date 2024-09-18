@@ -21,7 +21,7 @@ class programpage : public basepage
         ;
 
     public:
-        explicit programpage(basepage* parent = nullptr);
+        explicit programpage(QWidget* parent = nullptr);
         ~programpage();
 
     protected:

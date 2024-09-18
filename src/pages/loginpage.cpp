@@ -1,7 +1,7 @@
 #include "loginpage.h"
 #include "ui_loginpage.h"
 
-loginpage::loginpage(basepage *parent)
+loginpage::loginpage(QWidget *parent)
     : basepage(parent)
     , ui(new Ui::loginpage)
 {

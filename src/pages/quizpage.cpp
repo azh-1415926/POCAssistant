@@ -1,7 +1,7 @@
 #include "quizpage.h"
 #include "ui_quizpage.h"
 
-quizpage::quizpage(basepage *parent)
+quizpage::quizpage(QWidget *parent)
     : basepage("在线测试",parent)
     , ui(new Ui::quizpage)
 {

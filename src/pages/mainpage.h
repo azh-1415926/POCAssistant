@@ -19,7 +19,7 @@ class mainpage : public basepage
         ;
 
     public:
-        explicit mainpage(basepage* parent = nullptr);
+        explicit mainpage(QWidget* parent = nullptr);
         ~mainpage();
 
     protected:

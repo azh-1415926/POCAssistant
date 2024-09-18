@@ -3,7 +3,7 @@
 
 #include <QFile>
 
-programpage::programpage(basepage *parent)
+programpage::programpage(QWidget *parent)
     : basepage("在线实验",parent)
     , ui(new Ui::programpage)
 {

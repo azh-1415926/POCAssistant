@@ -17,7 +17,7 @@ class demo : public basepage
         ;
 
     public:
-        explicit demo(basepage* parent = nullptr);
+        explicit demo(QWidget* parent = nullptr);
         ~demo();
 
     protected:

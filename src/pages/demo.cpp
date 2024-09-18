@@ -1,7 +1,7 @@
 #include "demo.h"
 #include "ui_demo.h"
 
-demo::demo(basepage *parent)
+demo::demo(QWidget *parent)
     : basepage(parent)
     , ui(new Ui::demo)
 {

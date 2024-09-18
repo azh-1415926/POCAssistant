@@ -17,7 +17,7 @@ class coursepage : public basepage
         ;
 
     public:
-        explicit coursepage(basepage* parent = nullptr);
+        explicit coursepage(QWidget* parent = nullptr);
         ~coursepage();
 
     protected:

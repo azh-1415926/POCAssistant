@@ -1,7 +1,7 @@
 #include "coursepage.h"
 #include "ui_coursepage.h"
 
-coursepage::coursepage(basepage *parent)
+coursepage::coursepage(QWidget *parent)
     : basepage("在线学习",parent)
     , ui(new Ui::coursepage)
 {

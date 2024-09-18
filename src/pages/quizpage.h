@@ -17,7 +17,7 @@ class quizpage : public basepage
         ;
 
     public:
-        explicit quizpage(basepage* parent = nullptr);
+        explicit quizpage(QWidget* parent = nullptr);
         ~quizpage();
 
     protected:

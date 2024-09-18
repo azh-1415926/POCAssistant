@@ -7,6 +7,10 @@
         <file alias="Aqua.qss">style/Aqua.qss</file>
     </qresource>
 
+    <qresource prefix="/img">
+        <file alias="background.jpg">img/background.jpg</file>
+    </qresource>
+
     <qresource prefix="/sample-code">
         <file alias="test.cpp">sample-code/test.cpp</file>
     </qresource>

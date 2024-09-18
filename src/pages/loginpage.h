@@ -19,7 +19,7 @@ class loginpage : public basepage
         ;
 
     public:
-        explicit loginpage(basepage* parent = nullptr);
+        explicit loginpage(QWidget* parent = nullptr);
         ~loginpage();
 
     protected:

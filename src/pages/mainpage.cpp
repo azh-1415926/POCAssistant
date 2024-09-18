@@ -1,7 +1,7 @@
 #include "mainpage.h"
 #include "ui_mainpage.h"
 
-mainpage::mainpage(basepage *parent)
+mainpage::mainpage(QWidget *parent)
     : basepage("主页",parent)
     , ui(new Ui::mainpage)
 {
