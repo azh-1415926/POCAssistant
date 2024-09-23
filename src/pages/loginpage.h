@@ -1,7 +1,6 @@
 #pragma once
 
 #include "basepage.h"
-#include "basesocket.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class loginpage; }
@@ -13,7 +12,6 @@ class loginpage : public basepage
 
     private:
         Ui::loginpage* ui;
-        basesocket* s;
 
     protected:
         ;

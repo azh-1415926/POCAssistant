@@ -8,8 +8,6 @@ programpage::programpage(QWidget *parent)
     , ui(new Ui::programpage)
 {
     initalProgramPage();
-    
-    setupEditor();
 }
 
 programpage::~programpage()
@@ -27,6 +25,10 @@ void programpage::back()
 void programpage::initalProgramPage()
 {
     ui->setupUi(this);
+
+    setupEditor();
+
+    ui->optionOfSample->addItems(QStringList()<<"hello"<<"sum");
 }
 
 void programpage::setupEditor()
@@ -40,7 +42,10 @@ void programpage::setupEditor()
 
     highlighter = new Highlighter(ui->CodeEdit->document());
 
-    QFile file(":/sample-code/test.cpp");
-    if (file.open(QFile::ReadOnly | QFile::Text))
-        ui->CodeEdit->setPlainText(file.readAll());
+    connect(ui->optionOfSample,&QComboBox::currentTextChanged,this,[=](const QString& sample)
+    {
+        QFile file(":/sample-code/"+sample+".cpp");
+        if (file.open(QFile::ReadOnly | QFile::Text))
+            ui->CodeEdit->setPlainText(file.readAll());
+    });
 }

@@ -101,7 +101,12 @@ void widget::initalWidget()
 
 void widget::initalTopPages()
 {
-    connect(ui->LoginPage,&basepage::logon,this,&widget::hideLoginPage);
+    connect(ui->LoginPage,&basepage::logon,this,[=](const QString& token)
+    {
+        qDebug()<<"Token:"<<token;
+
+        hideLoginPage();
+    });
     connect(ui->LoginPage,&basepage::logoff,this,&widget::showLoginPage); 
 }
 

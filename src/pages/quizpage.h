@@ -32,5 +32,5 @@ class quizpage : public basepage
         ;
 
     private:
-        void initalquizpage();
+        void initalQuizPage();
 };

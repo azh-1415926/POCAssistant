@@ -150,6 +150,7 @@ class jsonFile : public QObject
             }
             return doc.object();
         }
+        void fromJson(const QString& str) { m_Json=toJson(str); }
         /* 导出为 json 文件 */
         void save(const QString& path)
         {

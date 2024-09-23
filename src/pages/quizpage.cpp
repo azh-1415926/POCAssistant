@@ -5,7 +5,7 @@ quizpage::quizpage(QWidget *parent)
     : basepage("在线测试",parent)
     , ui(new Ui::quizpage)
 {
-    initalquizpage();
+    initalQuizPage();
 }
 
 quizpage::~quizpage()
@@ -20,7 +20,7 @@ void quizpage::back()
 {
 }
 
-void quizpage::initalquizpage()
+void quizpage::initalQuizPage()
 {
     ui->setupUi(this);
 }

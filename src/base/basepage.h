@@ -32,7 +32,7 @@ class basepage : public QWidget
         void back();
 
     signals:
-        void logon();
+        void logon(const QString& token);
         void logoff();
 
         void refreshStatus(const StatusOfPage& status);

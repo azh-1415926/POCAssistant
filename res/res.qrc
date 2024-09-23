@@ -12,6 +12,9 @@
     </qresource>
 
     <qresource prefix="/sample-code">
-        <file alias="test.cpp">sample-code/test.cpp</file>
+        <file alias="hello.cpp">sample-code/hello.cpp</file>
+    </qresource>
+    <qresource prefix="/sample-code">
+        <file alias="sum.cpp">sample-code/sum.cpp</file>
     </qresource>
 </RCC>
