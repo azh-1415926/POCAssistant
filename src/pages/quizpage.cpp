@@ -23,4 +23,9 @@ void quizpage::back()
 void quizpage::initalQuizPage()
 {
     ui->setupUi(this);
+
+    connect(ui->btnOfTest,&QPushButton::clicked,this,[=]()
+    {
+        ui->stackedWidget->setCurrentIndex(1);
+    });
 }
