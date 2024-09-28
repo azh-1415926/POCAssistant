@@ -2,6 +2,8 @@
 
 #include "basepage.h"
 
+#include <QTreeWidget>
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class coursepage; }
 QT_END_NAMESPACE
@@ -20,6 +22,8 @@ class coursepage : public basepage
         explicit coursepage(QWidget* parent = nullptr);
         ~coursepage();
 
+        QString getOutLine(QTreeWidget* w);
+
     protected:
         // bool eventFilter(QObject* obj,QEvent* e) override;
 
@@ -27,6 +31,8 @@ class coursepage : public basepage
         virtual void resetPage();
 
         void back();
+
+        void setOutLine(QString str);
 
     signals:
         ;

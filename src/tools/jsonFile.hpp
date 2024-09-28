@@ -45,6 +45,19 @@ class jsonFile : public QObject
         template<class T1,class T2=T1>
         void add(const QString& key,QList<QPair<T1,T2>> value)
         {
+            QJsonObject obj;
+
+            for(int i=0;i<value.length();i++)
+            {
+                obj.insert(value[i].first,value[i].second);
+            }
+
+            m_Json.insert(key,obj);
+        }
+
+        template<class T1,class T2=T1>
+        void addArray(const QString& key,QList<QPair<T1,T2>> value)
+        {
             QJsonArray array;
             QJsonArray first;
             QJsonArray second;

@@ -1,10 +1,8 @@
-<ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>coursepage</class>
- <widget class="coursepage" name="coursepage" >
-  <property name="geometry" >
+ <widget class="coursepage" name="coursepage">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -12,10 +10,356 @@
     <height>300</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>coursepage</string>
   </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,2">
+      <item>
+       <widget class="QTreeWidget" name="outline">
+        <column>
+         <property name="text">
+          <string>章节</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>名称</string>
+         </property>
+        </column>
+        <item>
+         <property name="text">
+          <string>第一章</string>
+         </property>
+         <property name="text">
+          <string>引论</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>第一节</string>
+          </property>
+          <property name="text">
+           <string>程序设计语言与编译程序的联系</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>第二节</string>
+          </property>
+          <property name="text">
+           <string>编译程序构造及有关概念</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>第三节</string>
+          </property>
+          <property name="text">
+           <string>形式语言与编译实现技术</string>
+          </property>
+         </item>
+        </item>
+        <item>
+         <property name="text">
+          <string>第二章</string>
+         </property>
+         <property name="text">
+          <string>文法与语言</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>第一节</string>
+          </property>
+          <property name="text">
+           <string>符号串与符号串集合</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>第二节</string>
+          </property>
+          <property name="text">
+           <string>文法与语言形式的定义</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>第三节</string>
+          </property>
+          <property name="text">
+           <string>语言的分类</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>第四节</string>
+          </property>
+          <property name="text">
+           <string>文法等价与等价变换</string>
+          </property>
+         </item>
+        </item>
+        <item>
+         <property name="text">
+          <string>第三章</string>
+         </property>
+         <property name="text">
+          <string>词法分析</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>第一节</string>
+          </property>
+          <property name="text">
+           <string>引言</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>第二节</string>
+          </property>
+          <property name="text">
+           <string>正则表达式与有穷状态自动机</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>第三节</string>
+          </property>
+          <property name="text">
+           <string>词法分析程序的实现</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>第四节</string>
+          </property>
+          <property name="text">
+           <string>词法分析程序的自动生成</string>
+          </property>
+         </item>
+        </item>
+        <item>
+         <property name="text">
+          <string>第四章</string>
+         </property>
+         <property name="text">
+          <string>语法分析---自顶向下分析技术</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>第一节</string>
+          </property>
+          <property name="text">
+           <string>引言</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>第二节</string>
+          </property>
+          <property name="text">
+           <string>带回溯的自顶向下的分析技术</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>第三节</string>
+          </property>
+          <property name="text">
+           <string>无回溯的自顶向下分析技术</string>
+          </property>
+         </item>
+        </item>
+        <item>
+         <property name="text">
+          <string>第五章</string>
+         </property>
+         <property name="text">
+          <string>语法分析---自底向上分析技术</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>第一节</string>
+          </property>
+          <property name="text">
+           <string>概述</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>第二节</string>
+          </property>
+          <property name="text">
+           <string>简单优化分析技术</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>第三节</string>
+          </property>
+          <property name="text">
+           <string>算符优先分析技术</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>第四节</string>
+          </property>
+          <property name="text">
+           <string>LR(K) 分析技术</string>
+          </property>
+         </item>
+        </item>
+        <item>
+         <property name="text">
+          <string>第六章</string>
+         </property>
+         <property name="text">
+          <string>语义分析与目标代码生成</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>第一节</string>
+          </property>
+          <property name="text">
+           <string>概述</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>第二节</string>
+          </property>
+          <property name="text">
+           <string>说明部分的分析</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>第三节</string>
+          </property>
+          <property name="text">
+           <string>目标代码的生成</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>第四节</string>
+          </property>
+          <property name="text">
+           <string>源程序的内部中间表示</string>
+          </property>
+         </item>
+        </item>
+        <item>
+         <property name="text">
+          <string>第七章</string>
+         </property>
+         <property name="text">
+          <string>运行环境</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>第一节</string>
+          </property>
+          <property name="text">
+           <string>引言</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>第二节</string>
+          </property>
+          <property name="text">
+           <string>存储分配策略</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>第三节</string>
+          </property>
+          <property name="text">
+           <string>符号表</string>
+          </property>
+         </item>
+        </item>
+        <item>
+         <property name="text">
+          <string>第八章</string>
+         </property>
+         <property name="text">
+          <string>代码优化</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>第一节</string>
+          </property>
+          <property name="text">
+           <string>概述</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>第二节</string>
+          </property>
+          <property name="text">
+           <string>基本块与流图</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>第三节</string>
+          </property>
+          <property name="text">
+           <string>与循环有关的优化</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>第四节</string>
+          </property>
+          <property name="text">
+           <string>窥孔优化</string>
+          </property>
+         </item>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="1">
+         <widget class="QPushButton" name="pushButton">
+          <property name="text">
+           <string>PushButton</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" colspan="2">
+         <widget class="QWidget" name="widget" native="true"/>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
  </widget>
- <pixmapfunction></pixmapfunction>
+ <customwidgets>
+  <customwidget>
+   <class>coursepage</class>
+   <extends>QWidget</extends>
+   <header>coursepage.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
  <connections/>
 </ui>
