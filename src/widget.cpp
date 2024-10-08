@@ -1,8 +1,6 @@
 #include "widget.h"
 #include "ui_widget.h"
 
-#include "basesocket.h"
-
 #define RegisterPage(pageName) \
     connect(pageName,&basepage::refreshStatus,this,&widget::setPageStatus); \
     connect(pageName,&basepage::logon,this,&widget::hideLoginPage); \
@@ -18,20 +16,10 @@ widget::widget(QWidget *parent)
     initalWidget();
 
     m_FlagOfInit=true;
-
-    basesocket s;
-    auto socket=s.getInstance();
-
-    QString response;
-    socket->recv(response);
-    
-    qDebug()<<"Recv:"<<response;
 }
 
 widget::~widget()
 {
-    basesocket s;
-    delete s.getInstance();
 }
 
 bool widget::eventFilter(QObject *obj, QEvent *e)

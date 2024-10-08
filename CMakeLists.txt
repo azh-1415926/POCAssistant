@@ -18,6 +18,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core5Compat) 
 endif()
 
+set(QMARKDOWNTEXTEDIT_EXE OFF)
+add_subdirectory(3rdparty/qmarkdowntextedit)
+
 set(ROOT_DIR .)
 
 # 搜寻源文件
@@ -56,8 +59,8 @@ else()
 endif()
 
 # 链接的头文件、库
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network )
-target_include_directories(${PROJECT_NAME} PRIVATE ${ROOT_DIR}/src ${ROOT_DIR}/src/base ${ROOT_DIR}/src/pages ${ROOT_DIR}/src/tools ${ROOT_DIR}/src/modules)
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network qmarkdowntextedit)
+target_include_directories(${PROJECT_NAME} PRIVATE ${ROOT_DIR}/src ${ROOT_DIR}/src/base ${ROOT_DIR}/src/pages ${ROOT_DIR}/src/tools ${ROOT_DIR}/src/modules 3rdparty/qmarkdowntextedit)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com

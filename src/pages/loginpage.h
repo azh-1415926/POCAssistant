@@ -28,6 +28,8 @@ class loginpage : public basepage
 
         void back();
 
+        void toLogin(QNetworkReply* reply);
+
     signals:
         ;
 

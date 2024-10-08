@@ -1,3 +1,4 @@
+#define MANAGER_IMPL
 #include "widget.h"
 
 #include <QApplication>

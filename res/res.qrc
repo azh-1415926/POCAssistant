@@ -17,4 +17,8 @@
     <qresource prefix="/sample-code">
         <file alias="sum.cpp">sample-code/sum.cpp</file>
     </qresource>
+
+    <qresource prefix="/md/course">
+        <file alias="1.md">md/course/1.md</file>
+    </qresource>
 </RCC>

@@ -343,7 +343,13 @@
          </widget>
         </item>
         <item row="1" column="0" colspan="2">
-         <widget class="QWidget" name="widget" native="true"/>
+         <widget class="QWidget" name="widget" native="true">
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <item>
+            <widget class="QMarkdownTextEdit" name="test"/>
+           </item>
+          </layout>
+         </widget>
         </item>
        </layout>
       </item>
@@ -358,6 +364,11 @@
    <extends>QWidget</extends>
    <header>coursepage.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QMarkdownTextEdit</class>
+   <extends>QPlainTextEdit</extends>
+   <header>qmarkdowntextedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

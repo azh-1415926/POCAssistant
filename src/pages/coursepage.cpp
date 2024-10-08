@@ -3,6 +3,8 @@
 
 #include <jsonFile.hpp>
 
+#include "markdownhighlighter.h"
+
 const QString number_Transfer_BigChinese(const double &Fnumber)
 {
  
@@ -224,4 +226,23 @@ void coursepage::initalCoursePage()
     ui->outline->columnCount();
 
     getOutLine(ui->outline);
+
+    connect(ui->outline,&QTreeWidget::clicked,this,[=]()
+    {
+        QList<QTreeWidgetItem*> list=ui->outline->selectedItems();
+        for(int i=0;i<list.count();i++)
+        {
+            QTreeWidgetItemIterator it(list[i]);
+
+            QFile file(":/md/course/1.md");
+            if (file.open(QFile::ReadOnly | QFile::Text))
+            {
+                ui->test->setAutoTextOptions(QMarkdownTextEdit::BracketRemoval);
+                ui->test->setPlainText(file.readAll());
+                ui->test->setReadOnly(true);
+            }
+                
+            // ui->test->setText("# "+(*it)->text(1));
+        }
+    });
 }
