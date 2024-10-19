@@ -12,7 +12,7 @@ class collectbutton : public QPushButton
         QString textOfUncollect;
 
     public:
-        explicit collectbutton(QWidget* parent = nullptr,const QString& collect="⭐",const QString& uncollect="☆");
+        explicit collectbutton(QWidget* parent = nullptr,const QString& collect="★",const QString& uncollect="☆");
         virtual ~collectbutton();
         /* 返回是否被收藏，被收藏返回 true */
         inline bool isCollect() const { return this->text()==textOfCollect; };

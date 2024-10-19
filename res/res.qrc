@@ -21,4 +21,20 @@
     <qresource prefix="/md/course">
         <file alias="1.md">md/course/1.md</file>
     </qresource>
+
+    <qresource prefix="/img">
+        <file alias="home">img/home.png</file>
+    </qresource>
+
+    <!-- 主界面资源 -->
+
+    <qresource prefix="/img/main">
+        <file alias="course">img/main/course.png</file>
+    </qresource>
+    <qresource prefix="/img/main">
+        <file alias="code">img/main/code.png</file>
+    </qresource>
+    <qresource prefix="/img/main">
+        <file alias="quiz">img/main/quiz.png</file>
+    </qresource>
 </RCC>

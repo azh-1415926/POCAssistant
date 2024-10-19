@@ -32,6 +32,8 @@ class programpage : public basepage
 
         void back();
 
+        void getResult(QNetworkReply* reply);
+
     signals:
         ;
 

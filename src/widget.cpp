@@ -1,12 +1,15 @@
 #include "widget.h"
 #include "ui_widget.h"
 
+#include "base.hpp"
+#include "jsonFile.hpp"
+
 #define RegisterPage(pageName) \
     connect(pageName,&basepage::refreshStatus,this,&widget::setPageStatus); \
     connect(pageName,&basepage::logon,this,&widget::hideLoginPage); \
     connect(pageName,&basepage::logoff,this,&widget::showLoginPage);
 
-// #define 
+static QString currInfo;
 
 widget::widget(QWidget *parent)
     : QWidget(parent)
@@ -46,14 +49,26 @@ void widget::showLoginPage()
 
 void widget::hideLoginPage()
 {
-    ui->TopPages->setCurrentIndex(1);
+    connect(httpManager::getInstance().getManger(), &QNetworkAccessManager::finished,this,&widget::getInfo);
+
+    QNetworkRequest request;
+    request.setUrl(QUrl("http://127.0.0.1:8848/login/info"));
+    request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
+    request.setRawHeader("Accept","text/html");
+    // request.setRawHeader("Cookie",httpCookie::getInstance().cookie().toUtf8());
+    qDebug()<<request.rawHeaderList();
+
+    httpManager::getInstance().getManger()->get(request);
 }
 
 void widget::setPageStatus(const StatusOfPage &status)
 {
     ui->CurrPage->setText(status.currPage);
-    ui->CurrIcon->setPixmap(status.currPage);
-    ui->CurrInfo->setText(status.currInfo);
+    ui->CurrIcon->setPixmap(status.currIcon);
+    if(status.currInfo.isEmpty())
+        ui->CurrInfo->setText(currInfo);
+    else
+        ui->CurrInfo->setText(status.currInfo);
 }
 
 void widget::goToBack()
@@ -73,6 +88,46 @@ void widget::selectPage(int i)
     static_cast<basepage*>(page)->select();
 }
 
+void widget::getInfo(QNetworkReply *reply)
+{
+    disconnect(httpManager::getInstance().getManger(), &QNetworkAccessManager::finished,this,&widget::getInfo);
+
+    QString str(reply->readAll());
+    qDebug()<<"getInfo:"<<str;
+
+    jsonFile json;
+    json.fromJson(str);
+
+    QString suffix;
+    int role=json.value("role").toInt();
+
+    switch (role)
+    {
+    case 0:
+        suffix="同学";
+        break;
+    
+    case 1:
+        suffix="老师";
+        break;
+
+    case 2:
+        suffix="管理员";
+        break;
+
+    default:
+        break;
+    }
+
+    if(!json.value("user_name").toString().isEmpty())
+        currInfo=json.value("user_name").toString()+suffix;
+
+    qDebug()<<"currInfo"<<currInfo;
+
+    ui->TopPages->setCurrentIndex(1);
+    ui->MainPage->select();
+}
+
 void widget::initalWidget()
 {
     ui->setupUi(this);
@@ -89,12 +144,7 @@ void widget::initalWidget()
 
 void widget::initalTopPages()
 {
-    connect(ui->LoginPage,&basepage::logon,this,[=](const QString& token)
-    {
-        qDebug()<<"Token:"<<token;
-
-        hideLoginPage();
-    });
+    connect(ui->LoginPage,&basepage::logon,this,&widget::hideLoginPage);
     connect(ui->LoginPage,&basepage::logoff,this,&widget::showLoginPage); 
 }
 

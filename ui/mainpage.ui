@@ -50,6 +50,12 @@ QFrame#frame3
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <widget class="QWidget" name="containerOfMain" native="true">
+        <property name="layoutDirection">
+         <enum>Qt::LeftToRight</enum>
+        </property>
+        <property name="autoFillBackground">
+         <bool>false</bool>
+        </property>
         <property name="styleSheet">
          <string notr="true"/>
         </property>
@@ -64,6 +70,12 @@ QFrame#frame3
              <pointsize>15</pointsize>
              <bold>true</bold>
             </font>
+           </property>
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">border-radius: 15px;</string>
            </property>
            <property name="text">
             <string>编译原理课程小助手</string>
@@ -80,6 +92,12 @@ QFrame#frame3
            </property>
            <item>
             <widget class="QFrame" name="frame1">
+             <property name="layoutDirection">
+              <enum>Qt::LeftToRight</enum>
+             </property>
+             <property name="autoFillBackground">
+              <bool>false</bool>
+             </property>
              <property name="frameShape">
               <enum>QFrame::StyledPanel</enum>
              </property>
@@ -109,6 +127,9 @@ QFrame#frame3
                   <bold>true</bold>
                  </font>
                 </property>
+                <property name="autoFillBackground">
+                 <bool>false</bool>
+                </property>
                 <property name="text">
                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;在线学习&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                 </property>
@@ -119,8 +140,26 @@ QFrame#frame3
               </item>
               <item>
                <widget class="QLabel" name="iconOfCourse">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>100</height>
+                 </size>
+                </property>
                 <property name="text">
-                 <string>icon1</string>
+                 <string/>
+                </property>
+                <property name="pixmap">
+                 <pixmap resource="../res/res.qrc">:/img/main/course</pixmap>
+                </property>
+                <property name="scaledContents">
+                 <bool>true</bool>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
@@ -130,7 +169,7 @@ QFrame#frame3
               <item>
                <widget class="QLabel" name="label">
                 <property name="text">
-                 <string>系统学习编译原理知识，以便于在后续实验、测试中如鱼得水</string>
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;提供编译原理的学习路线，涵盖编译原理的各个方面，如词法分析、语法分析、语义分析等&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -155,6 +194,9 @@ QFrame#frame3
            </item>
            <item>
             <widget class="QFrame" name="frame2">
+             <property name="autoFillBackground">
+              <bool>false</bool>
+             </property>
              <property name="frameShape">
               <enum>QFrame::StyledPanel</enum>
              </property>
@@ -194,8 +236,29 @@ QFrame#frame3
               </item>
               <item>
                <widget class="QLabel" name="iconOfProgram">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>100</height>
+                 </size>
+                </property>
+                <property name="autoFillBackground">
+                 <bool>false</bool>
+                </property>
                 <property name="text">
-                 <string>icon2</string>
+                 <string/>
+                </property>
+                <property name="pixmap">
+                 <pixmap resource="../res/res.qrc">:/img/main/code</pixmap>
+                </property>
+                <property name="scaledContents">
+                 <bool>true</bool>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
@@ -205,7 +268,7 @@ QFrame#frame3
               <item>
                <widget class="QLabel" name="label_2">
                 <property name="text">
-                 <string>在线编写代码并运行，结合所学的知识，加以运用</string>
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;提供在线代码编辑器，支持C/C++语言，用户可以在线编写代码并进行编译，查看编译结果&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -230,6 +293,9 @@ QFrame#frame3
            </item>
            <item>
             <widget class="QFrame" name="frame3">
+             <property name="autoFillBackground">
+              <bool>false</bool>
+             </property>
              <property name="frameShape">
               <enum>QFrame::StyledPanel</enum>
              </property>
@@ -269,8 +335,26 @@ QFrame#frame3
               </item>
               <item>
                <widget class="QLabel" name="iconOfQuestion">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>100</height>
+                 </size>
+                </property>
                 <property name="text">
-                 <string>icon3</string>
+                 <string/>
+                </property>
+                <property name="pixmap">
+                 <pixmap resource="../res/res.qrc">:/img/main/quiz</pixmap>
+                </property>
+                <property name="scaledContents">
+                 <bool>true</bool>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
@@ -279,8 +363,11 @@ QFrame#frame3
               </item>
               <item>
                <widget class="QLabel" name="label_3">
+                <property name="autoFillBackground">
+                 <bool>false</bool>
+                </property>
                 <property name="text">
-                 <string>完成编译原理的课程练习，加深巩固理论知识</string>
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;提供编译原理相关的在线测试题目，包括选择题、填空题、编程题等，帮助用户检验学习成果&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -326,6 +413,8 @@ QFrame#frame3
    <header>clicklabel.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../res/res.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -44,6 +44,8 @@ void mainpage::initalmainpage()
 {
     ui->setupUi(this);
 
+    m_Status.currIcon.load(":/img/home");
+
     connect(ui->course,&clicklabel::clicked,this,&mainpage::selectLabel);
     connect(ui->program,&clicklabel::clicked,this,&mainpage::selectLabel);
     connect(ui->quiz,&clicklabel::clicked,this,&mainpage::selectLabel);

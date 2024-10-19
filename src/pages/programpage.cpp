@@ -27,9 +27,23 @@ void programpage::back()
 {
 }
 
+void programpage::getResult(QNetworkReply *reply)
+{
+    disconnect(httpManager::getInstance().getManger(), &QNetworkAccessManager::finished,this,&programpage::getResult);
+
+    auto cookie=reply->rawHeader("Set-Cookie");
+    qDebug()<<"Cookie:"<<cookie;
+
+    QString str(reply->readAll());
+    qDebug()<<"reply:"<<str;
+    qDebug()<<"reply headers:"<<reply->rawHeaderPairs();
+}
+
 void programpage::initalProgramPage()
 {
     ui->setupUi(this);
+
+    m_Status.currIcon.load(":/img/main/code");
 
     setupEditor();
 
@@ -37,18 +51,21 @@ void programpage::initalProgramPage()
 
     connect(ui->btnOfRun,&QPushButton::clicked,this,[=]()
     {
+        connect(httpManager::getInstance().getManger(), &QNetworkAccessManager::finished,this,&programpage::getResult);
+
         QString code=ui->CodeEdit->toPlainText();
 
         QNetworkRequest request;
         request.setUrl(QUrl("http://127.0.0.1:8848/code/compile"));
         request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
         request.setRawHeader("Accept","text/html");
+        request.setRawHeader("Cookie",httpCookie::getInstance().cookie().toUtf8());
 
         QJsonObject obj;
         obj.insert("data",code);
         QJsonDocument doc(obj);
 
-        httpManager->post(request,doc.toJson());
+        httpManager::getInstance().getManger()->post(request,doc.toJson());
     });
 }
 

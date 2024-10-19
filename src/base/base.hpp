@@ -5,6 +5,8 @@
 
 #include <QScopedPointer>
 #include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkCookieJar>
 
 struct StatusOfPage
 {
@@ -13,8 +15,40 @@ struct StatusOfPage
     QString currInfo;
 };
 
-#ifdef MANAGER_IMPL
-    QScopedPointer<QNetworkAccessManager> httpManager(new QNetworkAccessManager);
-#else
-    extern QScopedPointer<QNetworkAccessManager> httpManager;
-#endif
+class httpManager : QObject
+{
+    public:
+        static httpManager& getInstance()
+        {
+            static httpManager instance;
+            return instance;
+        }
+        QNetworkAccessManager* getManger()
+        {
+            if(m_Manger==nullptr)
+                m_Manger=new QNetworkAccessManager(this);
+
+            return m_Manger;
+        }
+
+    private:
+        explicit httpManager(QObject* parent=nullptr): QObject(parent), m_Manger(nullptr) { }
+
+        QNetworkAccessManager* m_Manger;
+};
+
+class httpCookie : QObject
+{
+    public:
+        static httpCookie& getInstance()
+        {
+            static httpCookie instance;
+            return instance;
+        }
+        QString cookie() { return m_Cookie; }
+
+        void setCookie(QString c) { m_Cookie=c; }
+
+    private:
+        QString m_Cookie;
+};

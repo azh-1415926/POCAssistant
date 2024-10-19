@@ -29,10 +29,10 @@ class basepage : public QWidget
         void setIcon(const QString& str) { m_Status.currIcon.load(str); }
         void setInfo(const QString& str) { m_Status.currIcon=str; }
 
-        void back();
+        virtual void back();
 
     signals:
-        void logon(const QString& token);
+        void logon();
         void logoff();
 
         void refreshStatus(const StatusOfPage& status);

@@ -251,8 +251,14 @@
               <property name="text">
                <string>图标</string>
               </property>
+              <property name="scaledContents">
+               <bool>true</bool>
+              </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
+              </property>
+              <property name="wordWrap">
+               <bool>false</bool>
               </property>
              </widget>
             </item>

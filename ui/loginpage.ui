@@ -62,7 +62,7 @@
        <number>0</number>
       </property>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,0,0,2">
+       <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,0,0,0,2">
         <property name="spacing">
          <number>15</number>
         </property>
@@ -176,9 +176,22 @@
          </spacer>
         </item>
         <item>
+         <widget class="QLabel" name="textOfError">
+          <property name="text">
+           <string>登录失败</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0">
           <item>
            <widget class="QComboBox" name="optionOfRole">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="font">
              <font>
               <pointsize>12</pointsize>
@@ -189,6 +202,12 @@
           </item>
           <item>
            <widget class="QPushButton" name="btnOfLogin">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="font">
              <font>
               <pointsize>15</pointsize>

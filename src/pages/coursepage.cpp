@@ -223,6 +223,8 @@ void coursepage::initalCoursePage()
 {
     ui->setupUi(this);
 
+    m_Status.currIcon.load(":/img/main/course");
+
     ui->outline->columnCount();
 
     getOutLine(ui->outline);

@@ -32,6 +32,8 @@ class widget : public QWidget
         void goToBack();
         void selectPage(int i);
 
+        void getInfo(QNetworkReply* reply);
+
     signals:
         ;
 
