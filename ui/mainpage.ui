@@ -92,6 +92,12 @@ QFrame#frame3
            </property>
            <item>
             <widget class="QFrame" name="frame1">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="layoutDirection">
               <enum>Qt::LeftToRight</enum>
              </property>
@@ -183,7 +189,13 @@ QFrame#frame3
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_4">
+               <widget class="QPushButton" name="btnOfCourse">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
                 <property name="text">
                  <string>进入</string>
                 </property>
@@ -282,7 +294,7 @@ QFrame#frame3
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_5">
+               <widget class="QPushButton" name="btnOfProgram">
                 <property name="text">
                  <string>进入</string>
                 </property>
@@ -334,7 +346,7 @@ QFrame#frame3
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="iconOfQuestion">
+               <widget class="QLabel" name="iconOfQuiz">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -381,7 +393,7 @@ QFrame#frame3
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_6">
+               <widget class="QPushButton" name="btnOfQuiz">
                 <property name="text">
                  <string>进入</string>
                 </property>

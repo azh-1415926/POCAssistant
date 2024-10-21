@@ -1,4 +1,3 @@
-#define MANAGER_IMPL
 #include "widget.h"
 
 #include <QApplication>
@@ -37,5 +36,6 @@ int main(int argc, char *argv[])
 
     widget w;
     w.show();
+    
     return app.exec();
 }

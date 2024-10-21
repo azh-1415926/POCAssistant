@@ -49,4 +49,8 @@ void mainpage::initalmainpage()
     connect(ui->course,&clicklabel::clicked,this,&mainpage::selectLabel);
     connect(ui->program,&clicklabel::clicked,this,&mainpage::selectLabel);
     connect(ui->quiz,&clicklabel::clicked,this,&mainpage::selectLabel);
+
+    connect(ui->btnOfCourse,&QPushButton::clicked,this,[=](){ selectPage(1); });
+    connect(ui->btnOfProgram,&QPushButton::clicked,this,[=](){ selectPage(2); });
+    connect(ui->btnOfQuiz,&QPushButton::clicked,this,[=](){ selectPage(3); });
 }

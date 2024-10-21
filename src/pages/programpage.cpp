@@ -4,9 +4,9 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
-#include <QJsonObject>
-#include <QJsonDocument>
 #include <QFile>
+
+#include "jsonFile.hpp"
 
 programpage::programpage(QWidget *parent)
     : basepage("在线实验",parent)
@@ -37,6 +37,11 @@ void programpage::getResult(QNetworkReply *reply)
     QString str(reply->readAll());
     qDebug()<<"reply:"<<str;
     qDebug()<<"reply headers:"<<reply->rawHeaderPairs();
+
+    jsonFile json;
+    json.fromJson(str);
+
+    ui->infoOfOutput->setText(json.value("output").toString());
 }
 
 void programpage::initalProgramPage()
