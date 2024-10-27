@@ -5,6 +5,7 @@
 #include <QLabel>
 #include <QStackedWidget>
 #include <QTextEdit>
+#include <QJsonObject>
 
 class collectbutton;
 class clickoptions;
@@ -19,8 +20,6 @@ class quizview : public QWidget
         clickoptions* optionOfJudgeQuiz;
         QTextEdit* codeQuiz;
 
-        int indexOfQuestion;
-        int sumOfQuestion;
         QPushButton* forwardBtn;
         QPushButton* nextBtn;
         collectbutton* collectBtn;
@@ -31,15 +30,6 @@ class quizview : public QWidget
     public:
         explicit quizview(QWidget* parent = nullptr);
         virtual ~quizview();
-        
-        /* 返回当前组件的标题 */
-        inline QString title() const { return this->textOfTag->text(); }
-        /* 返回当前问题的下标 */
-        inline int index() const { return this->indexOfQuestion; }
-        /* 返回当前问题下标对应标签上的字符串文本 */
-        inline QString stringOfIndex() const { return QString::number(indexOfQuestion); }
-        /* 返回当前问题的总数 */
-        inline int count() const { return this->sumOfQuestion; }
 
     protected:
         ;
@@ -54,12 +44,13 @@ class quizview : public QWidget
 
         void setQuizType(int type);
         void hideCollection(bool b);
+        void updateQuiz(const QJsonObject& quiz);
 
     signals:
         void collectQuestion();
         void uncollectQuestion();
-        void changeQuestion(int i);
-        void lastIndex(int i);
+        void nextQuiz();
+        void prevQuiz();
 
     private:
         void initalQuestion();

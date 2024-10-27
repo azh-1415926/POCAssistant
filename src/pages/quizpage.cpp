@@ -1,6 +1,10 @@
 #include "quizpage.h"
 #include "ui_quizpage.h"
 
+#include "quizcontroller.h"
+#include "quizmodel.h"
+#include "jsonFile.hpp"
+
 quizpage::quizpage(QWidget *parent)
     : basepage("在线测试",parent)
     , ui(new Ui::quizpage)
@@ -34,4 +38,14 @@ void quizpage::initalQuizPage()
     {
         ui->stackedWidget->setCurrentIndex(1);
     });
+
+    quizcontroller* controller=new quizcontroller(this);
+    quizmodel* model=new quizmodel(this);
+
+    controller->bind(ui->pageOfTest);
+    controller->bind(model);
+
+    jsonFile file;
+    file.load("quiz.json");
+    model->load(file.toJson());
 }
