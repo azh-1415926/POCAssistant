@@ -11,7 +11,17 @@ clickoptions::clickoptions(QWidget *parent)
     : QGroupBox(parent)
     , numOfOptions(4)
     , answerOfOptions(-1), hoverOption(-1), checkedOption(-1)
-    , hoverBox(nullptr), correctBox(nullptr), incorrectBox(nullptr)
+    , hoverBox(nullptr), checkedBox(nullptr), correctBox(nullptr), incorrectBox(nullptr)
+{
+    initalOptions();
+    initalEvent();
+}
+
+clickoptions::clickoptions(int nOfOption, QWidget *parent)
+    : QGroupBox(parent)
+    , numOfOptions(nOfOption)
+    , answerOfOptions(-1), hoverOption(-1), checkedOption(-1)
+    , hoverBox(nullptr), checkedBox(nullptr), correctBox(nullptr), incorrectBox(nullptr)
 {
     initalOptions();
     initalEvent();
@@ -44,10 +54,12 @@ bool clickoptions::eventFilter(QObject *obj, QEvent *e)
         return true;
     }
     #endif
+
     /* 若为当前对象的绘制事件，则一并绘制悬浮、正确、错误选框 */
     if(obj==this&&e->type()==QEvent::Paint)
     {
         paintBox(this,hoverBox);
+        paintBox(this,checkedBox);
         paintBox(this,correctBox);
         paintBox(this,incorrectBox);
         return true;
@@ -111,6 +123,11 @@ void clickoptions::displayAnswer(bool state)
             delete incorrectBox;
             incorrectBox=nullptr;
         }
+        if(checkedBox!=nullptr)
+        {
+            delete checkedBox;
+            checkedBox=nullptr;
+        }
         if(hoverBox!=nullptr)
         {
             delete hoverBox;
@@ -166,6 +183,8 @@ void clickoptions::initalOptions()
         {
             this->checkedOption=i;
             emit selectOption(i);
+            checkedBox=setOptionOfBox(checkedOption,checkedBox);
+            this->update();
         });
         /* 标签被点击，则选中对应的按钮、更新被选中的选项，且发送 selectOption 信号 */
         connect(labels[i],&clicklabel::clicked,this,[=]()
@@ -173,6 +192,8 @@ void clickoptions::initalOptions()
             buttons[i]->setChecked(true);
             this->checkedOption=i;
             emit selectOption(i);
+            checkedBox=setOptionOfBox(checkedOption,checkedBox);
+            this->update();
         });
         #ifdef __ANDROID__
         connect(labels[i],&clicklabel::hover,this,&clickoptions::displayHover);
@@ -210,13 +231,34 @@ void clickoptions::paintBox(QWidget *widget, QRect *box)
         /* 对应选框的笔刷颜色 */
         if(box==hoverBox)
             pen.setBrush(QBrush(qRgb(30,144,255)));
+        else if(box==checkedBox)
+            pen.setBrush(QBrush(qRgb(30,144,255)));
         else if(box==correctBox)
             pen.setBrush(QBrush(qRgb(144,238,144)));
         else if(box==incorrectBox)
             pen.setBrush(QBrush(qRgb(255,0,0)));
         painter.setPen(pen);
         if(box==hoverBox)
+        {
             painter.drawRoundedRect(QRect(box->topLeft(),box->bottomRight()),20,20);
+        }
+        else if(box==checkedBox)
+        {
+            QPainterPath path;
+            path.addRoundedRect(
+                QRect(
+                    box->topLeft(),box->bottomRight()
+                ),
+                15,15
+            );
+            /* 填充选框 */
+            painter.fillPath(path,pen.brush());
+            pen.setColor(Qt::black);
+            pen.setWidth(5);
+            painter.setPen(pen);
+            /* 绘制黑色边框 */
+            painter.drawPath(path);
+        }
         else
         {
             /* 正确、错误选框往里缩 5 格像素，方便悬浮选框展示 */
@@ -248,6 +290,11 @@ void clickoptions::freeBoxes()
     {
         delete hoverBox;
         hoverBox=nullptr;
+    }
+    if(checkedBox!=nullptr)
+    {
+        delete checkedBox;
+        checkedBox=nullptr;
     }
     if(correctBox!=nullptr)
     {

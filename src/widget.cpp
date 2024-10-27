@@ -49,16 +49,16 @@ void widget::showLoginPage()
 
 void widget::hideLoginPage()
 {
-    connect(httpManager::getInstance().getManger(), &QNetworkAccessManager::finished,this,&widget::getInfo);
+    connect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&widget::getInfo);
 
     QNetworkRequest request;
-    request.setUrl(QUrl("http://127.0.0.1:8848/login/info"));
+    request.setUrl(QUrl("http://127.0.0.1:8848/login/info?userId="+userId::getInstance().get()));
     request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
     request.setRawHeader("Accept","text/html");
     // request.setRawHeader("Cookie",httpCookie::getInstance().cookie().toUtf8());
     qDebug()<<request.rawHeaderList();
 
-    httpManager::getInstance().getManger()->get(request);
+    httpManager::getInstance().get()->get(request);
 }
 
 void widget::setPageStatus(const StatusOfPage &status)
@@ -90,7 +90,7 @@ void widget::selectPage(int i)
 
 void widget::getInfo(QNetworkReply *reply)
 {
-    disconnect(httpManager::getInstance().getManger(), &QNetworkAccessManager::finished,this,&widget::getInfo);
+    disconnect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&widget::getInfo);
 
     QString str(reply->readAll());
     qDebug()<<"getInfo:"<<str;
@@ -98,6 +98,7 @@ void widget::getInfo(QNetworkReply *reply)
     jsonFile json;
     json.fromJson(str);
 
+    QString prefix="当前用户：";
     QString suffix;
     int role=json.value("role").toInt();
 
@@ -120,7 +121,7 @@ void widget::getInfo(QNetworkReply *reply)
     }
 
     if(!json.value("user_name").toString().isEmpty())
-        currInfo=json.value("user_name").toString()+suffix;
+        currInfo=prefix+json.value("user_name").toString()+suffix;
 
     qDebug()<<"currInfo"<<currInfo;
 

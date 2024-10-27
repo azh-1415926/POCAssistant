@@ -1,9 +1,10 @@
-#ifndef SWITCH_QUESTION_H
-#define SWITCH_QUESTION_H
+#pragma once
 
 #include <QWidget>
 #include <QPushButton>
 #include <QLabel>
+#include <QStackedWidget>
+#include <QTextEdit>
 
 class collectbutton;
 class clickoptions;
@@ -13,7 +14,10 @@ class quizview : public QWidget
     Q_OBJECT
 
     private:
-        clickoptions* options;
+        QStackedWidget* centerOfQuiz;
+        clickoptions* optionOfSelectQuiz;
+        clickoptions* optionOfJudgeQuiz;
+        QTextEdit* codeQuiz;
 
         int indexOfQuestion;
         int sumOfQuestion;
@@ -22,6 +26,7 @@ class quizview : public QWidget
         collectbutton* collectBtn;
         QLabel* textOfTag;
         QLabel* textOfProcess;
+        QLabel* textOfQuiz;
 
     public:
         explicit quizview(QWidget* parent = nullptr);
@@ -47,6 +52,9 @@ class quizview : public QWidget
         void setTextOfSum(const QString& str);
         void setCollect(bool status);
 
+        void setQuizType(int type);
+        void hideCollection(bool b);
+
     signals:
         void collectQuestion();
         void uncollectQuestion();
@@ -55,6 +63,5 @@ class quizview : public QWidget
 
     private:
         void initalQuestion();
+        void initalCodeQuiz();
 };
-
-#endif

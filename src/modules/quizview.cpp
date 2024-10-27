@@ -2,27 +2,34 @@
 
 #include "collectbutton.h"
 #include "clickoptions.h"
+#include "highlighter.h"
 
 #include <QGridLayout>
 #include <QVBoxLayout>
 
 quizview::quizview(QWidget *parent)
     : QWidget(parent)
-    , options(new clickoptions)
+    , optionOfSelectQuiz(new clickoptions)
+    , optionOfJudgeQuiz(new clickoptions(2))
+    , codeQuiz(new QTextEdit)
     , indexOfQuestion(0), sumOfQuestion(0)
     , forwardBtn(new QPushButton), nextBtn(new QPushButton), collectBtn(new collectbutton)
-    , textOfTag(new QLabel), textOfProcess(new QLabel)
+    , textOfTag(new QLabel), textOfProcess(new QLabel), textOfQuiz(new QLabel)
 {
+    initalCodeQuiz();
     initalQuestion();
 }
 
 quizview::~quizview()
 {
-    delete options;
+    delete optionOfSelectQuiz;
+    delete optionOfJudgeQuiz;
+    delete codeQuiz;
     delete forwardBtn;
     delete nextBtn;
     delete collectBtn;
     delete textOfTag;
+    delete textOfQuiz;
 }
 
 /* 设置当前组件的标题 */
@@ -69,6 +76,40 @@ void quizview::setCollect(bool status)
         this->collectBtn->setUncollectNoSignal();
 }
 
+void quizview::setQuizType(int type)
+{
+    QString quizType;
+
+    switch (type)
+    {
+    case 0:
+        quizType="选择题";
+        break;
+
+    case 1:
+        quizType="判断题";
+        break;
+
+    case 2:
+        quizType="编程题";
+        break;
+
+    default:
+        break;
+    }
+
+    centerOfQuiz->setCurrentIndex(type);
+    textOfTag->setText(quizType);
+}
+
+void quizview::hideCollection(bool b)
+{
+    if(b)
+        collectBtn->hide();
+    else
+        collectBtn->show();
+}
+
 /* 初始化布局、按钮、文本 */
 void quizview::initalQuestion()
 {
@@ -77,8 +118,9 @@ void quizview::initalQuestion()
     QGridLayout* layoutOfSwitch=new QGridLayout;
     QHBoxLayout* layoutOfStatus=new QHBoxLayout;
 
+    centerOfQuiz=new QStackedWidget;
+
     textOfProcess->setText("1/15");
-    textOfTag->setText("选择题");
 
     layoutOfStatus->addWidget(textOfProcess);
     layoutOfStatus->addWidget(textOfTag);
@@ -94,7 +136,16 @@ void quizview::initalQuestion()
     layoutOfSwitch->addWidget(nextBtn,0,2);
 
     layout->addLayout(layoutOfStatus);
-    layout->addWidget(options);
+    centerOfQuiz->addWidget(optionOfSelectQuiz);
+    centerOfQuiz->addWidget(optionOfJudgeQuiz);
+    centerOfQuiz->addWidget(codeQuiz);
+
+    setQuizType(2);
+
+    textOfQuiz->setText("这是题目的内容，这是一道编程题");
+
+    layout->addWidget(textOfQuiz);
+    layout->addWidget(centerOfQuiz);
     layout->addLayout(layoutOfSwitch);
 
     /* 向前按钮点击事件 */
@@ -130,4 +181,16 @@ void quizview::initalQuestion()
     {
         emit uncollectQuestion();
     });
+}
+
+void quizview::initalCodeQuiz()
+{
+    QFont font;
+    font.setFamily("Courier");
+    font.setFixedPitch(true);
+    font.setPointSize(10);
+
+    codeQuiz->setFont(font);
+
+    Highlighter* highlighter = new Highlighter(codeQuiz->document());
 }

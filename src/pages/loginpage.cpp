@@ -31,15 +31,10 @@ void loginpage::back()
 
 void loginpage::toLogin(QNetworkReply *reply)
 {
-    auto cookie=reply->rawHeader("Set-Cookie");
-    qDebug()<<"Cookie:"<<cookie;
-    httpCookie::getInstance().setCookie(cookie);
-
-    disconnect(httpManager::getInstance().getManger(), &QNetworkAccessManager::finished,this,&loginpage::toLogin);
+    disconnect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&loginpage::toLogin);
 
     QString str(reply->readAll());
     qDebug()<<"reply:"<<str;
-    qDebug()<<"reply headers:"<<reply->rawHeaderPairs();
 
     // int begin=str.indexOf("{");
     // int end=str.lastIndexOf("}");
@@ -52,6 +47,7 @@ void loginpage::toLogin(QNetworkReply *reply)
     {
         ui->textOfError->hide();
         // currToken=json.value("token").toString();
+        userId::getInstance().set(ui->inputOfAccount->text());
         emit logon();
     }
     else if(json.value("success").toString()=="false")
@@ -80,7 +76,7 @@ void loginpage::initalLoginPage()
 
     connect(ui->btnOfLogin,&QPushButton::clicked,this,[=]()
     {
-        connect(httpManager::getInstance().getManger(), &QNetworkAccessManager::finished,this,&loginpage::toLogin);
+        connect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&loginpage::toLogin);
 
         QNetworkRequest request;
         request.setUrl("http://127.0.0.1:8848/login/token?userId="+ui->inputOfAccount->text()+"&passwd="+ui->inputOfPassword->text());
@@ -90,7 +86,7 @@ void loginpage::initalLoginPage()
         QJsonObject obj;
         QJsonDocument doc(obj);
 
-        httpManager::getInstance().getManger()->post(request,doc.toJson());
+        httpManager::getInstance().get()->post(request,doc.toJson());
     });
 
     // QTimer* timer=new QTimer(this);

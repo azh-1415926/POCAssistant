@@ -19,11 +19,13 @@ class clickoptions : public QGroupBox
         QList<QRadioButton*> buttons;
         QList<clicklabel*> labels;
         QRect* hoverBox;
+        QRect* checkedBox;
         QRect* correctBox;
         QRect* incorrectBox; 
 
     public:
         explicit clickoptions(QWidget* parent = nullptr);
+        clickoptions(int nOfOption,QWidget* parent = nullptr);
         virtual ~clickoptions();
         /* 返回答案选项的下标 */
         inline int getAnswer() const { return this->answerOfOptions; };

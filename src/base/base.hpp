@@ -8,6 +8,37 @@
 #include <QNetworkReply>
 #include <QNetworkCookieJar>
 
+#define SINGLETONE(Name,Type) \
+class Name : QObject \
+{ \
+    public: \
+        static Name& getInstance() \
+        { \
+            static Name instance; \
+            return instance; \
+        } \
+        Type get() {  return m_Instance; } \
+        void set(Type data) { m_Instance=data; } \
+    private: \
+        explicit Name(QObject* parent=nullptr): QObject(parent) { } \
+        Type m_Instance; \
+};
+
+#define SINGLETONE_P(Name,Type) \
+class Name : QObject \
+{ \
+    public: \
+        static Name& getInstance() \
+        { \
+            static Name instance; \
+            return instance; \
+        } \
+        Type* get() {  return m_Instance; } \
+    private: \
+        explicit Name(QObject* parent=nullptr): QObject(parent), m_Instance(new Type(this)) { } \
+        Type* m_Instance; \
+};
+
 struct StatusOfPage
 {
     QString currPage;
@@ -15,40 +46,45 @@ struct StatusOfPage
     QString currInfo;
 };
 
-class httpManager : QObject
-{
-    public:
-        static httpManager& getInstance()
-        {
-            static httpManager instance;
-            return instance;
-        }
-        QNetworkAccessManager* getManger()
-        {
-            if(m_Manger==nullptr)
-                m_Manger=new QNetworkAccessManager(this);
+// template<class T>
+// class singletone : QObject
+// {
+//     public:
+//         static singletone& getInstance()
+//         {
+//             static singletone instance;
+//             return instance;
+//         }
+//         T get() { return m_Instance; }
 
-            return m_Manger;
-        }
+//         void set(T data) { m_Instance=data; }
 
-    private:
-        explicit httpManager(QObject* parent=nullptr): QObject(parent), m_Manger(nullptr) { }
+//     protected:
+//         explicit singletone(QObject* parent=nullptr): QObject(parent) { }
 
-        QNetworkAccessManager* m_Manger;
-};
+//         T m_Instance;
+// };
 
-class httpCookie : QObject
-{
-    public:
-        static httpCookie& getInstance()
-        {
-            static httpCookie instance;
-            return instance;
-        }
-        QString cookie() { return m_Cookie; }
+// class httpManager : QObject
+// {
+//     public:
+//         static httpManager& getInstance()
+//         {
+//             static httpManager instance;
+//             return instance;
+//         }
+//         QNetworkAccessManager* getManger()
+//         {
+//             if(m_Manger==nullptr)
+//                 m_Manger=new QNetworkAccessManager(this);
 
-        void setCookie(QString c) { m_Cookie=c; }
+//             return m_Manger;
+//         }
 
-    private:
-        QString m_Cookie;
-};
+//     private:
+//         explicit httpManager(QObject* parent=nullptr): QObject(parent), m_Manger(nullptr) { }
+
+//         QNetworkAccessManager* m_Manger;
+// };
+SINGLETONE_P(httpManager,QNetworkAccessManager)
+SINGLETONE(userId,QString)
