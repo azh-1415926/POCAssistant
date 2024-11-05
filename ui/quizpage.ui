@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>336</height>
+    <height>346</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -169,7 +169,19 @@ QFrame#frame3
                 <item>
                  <widget class="QLabel" name="label_4">
                   <property name="text">
-                   <string>TextLabel</string>
+                   <string>针对每个章节的的知识点进行考察，巩固知识点</string>
+                  </property>
+                  <property name="scaledContents">
+                   <bool>false</bool>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                  </property>
+                  <property name="wordWrap">
+                   <bool>true</bool>
+                  </property>
+                  <property name="indent">
+                   <number>-1</number>
                   </property>
                  </widget>
                 </item>
@@ -236,7 +248,10 @@ QFrame#frame3
                 <item>
                  <widget class="QLabel" name="label_5">
                   <property name="text">
-                   <string>TextLabel</string>
+                   <string>记录习题测试中的错题，以便查漏补缺</string>
+                  </property>
+                  <property name="wordWrap">
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
@@ -303,7 +318,10 @@ QFrame#frame3
                 <item>
                  <widget class="QLabel" name="label_6">
                   <property name="text">
-                   <string>TextLabel</string>
+                   <string>从题库中抽取题目并进行限时训练</string>
+                  </property>
+                  <property name="wordWrap">
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
@@ -348,7 +366,7 @@ QFrame#frame3
  </customwidgets>
  <resources>
   <include location="../res/res.qrc"/>
-  <include location="C:/Users/Administrator/.designer/res/res.qrc"/>
+  <include location="../res/res.qrc"/>
  </resources>
  <connections/>
 </ui>

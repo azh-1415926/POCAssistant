@@ -7,6 +7,7 @@
 #include <QFile>
 
 #include "jsonFile.hpp"
+#include "constant.h"
 
 programpage::programpage(QWidget *parent)
     : basepage("在线实验",parent)
@@ -32,7 +33,7 @@ void programpage::getResult(QNetworkReply *reply)
     disconnect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&programpage::getResult);
 
     QString str(reply->readAll());
-    qDebug()<<"reply:"<<str;
+    qDebug()<<"compile:"<<str;
 
     jsonFile json;
     json.fromJson(str);
@@ -57,7 +58,11 @@ void programpage::initalProgramPage()
         QString code=ui->CodeEdit->toPlainText();
 
         QNetworkRequest request;
-        request.setUrl(QUrl("http://127.0.0.1:8848/code/compile"));
+        request.setUrl(QUrl("http://"
+        SERVER_IP
+        ":"
+        SERVER_PORT_S
+        "/code/compile"));
         request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
         request.setRawHeader("Accept","text/html");
 

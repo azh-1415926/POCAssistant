@@ -18,6 +18,7 @@ quizpage::~quizpage()
 
 void quizpage::resetPage()
 {
+    ui->stackedWidget->setCurrentIndex(0);
 }
 
 void quizpage::back()
@@ -46,6 +47,6 @@ void quizpage::initalQuizPage()
     controller->bind(model);
 
     jsonFile file;
-    file.load("quiz.json");
+    file.load(":/json/test/quiz.json");
     model->load(file.toJson());
 }

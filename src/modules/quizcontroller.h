@@ -33,7 +33,7 @@ class quizcontroller : public QObject
         void goPrevQuiz();
         void goNextQuiz();
 
-        void updateView();
+        void InitalView();
 
     signals:
         ;

@@ -52,6 +52,9 @@ class quizview : public QWidget
         void nextQuiz();
         void prevQuiz();
 
+        void updateSelectOption(int i,const QString& context);
+        void updateJudgeOption(int i,const QString& context);
+
     private:
         void initalQuestion();
         void initalCodeQuiz();

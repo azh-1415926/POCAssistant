@@ -88,3 +88,4 @@ struct StatusOfPage
 // };
 SINGLETONE_P(httpManager,QNetworkAccessManager)
 SINGLETONE(userId,QString)
+SINGLETONE(userRole,int)

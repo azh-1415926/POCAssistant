@@ -48,4 +48,9 @@
     <qresource prefix="/img/quiz">
         <file alias="simulation">img/quiz/simulation.png</file>
     </qresource>
+
+    <!-- json -->
+    <qresource prefix="/json/test">
+        <file alias="quiz.json">json/test/quiz.json</file>
+    </qresource>
 </RCC>

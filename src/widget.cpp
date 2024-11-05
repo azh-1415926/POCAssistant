@@ -3,6 +3,7 @@
 
 #include "base.hpp"
 #include "jsonFile.hpp"
+#include "constant.h"
 
 #define RegisterPage(pageName) \
     connect(pageName,&basepage::refreshStatus,this,&widget::setPageStatus); \
@@ -52,13 +53,17 @@ void widget::hideLoginPage()
     connect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&widget::getInfo);
 
     QNetworkRequest request;
-    request.setUrl(QUrl("http://127.0.0.1:8848/login/info?userId="+userId::getInstance().get()));
+    request.setUrl("http://"
+    SERVER_IP
+    ":"
+    SERVER_PORT_S
+    "/login/info?userId="+userId::getInstance().get());
     request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
     request.setRawHeader("Accept","text/html");
-    // request.setRawHeader("Cookie",httpCookie::getInstance().cookie().toUtf8());
-    qDebug()<<request.rawHeaderList();
 
     httpManager::getInstance().get()->get(request);
+
+    selectPage(0);
 }
 
 void widget::setPageStatus(const StatusOfPage &status)
@@ -101,6 +106,7 @@ void widget::getInfo(QNetworkReply *reply)
     QString prefix="当前用户：";
     QString suffix;
     int role=json.value("role").toInt();
+    userRole::getInstance().set(role);
 
     switch (role)
     {
@@ -122,8 +128,6 @@ void widget::getInfo(QNetworkReply *reply)
 
     if(!json.value("user_name").toString().isEmpty())
         currInfo=prefix+json.value("user_name").toString()+suffix;
-
-    qDebug()<<"currInfo"<<currInfo;
 
     ui->TopPages->setCurrentIndex(1);
     ui->MainPage->select();

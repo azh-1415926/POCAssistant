@@ -128,20 +128,23 @@ void quizview::updateQuiz(const QJsonObject &quiz)
 {
     int type=quiz.value("type").toInt();
 
+    setQuizType(type);
+
     textOfQuiz->setText(quiz.value("content").toString());
 
     switch (type)
     {
     case 0:
-        optionOfSelectQuiz->setTextOfOption(0,quiz.value("A").toString());
-        optionOfSelectQuiz->setTextOfOption(1,quiz.value("B").toString());
-        optionOfSelectQuiz->setTextOfOption(2,quiz.value("C").toString());
-        optionOfSelectQuiz->setTextOfOption(3,quiz.value("D").toString());
+        emit updateSelectOption(0,quiz.value("A").toString());
+        emit updateSelectOption(1,quiz.value("B").toString());
+        emit updateSelectOption(2,quiz.value("C").toString());
+        emit updateSelectOption(3,quiz.value("D").toString());
         break;
 
     case 1:
-        optionOfJudgeQuiz->setTextOfOption(0,quiz.value("A").toString());
-        optionOfJudgeQuiz->setTextOfOption(1,quiz.value("B").toString());
+
+        emit updateJudgeOption(0,"正确");
+        emit updateJudgeOption(1,"错误");
         break;
 
     case 2:
@@ -151,8 +154,6 @@ void quizview::updateQuiz(const QJsonObject &quiz)
     default:
         break;
     }
-
-    setQuizType(type);
 }
 
 /* 初始化布局、按钮、文本 */
@@ -198,6 +199,9 @@ void quizview::initalQuestion()
     /* 当收藏按钮发送 collected、uncollected 信号时，发送 collectQuestion、uncollectQuestion 信号，当做转发 */
     connect(collectBtn,&collectbutton::collected,this,[=]() { emit collectQuestion(); });
     connect(collectBtn,&collectbutton::uncollected,this,[=]() { emit uncollectQuestion(); });
+
+    connect(this,&quizview::updateSelectOption,optionOfSelectQuiz,&clickoptions::setTextOfOption);
+    connect(this,&quizview::updateJudgeOption,optionOfJudgeQuiz,&clickoptions::setTextOfOption);
 }
 
 void quizview::initalCodeQuiz()

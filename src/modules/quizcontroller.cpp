@@ -23,7 +23,7 @@ void quizcontroller::bind(quizmodel *m)
 {
     model=m;
 
-    connect(model,&quizmodel::dataChanged,this,&quizcontroller::updateView);
+    connect(model,&quizmodel::dataChanged,this,&quizcontroller::InitalView);
 }
 
 void quizcontroller::unbind()
@@ -38,7 +38,7 @@ void quizcontroller::unbind()
 
     if(model)
     {
-        disconnect(model,&quizmodel::dataChanged,this,&quizcontroller::updateView);
+        disconnect(model,&quizmodel::dataChanged,this,&quizcontroller::InitalView);
 
         model=nullptr;
     }
@@ -60,9 +60,13 @@ void quizcontroller::goNextQuiz()
     updateQuiz(++this->m_Index);
 }
 
-void quizcontroller::updateView()
+void quizcontroller::InitalView()
 {
+    if(view==nullptr)
+        return;
+
     updateQuiz(0);
+    view->setSum(model->count());
 }
 
 void quizcontroller::initalController()
@@ -72,6 +76,5 @@ void quizcontroller::initalController()
 void quizcontroller::updateQuiz(int index)
 {
     view->setIndex(index);
-    view->setSum(model->count());
     view->updateQuiz(model->get(index));
 }

@@ -3,6 +3,7 @@
 
 #include "jsonFile.hpp"
 #include "base.hpp"
+#include "constant.h"
 
 #include <QTimer>
 
@@ -34,7 +35,7 @@ void loginpage::toLogin(QNetworkReply *reply)
     disconnect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&loginpage::toLogin);
 
     QString str(reply->readAll());
-    qDebug()<<"reply:"<<str;
+    qDebug()<<"login:"<<str;
 
     // int begin=str.indexOf("{");
     // int end=str.lastIndexOf("}");
@@ -72,6 +73,7 @@ void loginpage::initalLoginPage()
     ui->inputOfPassword->setEchoMode(QLineEdit::Password);
 
     ui->optionOfRole->addItems(QStringList()<<"学生"<<"教师"<<"管理员");
+    ui->optionOfRole->hide();
     ui->textOfError->hide();
 
     connect(ui->btnOfLogin,&QPushButton::clicked,this,[=]()
@@ -79,7 +81,11 @@ void loginpage::initalLoginPage()
         connect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&loginpage::toLogin);
 
         QNetworkRequest request;
-        request.setUrl("http://127.0.0.1:8848/login/token?userId="+ui->inputOfAccount->text()+"&passwd="+ui->inputOfPassword->text());
+        request.setUrl("http://"
+        SERVER_IP
+        ":"
+        SERVER_PORT_S
+        "/login/token?userId="+ui->inputOfAccount->text()+"&passwd="+ui->inputOfPassword->text());
         request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
         request.setRawHeader("Accept","text/html");
 
