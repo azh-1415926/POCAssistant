@@ -156,6 +156,20 @@ void quizview::updateQuiz(const QJsonObject &quiz)
     }
 }
 
+void quizview::reset()
+{
+    setIndex(-1);
+    setSum(0);
+
+    centerOfQuiz->setCurrentIndex(0);
+    textOfTag->setText("");
+    textOfQuiz->setText("暂无题目");
+    emit updateSelectOption(0,"无内容");
+    emit updateSelectOption(1,"无内容");
+    emit updateSelectOption(2,"无内容");
+    emit updateSelectOption(3,"无内容");
+}
+
 /* 初始化布局、按钮、文本 */
 void quizview::initalQuestion()
 {

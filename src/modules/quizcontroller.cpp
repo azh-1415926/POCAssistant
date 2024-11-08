@@ -66,7 +66,6 @@ void quizcontroller::InitalView()
         return;
 
     updateQuiz(0);
-    view->setSum(model->count());
 }
 
 void quizcontroller::initalController()
@@ -75,6 +74,17 @@ void quizcontroller::initalController()
 
 void quizcontroller::updateQuiz(int index)
 {
+    if(model->count()==0)
+    {
+        view->reset();
+        return;
+    }
+            
+    if(index>=model->count())
+    {
+        return;
+    }
     view->setIndex(index);
+    view->setSum(model->count());
     view->updateQuiz(model->get(index));
 }

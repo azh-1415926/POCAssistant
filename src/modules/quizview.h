@@ -46,6 +46,8 @@ class quizview : public QWidget
         void hideCollection(bool b);
         void updateQuiz(const QJsonObject& quiz);
 
+        void reset();
+
     signals:
         void collectQuestion();
         void uncollectQuestion();
