@@ -6,12 +6,15 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class quizpage; }
 QT_END_NAMESPACE
 
+class quizmodel;
+
 class quizpage : public basepage
 {
     Q_OBJECT
 
     private:
         Ui::quizpage* ui;
+        quizmodel* modelOfTest;
 
     protected:
         ;
@@ -27,6 +30,10 @@ class quizpage : public basepage
         virtual void resetPage();
 
         void back();
+
+        void updateTest(QNetworkReply* reply);
+        void updateCollection(QNetworkReply* reply);
+        void updateWrong(QNetworkReply* reply);
 
     signals:
         ;

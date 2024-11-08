@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>346</height>
+    <height>424</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -318,7 +318,7 @@ QFrame#frame3
                 <item>
                  <widget class="QLabel" name="label_6">
                   <property name="text">
-                   <string>从题库中抽取题目并进行限时训练</string>
+                   <string>从题库中抽取题目，并进行限时训练</string>
                   </property>
                   <property name="wordWrap">
                    <bool>true</bool>
@@ -340,7 +340,30 @@ QFrame#frame3
           </item>
          </layout>
         </widget>
-        <widget class="quizview" name="pageOfTest"/>
+        <widget class="QWidget" name="pageOfTest">
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <widget class="QComboBox" name="optionOfChapter"/>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnOfSwitch">
+              <property name="text">
+               <string>切换至收藏页</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QStackedWidget" name="pagesOfTest">
+            <widget class="quizview" name="pageOfQuestions"/>
+            <widget class="quizview" name="pageOfCollections"/>
+           </widget>
+          </item>
+         </layout>
+        </widget>
         <widget class="QWidget" name="pageOfWrong"/>
         <widget class="QWidget" name="pageOfSimulation"/>
        </widget>
