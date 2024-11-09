@@ -29,10 +29,12 @@ class coursepage : public basepage
 
     public slots:
         virtual void resetPage();
+        virtual void selectedPage();
 
         void back();
 
-        void setOutLine(QString str);
+        void setOutLine(QNetworkReply* reply);
+        void setContent(QNetworkReply* reply);
 
     signals:
         ;

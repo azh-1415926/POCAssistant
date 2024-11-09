@@ -19,6 +19,7 @@ basepage::~basepage()
 void basepage::select()
 {
     emit refreshStatus(m_Status);
+    selectedPage();
 }
 
 void basepage::setStatus(const QString &currPage, const QString &currIcon, const QString &currInfo)
@@ -29,6 +30,10 @@ void basepage::setStatus(const QString &currPage, const QString &currIcon, const
 }
 
 void basepage::resetPage()
+{
+}
+
+void basepage::selectedPage()
 {
 }
 

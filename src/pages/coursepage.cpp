@@ -4,6 +4,20 @@
 #include <jsonFile.hpp>
 
 #include "markdownhighlighter.h"
+#include "constant.h"
+
+int bigChinese_Transfer_Number(const QString& str)
+{
+    QStringList numerical_value  = {"零","一","二","三","四","五","六","七","八","九"};
+
+    for(int i=0;i<numerical_value.size();i++)
+    {
+        if(str==numerical_value[i])
+            return i;
+    }
+
+    return -1;
+}
 
 const QString number_Transfer_BigChinese(const double &Fnumber)
 {
@@ -180,12 +194,34 @@ void coursepage::resetPage()
 {
 }
 
+void coursepage::selectedPage()
+{
+    connect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&coursepage::setOutLine);
+
+    QNetworkRequest request;
+    request.setUrl(QUrl("http://"
+    SERVER_IP
+    ":"
+    SERVER_PORT_S
+    "/course/getOutline"));
+    request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
+    request.setRawHeader("Accept","text/html");
+
+    httpManager::getInstance().get()->get(request);
+}
+
 void coursepage::back()
 {
 }
 
-void coursepage::setOutLine(QString str)
+void coursepage::setOutLine(QNetworkReply* reply)
 {
+    disconnect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&coursepage::setOutLine);
+
+    QString str=reply->readAll();
+
+    qDebug()<<"getOutline:"<<str;
+
     QTreeWidget* widgetOfOutLine=ui->outline;
 
     widgetOfOutLine->clear();
@@ -195,13 +231,13 @@ void coursepage::setOutLine(QString str)
     QString currChapter;
     QList<QPair<QString,QString>> currSections;
 
-    int countOfChapter=obj.value("count").toString().toInt();
+    int countOfChapter=obj.value("count").toInt();
 
     for(int i=0;i<countOfChapter;i++)
     {
         QJsonObject chapter=obj.value(QString::number(i)).toObject();
         
-        int countOfSection=chapter.value("count").toString().toInt();
+        int countOfSection=chapter.value("count").toInt();
         QString value=chapter.value("value").toString();
 
         QTreeWidgetItem* item=new QTreeWidgetItem(QStringList()<<"第"+number_Transfer_BigChinese(i+1)+"章"<<value);
@@ -217,6 +253,18 @@ void coursepage::setOutLine(QString str)
 
         widgetOfOutLine->addTopLevelItem(item);
     }
+}
+
+void coursepage::setContent(QNetworkReply *reply)
+{
+    disconnect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&coursepage::setContent);
+
+    QString str=reply->readAll();
+    QJsonObject obj=jsonFile::toJson(str);
+
+    ui->test->setAutoTextOptions(QMarkdownTextEdit::BracketRemoval);
+    ui->test->setPlainText(obj.value("content").toString());
+    ui->test->setReadOnly(true);
 }
 
 void coursepage::initalCoursePage()
@@ -236,15 +284,37 @@ void coursepage::initalCoursePage()
         {
             QTreeWidgetItemIterator it(list[i]);
 
-            QFile file(":/md/course/1.md");
-            if (file.open(QFile::ReadOnly | QFile::Text))
+            QString str=(*it)->data(0,0).value<QString>();
+
+            qDebug()<<(*it)->data(0,0);
+
+            QString chapter;
+            QString section;
+
+            if(str.indexOf("章")==-1)
             {
-                ui->test->setAutoTextOptions(QMarkdownTextEdit::BracketRemoval);
-                ui->test->setPlainText(file.readAll());
-                ui->test->setReadOnly(true);
+                QString chapterStr=(*it)->parent()->data(0,0).value<QString>();
+                chapter=QString::number(bigChinese_Transfer_Number(chapterStr[1])-1);
+                section=QString::number(bigChinese_Transfer_Number(str[1]));
             }
-                
-            // ui->test->setText("# "+(*it)->text(1));
+            else
+            {
+                chapter=QString::number(bigChinese_Transfer_Number(str[1])-1);;
+                section="0";
+            }
+
+            connect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&coursepage::setContent);
+
+            QNetworkRequest request;
+            request.setUrl(QUrl("http://"
+            SERVER_IP
+            ":"
+            SERVER_PORT_S
+            "/course/getCourse?chapter="+chapter+"&section="+section));
+            request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
+            request.setRawHeader("Accept","text/html");
+
+            httpManager::getInstance().get()->get(request);
         }
     });
 }

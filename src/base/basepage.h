@@ -22,6 +22,7 @@ class basepage : public QWidget
     public slots:
         void select();
         virtual void resetPage();
+        virtual void selectedPage();
 
         void setStatus(const QString& currPage,const QString& currIcon,const QString& currInfo="");
         void setStatus(const StatusOfPage& status);
