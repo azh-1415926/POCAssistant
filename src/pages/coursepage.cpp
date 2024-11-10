@@ -273,6 +273,8 @@ void coursepage::initalCoursePage()
 
     m_Status.currIcon.load(":/img/main/course");
 
+    ui->btnOfMark->hide();
+
     ui->outline->columnCount();
 
     getOutLine(ui->outline);
@@ -285,8 +287,6 @@ void coursepage::initalCoursePage()
             QTreeWidgetItemIterator it(list[i]);
 
             QString str=(*it)->data(0,0).value<QString>();
-
-            qDebug()<<(*it)->data(0,0);
 
             QString chapter;
             QString section;

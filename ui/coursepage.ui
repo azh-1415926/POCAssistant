@@ -336,9 +336,9 @@
       <item>
        <layout class="QGridLayout" name="gridLayout">
         <item row="0" column="1">
-         <widget class="QPushButton" name="pushButton">
+         <widget class="QPushButton" name="btnOfMark">
           <property name="text">
-           <string>PushButton</string>
+           <string>Mark</string>
           </property>
          </widget>
         </item>

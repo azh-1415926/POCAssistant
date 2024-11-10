@@ -4,6 +4,7 @@
 #include "highlighter.h"
 
 #include <QTextEdit>
+#include <QJsonObject>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class programpage; }
@@ -16,6 +17,7 @@ class programpage : public basepage
     private:
         Ui::programpage* ui;
         Highlighter* highlighter;
+        QJsonObject m_ExperimentInfo;
 
     protected:
         ;
@@ -29,10 +31,13 @@ class programpage : public basepage
 
     public slots:
         virtual void resetPage();
+        virtual void selectedPage();
 
         void back();
 
+        void getExperiment(QNetworkReply* reply);
         void getResult(QNetworkReply* reply);
+        void getSubmitState(QNetworkReply* reply);
 
     signals:
         ;
