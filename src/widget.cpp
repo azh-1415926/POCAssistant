@@ -139,7 +139,8 @@ void widget::initalWidget()
     installEventFilter(this);
 
     // ui->frame->setStyleSheet("QFrame#frame{background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(251,102,102, 200), stop:1 rgba(20,196,188, 210));}");
-    ui->frame->setStyleSheet("QFrame#frame{background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255,255,210, 200), stop:1 rgba(168, 216, 234, 210));}");
+    // ui->frame->setStyleSheet("QFrame#frame{background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255,255,210, 200), stop:1 rgba(168, 216, 234, 210));}");
+    ui->frame->setStyleSheet("QFrame#frame{background-color: RGB(245,245,245);}");
 
     initalTopPages();
     initalAllPages();

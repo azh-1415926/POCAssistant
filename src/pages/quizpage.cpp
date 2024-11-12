@@ -75,7 +75,7 @@ void quizpage::initalQuizPage()
         SERVER_IP
         ":"
         SERVER_PORT_S
-        "/quiz/getquiz?chapter=0"));
+        "/quiz/getquiz?chapter=1"));
         request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
         request.setRawHeader("Accept","text/html");
 

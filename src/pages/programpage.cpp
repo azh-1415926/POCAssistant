@@ -181,6 +181,7 @@ void programpage::setupEditor()
     font.setPointSize(10);
 
     ui->CodeEdit->setFont(font);
+    ui->CodeEdit->setAcceptRichText(false);
 
     highlighter = new Highlighter(ui->CodeEdit->document());
 

@@ -280,7 +280,7 @@ QFrame#frame3
               <item>
                <widget class="QLabel" name="label_2">
                 <property name="text">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;提供在线代码编辑器，支持C/C++语言，用户可以在线编写代码并进行编译，查看编译结果&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;提供在线代码编辑器，支持C语言，用户可以在线编写代码并进行编译，查看编译结果&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
