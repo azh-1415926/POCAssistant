@@ -18,6 +18,7 @@ class quizview : public QWidget
         QStackedWidget* centerOfQuiz;
         clickoptions* optionOfSelectQuiz;
         clickoptions* optionOfJudgeQuiz;
+        QTextEdit* fillQuiz;
         QTextEdit* codeQuiz;
 
         QPushButton* forwardBtn;

@@ -11,6 +11,7 @@ quizview::quizview(QWidget *parent)
     : QWidget(parent)
     , optionOfSelectQuiz(new clickoptions)
     , optionOfJudgeQuiz(new clickoptions(2))
+    , fillQuiz(new QTextEdit)
     , codeQuiz(new QTextEdit)
     , forwardBtn(new QPushButton), nextBtn(new QPushButton), collectBtn(new collectbutton)
     , textOfTag(new QLabel), textOfProcess(new QLabel), textOfQuiz(new QLabel)
@@ -23,6 +24,7 @@ quizview::~quizview()
 {
     delete optionOfSelectQuiz;
     delete optionOfJudgeQuiz;
+    delete fillQuiz;
     delete codeQuiz;
     delete forwardBtn;
     delete nextBtn;
@@ -105,6 +107,10 @@ void quizview::setQuizType(int type)
         break;
 
     case 2:
+        quizType="填空题";
+        break;
+
+    case 3:
         quizType="编程题";
         break;
 
@@ -148,6 +154,10 @@ void quizview::updateQuiz(const QJsonObject &quiz)
         break;
 
     case 2:
+        /* code */
+        break;
+
+    case 3:
         /* code */
         break;
     
@@ -196,6 +206,7 @@ void quizview::initalQuestion()
     layout->addLayout(layoutOfStatus);
     centerOfQuiz->addWidget(optionOfSelectQuiz);
     centerOfQuiz->addWidget(optionOfJudgeQuiz);
+    centerOfQuiz->addWidget(fillQuiz);
     centerOfQuiz->addWidget(codeQuiz);
 
     // setQuizType(2);
