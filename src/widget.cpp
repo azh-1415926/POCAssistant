@@ -131,6 +131,15 @@ void widget::getInfo(QNetworkReply *reply)
 
     ui->TopPages->setCurrentIndex(1);
     ui->MainPage->select();
+
+    if(userRole::getInstance().get()==(int)(UserRole::ADMIN))
+    {
+        ui->MainPage->switchToAdmin(true);
+    }
+    else
+    {
+        ui->MainPage->switchToAdmin(false);
+    }
 }
 
 void widget::initalWidget()
@@ -171,6 +180,7 @@ void widget::initalMainPage()
     RegisterPage(ui->CoursePage)
     RegisterPage(ui->ProgramPage)
     RegisterPage(ui->QuizPage)
+    RegisterPage(ui->ManagementPage)
 
     connect(ui->MainPage,&mainpage::selectPage,this,&widget::selectPage);
 

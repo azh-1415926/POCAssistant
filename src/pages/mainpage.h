@@ -31,6 +31,8 @@ class mainpage : public basepage
         void back();
         void selectLabel(const clicklabel* label);
 
+        void switchToAdmin(bool state);
+
     signals:
         void selectPage(int i);
 

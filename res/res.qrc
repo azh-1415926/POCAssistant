@@ -37,6 +37,9 @@
     <qresource prefix="/img/main">
         <file alias="quiz">img/main/quiz.png</file>
     </qresource>
+    <qresource prefix="/img/main">
+        <file alias="management">img/main/management.png</file>
+    </qresource>
 
     <!-- quiz -->
     <qresource prefix="/img/quiz">

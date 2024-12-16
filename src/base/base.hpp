@@ -46,6 +46,13 @@ struct StatusOfPage
     QString currInfo;
 };
 
+enum class UserRole : int
+{
+    STUDENT=0,
+    TEACHER=1,
+    ADMIN=2
+};
+
 // template<class T>
 // class singletone : QObject
 // {
