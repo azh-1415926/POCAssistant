@@ -37,5 +37,5 @@ class mainpage : public basepage
         void selectPage(int i);
 
     private:
-        void initalmainpage();
+        void initalMainPage();
 };

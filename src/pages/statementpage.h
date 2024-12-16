@@ -3,22 +3,22 @@
 #include "basepage.h"
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class managementpage; }
+namespace Ui { class statementpage; }
 QT_END_NAMESPACE
 
-class managementpage : public basepage
+class statementpage : public basepage
 {
     Q_OBJECT
 
     private:
-        Ui::managementpage* ui;
+        Ui::statementpage* ui;
 
     protected:
         ;
 
     public:
-        explicit managementpage(QWidget* parent = nullptr);
-        ~managementpage();
+        explicit statementpage(QWidget* parent = nullptr);
+        ~statementpage();
 
     protected:
         // bool eventFilter(QObject* obj,QEvent* e) override;
@@ -32,5 +32,5 @@ class managementpage : public basepage
         ;
 
     private:
-        void initalManagementPage();
+        void initalStatementPage();
 };

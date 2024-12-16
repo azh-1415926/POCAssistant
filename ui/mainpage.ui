@@ -173,7 +173,7 @@ QFrame#frame3
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="label">
+               <widget class="QLabel" name="textOfCourse">
                 <property name="text">
                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;提供编译原理的学习路线，涵盖编译原理的各个方面，如词法分析、语法分析、语义分析等&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                 </property>
@@ -374,7 +374,7 @@ QFrame#frame3
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="label_3">
+               <widget class="QLabel" name="textOfQuiz">
                 <property name="autoFillBackground">
                  <bool>false</bool>
                 </property>

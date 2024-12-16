@@ -40,6 +40,12 @@
     <qresource prefix="/img/main">
         <file alias="management">img/main/management.png</file>
     </qresource>
+    <qresource prefix="/img/main">
+        <file alias="statement">img/main/statement.png</file>
+    </qresource>
+    <qresource prefix="/img/main">
+        <file alias="update">img/main/update.png</file>
+    </qresource>
 
     <!-- quiz -->
     <qresource prefix="/img/quiz">

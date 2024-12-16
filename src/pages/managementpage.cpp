@@ -5,7 +5,7 @@ managementpage::managementpage(QWidget *parent)
     : basepage("在线管理",parent)
     , ui(new Ui::managementpage)
 {
-    initalManagementpage();
+    initalManagementPage();
 }
 
 managementpage::~managementpage()
@@ -20,7 +20,7 @@ void managementpage::back()
 {
 }
 
-void managementpage::initalManagementpage()
+void managementpage::initalManagementPage()
 {
     ui->setupUi(this);
 

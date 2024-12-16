@@ -287,6 +287,8 @@
             <widget class="programpage" name="ProgramPage"/>
             <widget class="quizpage" name="QuizPage"/>
             <widget class="managementpage" name="ManagementPage"/>
+            <widget class="statementpage" name="StatementPage"/>
+            <widget class="updatepage" name="UpdatePage"/>
            </widget>
           </item>
           <item>
@@ -383,7 +385,19 @@
   <customwidget>
    <class>managementpage</class>
    <extends>QWidget</extends>
-   <header location="global">managementpage.h</header>
+   <header>managementpage.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>statementpage</class>
+   <extends>QWidget</extends>
+   <header location="global">statementpage.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>updatepage</class>
+   <extends>QWidget</extends>
+   <header>updatepage.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
