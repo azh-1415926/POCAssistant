@@ -85,7 +85,7 @@ void mainpage::switchToAdmin(bool state)
         ui->course->setText("在线课程");
         ui->textOfCourse->setText("<html><head/><body><p>提供编译原理的学习路线，涵盖编译原理的各个方面，如词法分析、语法分析、语义分析等</p></body></html>");
 
-        ui->iconOfProgram->setPixmap(QPixmap(":/img/main/program"));
+        ui->iconOfProgram->setPixmap(QPixmap(":/img/main/code"));
         ui->program->setText("在线实验");
         ui->textOfProgram->setText("<html><head/><body><p>提供在线代码编辑器，支持C语言，用户可以在线编写代码并进行编译，查看编译结果</p></body></html>");
 

@@ -120,6 +120,7 @@ void programpage::initalProgramPage()
         connect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&programpage::getResult);
 
         QString code=ui->CodeEdit->toPlainText();
+        QString input=ui->inputOfProgram->toPlainText();
 
         QNetworkRequest request;
         request.setUrl(QUrl("http://"
@@ -131,7 +132,8 @@ void programpage::initalProgramPage()
         request.setRawHeader("Accept","text/html");
 
         QJsonObject obj;
-        obj.insert("data",code);
+        obj.insert("code",code);
+        obj.insert("input",input);
         QJsonDocument doc(obj);
 
         httpManager::getInstance().get()->post(request,doc.toJson());

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>528</width>
+    <width>540</width>
     <height>396</height>
    </rect>
   </property>
@@ -17,18 +17,18 @@
    <item>
     <widget class="QFrame" name="frame">
      <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
+      <enum>QFrame::Shape::StyledPanel</enum>
      </property>
      <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
+      <enum>QFrame::Shadow::Raised</enum>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <widget class="QWidget" name="centerWidget" native="true">
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
-          <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0">
-           <item row="2" column="0">
+          <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0">
+           <item row="3" column="0">
             <widget class="QScrollArea" name="scrollArea">
              <property name="widgetResizable">
               <bool>true</bool>
@@ -38,8 +38,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>468</width>
-                <height>158</height>
+                <width>462</width>
+                <height>69</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -97,6 +97,25 @@
               </widget>
              </item>
             </layout>
+           </item>
+           <item row="2" column="0">
+            <widget class="QTextEdit" name="inputOfProgram">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="placeholderText">
+              <string>程序输入</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
