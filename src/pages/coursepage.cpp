@@ -203,7 +203,7 @@ void coursepage::selectedPage()
     SERVER_IP
     ":"
     SERVER_PORT_S
-    "/course/getOutline"));
+    "/Course/getOutline"));
     request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
     request.setRawHeader("Accept","text/html");
 
@@ -310,7 +310,7 @@ void coursepage::initalCoursePage()
             SERVER_IP
             ":"
             SERVER_PORT_S
-            "/course/getCourse?chapter="+chapter+"&section="+section));
+            "/Course/getCourse?chapter="+chapter+"&section="+section));
             request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
             request.setRawHeader("Accept","text/html");
 

@@ -44,14 +44,14 @@ void loginpage::toLogin(QNetworkReply *reply)
     // json.fromJson(str.mid(begin,end+1-begin));
     json.fromJson(str);
 
-    if(json.value("success").toString()=="true")
+    if(json.value("result").toString()=="true")
     {
         ui->textOfError->hide();
         // currToken=json.value("token").toString();
         userId::getInstance().set(ui->inputOfAccount->text());
         emit logon();
     }
-    else if(json.value("success").toString()=="false")
+    else if(json.value("result").toString()=="false")
     {
         ui->textOfError->setText(ERROR_TEXT("账号或密码错误"));
         ui->textOfError->show();
@@ -85,7 +85,7 @@ void loginpage::initalLoginPage()
         SERVER_IP
         ":"
         SERVER_PORT_S
-        "/login/token?userId="+ui->inputOfAccount->text()+"&passwd="+ui->inputOfPassword->text());
+        "/User/login?userId="+ui->inputOfAccount->text()+"&passwd="+ui->inputOfPassword->text());
         request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
         request.setRawHeader("Accept","text/html");
 

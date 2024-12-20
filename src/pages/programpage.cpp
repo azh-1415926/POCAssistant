@@ -33,7 +33,7 @@ void programpage::selectedPage()
     SERVER_IP
     ":"
     SERVER_PORT_S
-    "/code/getExperiment?studentId="+userId::getInstance().get()));
+    "/Code/getExperiment?studentId="+userId::getInstance().get()));
     request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
     request.setRawHeader("Accept","text/html");
 
@@ -127,7 +127,7 @@ void programpage::initalProgramPage()
         SERVER_IP
         ":"
         SERVER_PORT_S
-        "/code/compile"));
+        "/Code/compile"));
         request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
         request.setRawHeader("Accept","text/html");
 
@@ -163,7 +163,7 @@ void programpage::initalProgramPage()
         SERVER_IP
         ":"
         SERVER_PORT_S
-        "/code/submit?experimentId="+experimentId));
+        "/Code/submit?experimentId="+experimentId));
         request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
         request.setRawHeader("Accept","text/html");
 

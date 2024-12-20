@@ -57,7 +57,7 @@ void widget::hideLoginPage()
     SERVER_IP
     ":"
     SERVER_PORT_S
-    "/login/info?userId="+userId::getInstance().get());
+    "/User/info?userId="+userId::getInstance().get());
     request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
     request.setRawHeader("Accept","text/html");
 
