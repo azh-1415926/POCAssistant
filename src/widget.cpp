@@ -181,6 +181,8 @@ void widget::initalMainPage()
     RegisterPage(ui->ProgramPage)
     RegisterPage(ui->QuizPage)
     RegisterPage(ui->ManagementPage)
+    RegisterPage(ui->StatementPage)
+    RegisterPage(ui->UpdatePage)
 
     connect(ui->MainPage,&mainpage::selectPage,this,&widget::selectPage);
 

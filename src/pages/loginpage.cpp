@@ -49,6 +49,13 @@ void loginpage::toLogin(QNetworkReply *reply)
         ui->textOfError->hide();
         // currToken=json.value("token").toString();
         userId::getInstance().set(ui->inputOfAccount->text());
+
+        QString token=json.value("token").toString();
+        if(!token.isEmpty())
+        {
+            tokenOfAdmin::getInstance().set(token);
+        }
+        
         emit logon();
     }
     else if(json.value("result").toString()=="false")

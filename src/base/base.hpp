@@ -96,3 +96,4 @@ enum class UserRole : int
 SINGLETONE_P(httpManager,QNetworkAccessManager)
 SINGLETONE(userId,QString)
 SINGLETONE(userRole,int)
+SINGLETONE(tokenOfAdmin,QString)

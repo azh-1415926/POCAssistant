@@ -27,10 +27,18 @@ class managementpage : public basepage
         virtual void resetPage();
 
         void back();
+        
+        QString getUrlByOperation(int index);
+
+        void operationOfUser(QNetworkReply* reply);
+        void operationOfClass(QNetworkReply* reply);
+        void operationOfSearch(QNetworkReply* reply);
 
     signals:
         ;
 
     private:
         void initalManagementPage();
+
+        
 };
