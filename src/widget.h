@@ -2,7 +2,7 @@
 
 #include <QWidget>
 
-#include "base.hpp"
+#include "basepage.h"
 #include "clicklabel.h"
 
 QT_BEGIN_NAMESPACE

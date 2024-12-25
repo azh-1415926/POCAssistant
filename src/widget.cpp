@@ -1,9 +1,7 @@
 #include "widget.h"
 #include "ui_widget.h"
 
-#include "base.hpp"
 #include "jsonFile.hpp"
-#include "constant.h"
 
 #define RegisterPage(pageName) \
     connect(pageName,&basepage::refreshStatus,this,&widget::setPageStatus); \

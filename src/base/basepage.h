@@ -1,8 +1,11 @@
 #pragma once
 
 #include <QWidget>
+#include <QNetworkReply>
 
 #include "base.hpp"
+#include "global.hpp"
+#include "constant.h"
 
 class basepage : public QWidget
 {

@@ -4,8 +4,6 @@
 #include "quizcontroller.h"
 #include "quizmodel.h"
 #include "jsonFile.hpp"
-#include "base.hpp"
-#include "constant.h"
 
 quizpage::quizpage(QWidget *parent)
     : basepage("在线测试",parent)

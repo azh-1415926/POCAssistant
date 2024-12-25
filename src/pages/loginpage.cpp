@@ -2,8 +2,6 @@
 #include "ui_loginpage.h"
 
 #include "jsonFile.hpp"
-#include "base.hpp"
-#include "constant.h"
 
 #include <QTimer>
 
@@ -55,7 +53,7 @@ void loginpage::toLogin(QNetworkReply *reply)
         {
             tokenOfAdmin::getInstance().set(token);
         }
-        
+
         emit logon();
     }
     else if(json.value("result").toString()=="false")

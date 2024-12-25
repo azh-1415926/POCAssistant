@@ -4,7 +4,6 @@
 #include <jsonFile.hpp>
 
 #include "markdownhighlighter.h"
-#include "constant.h"
 
 int bigChinese_Transfer_Number(const QString& str)
 {

@@ -1,9 +1,6 @@
 #include "managementpage.h"
 #include "ui_managementpage.h"
 
-#include "base.hpp"
-#include "constant.h"
-
 #include <QJsonObject>
 #include <QJsonDocument>
 

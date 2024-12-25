@@ -3,11 +3,6 @@
 #include <QString>
 #include <QPixmap>
 
-#include <QScopedPointer>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QNetworkCookieJar>
-
 #define SINGLETONE(Name,Type) \
 class Name : QObject \
 { \
@@ -52,48 +47,3 @@ enum class UserRole : int
     TEACHER=1,
     ADMIN=2
 };
-
-// template<class T>
-// class singletone : QObject
-// {
-//     public:
-//         static singletone& getInstance()
-//         {
-//             static singletone instance;
-//             return instance;
-//         }
-//         T get() { return m_Instance; }
-
-//         void set(T data) { m_Instance=data; }
-
-//     protected:
-//         explicit singletone(QObject* parent=nullptr): QObject(parent) { }
-
-//         T m_Instance;
-// };
-
-// class httpManager : QObject
-// {
-//     public:
-//         static httpManager& getInstance()
-//         {
-//             static httpManager instance;
-//             return instance;
-//         }
-//         QNetworkAccessManager* getManger()
-//         {
-//             if(m_Manger==nullptr)
-//                 m_Manger=new QNetworkAccessManager(this);
-
-//             return m_Manger;
-//         }
-
-//     private:
-//         explicit httpManager(QObject* parent=nullptr): QObject(parent), m_Manger(nullptr) { }
-
-//         QNetworkAccessManager* m_Manger;
-// };
-SINGLETONE_P(httpManager,QNetworkAccessManager)
-SINGLETONE(userId,QString)
-SINGLETONE(userRole,int)
-SINGLETONE(tokenOfAdmin,QString)

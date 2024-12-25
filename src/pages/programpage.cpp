@@ -7,7 +7,6 @@
 #include <QFile>
 
 #include "jsonFile.hpp"
-#include "constant.h"
 
 programpage::programpage(QWidget *parent)
     : basepage("在线实验",parent)
