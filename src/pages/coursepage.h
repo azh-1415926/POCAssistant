@@ -22,6 +22,7 @@ class coursepage : public basepage
         explicit coursepage(QWidget* parent = nullptr);
         ~coursepage();
 
+        // 获取页面中课程大纲内容
         QString getOutLine(QTreeWidget* w);
 
     protected:
@@ -33,7 +34,9 @@ class coursepage : public basepage
 
         void back();
 
+        // 设置页面的课程大纲
         void setOutLine(QNetworkReply* reply);
+        // 设置当前章节课程展示的内容
         void setContent(QNetworkReply* reply);
 
     signals:

@@ -28,6 +28,7 @@ class loginpage : public basepage
 
         void back();
 
+        // 接收后端响应，判断返回结果是否正确
         void toLogin(QNetworkReply* reply);
 
     signals:

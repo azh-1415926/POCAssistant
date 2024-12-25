@@ -3,6 +3,7 @@
 #include <QString>
 #include <QPixmap>
 
+// 单例模式，存取值变量
 #define SINGLETONE(Name,Type) \
 class Name : QObject \
 { \
@@ -19,6 +20,7 @@ class Name : QObject \
         Type m_Instance; \
 };
 
+// 单例模式，存储动态对象
 #define SINGLETONE_P(Name,Type) \
 class Name : QObject \
 { \
@@ -34,6 +36,7 @@ class Name : QObject \
         Type* m_Instance; \
 };
 
+// 页面的基本信息
 struct StatusOfPage
 {
     QString currPage;
@@ -41,6 +44,7 @@ struct StatusOfPage
     QString currInfo;
 };
 
+// 用户类型
 enum class UserRole : int
 {
     STUDENT=0,

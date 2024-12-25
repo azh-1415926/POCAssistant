@@ -29,8 +29,10 @@ class mainpage : public basepage
         virtual void resetPage();
 
         void back();
-        void selectLabel(const clicklabel* label);
 
+        // 图标被点击，跳转至对应模块
+        void selectLabel(const clicklabel* label);
+        // 切换至管理员界面
         void switchToAdmin(bool state);
 
     signals:

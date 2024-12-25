@@ -4,16 +4,10 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
+// 当前操作应当请求的 url
 SINGLETONE(urlOfOperation,QString)
+// 当前操作
 SINGLETONE(indexOfOperation,int)
-
-QStringList options={"用户管理","班级管理","查询"};
-QList<QStringList> subOptions=
-{
-    QStringList()<<"添加用户"<<"删除用户"<<"修改用户",
-    QStringList()<<"添加班级"<<"删除班级"<<"修改班级"<<"班级分配",
-    QStringList()<<"用户查询"<<"班级查询"
-};
 
 managementpage::managementpage(QWidget *parent)
     : basepage("在线管理",parent)
@@ -113,6 +107,14 @@ void managementpage::initalManagementPage()
     ui->setupUi(this);
 
     m_Status.currIcon.load(":/img/main/management");
+
+    QStringList options={"用户管理","班级管理","查询"};
+    QList<QStringList> subOptions=
+    {
+        QStringList()<<"添加用户"<<"删除用户"<<"修改用户",
+        QStringList()<<"添加班级"<<"删除班级"<<"修改班级"<<"班级分配",
+        QStringList()<<"用户查询"<<"班级查询"
+    };
 
     connect(ui->optionsOfFunc,&QComboBox::currentIndexChanged,this,[=](int i)
     {

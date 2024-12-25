@@ -35,8 +35,11 @@ class programpage : public basepage
 
         void back();
 
+        // 获取当前实验清单
         void getExperiment(QNetworkReply* reply);
+        // 获取编译结果
         void getResult(QNetworkReply* reply);
+        // 获取提交结果
         void getSubmitState(QNetworkReply* reply);
 
     signals:

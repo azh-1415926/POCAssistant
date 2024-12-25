@@ -28,8 +28,10 @@ class managementpage : public basepage
 
         void back();
         
+        // 获取当前操作的后端请求 url
         QString getUrlByOperation(int index);
 
+        // 分别对应用户管理、班级管理、查询
         void operationOfUser(QNetworkReply* reply);
         void operationOfClass(QNetworkReply* reply);
         void operationOfSearch(QNetworkReply* reply);
@@ -39,6 +41,4 @@ class managementpage : public basepage
 
     private:
         void initalManagementPage();
-
-        
 };

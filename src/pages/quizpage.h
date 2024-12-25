@@ -31,6 +31,7 @@ class quizpage : public basepage
 
         void back();
 
+        // 更新子页面
         void updateTest(QNetworkReply* reply);
         void updateCollection(QNetworkReply* reply);
         void updateWrong(QNetworkReply* reply);

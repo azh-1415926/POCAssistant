@@ -34,20 +34,17 @@ void loginpage::toLogin(QNetworkReply *reply)
 
     QString str(reply->readAll());
     qDebug()<<"login:"<<str;
-
-    // int begin=str.indexOf("{");
-    // int end=str.lastIndexOf("}");
     
     jsonFile json;
-    // json.fromJson(str.mid(begin,end+1-begin));
     json.fromJson(str);
 
     if(json.value("result").toString()=="true")
     {
         ui->textOfError->hide();
-        // currToken=json.value("token").toString();
+        // 设置当前用户 id 到全局变量
         userId::getInstance().set(ui->inputOfAccount->text());
 
+        // 管理员额外多一个 token
         QString token=json.value("token").toString();
         if(!token.isEmpty())
         {
@@ -99,11 +96,4 @@ void loginpage::initalLoginPage()
 
         httpManager::getInstance().get()->post(request,doc.toJson());
     });
-
-    // QTimer* timer=new QTimer(this);
-    // connect(timer,&QTimer::timeout,this,[=]()
-    // {
-    //     ui->textOfError->hide();
-    // });
-    // timer->start(15000);
 }

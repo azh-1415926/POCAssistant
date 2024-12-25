@@ -127,6 +127,7 @@ QString coursepage::getOutLine(QTreeWidget* w)
     int countOfChapter=0;
     int countOfSection=0;
 
+    // reg 用于匹配章
     QRegularExpression reg("^\u7b2c[\u4e00-\u9fa5]\u7ae0$");
     QRegularExpressionValidator v(reg,0);
 
@@ -142,7 +143,7 @@ QString coursepage::getOutLine(QTreeWidget* w)
         int pos=0;
         QValidator::State result=v.validate(str,pos);
 
-        // 判断章节
+        // 判断章节，result 不匹配则是章，否则则是节
         if(result!=QValidator::State::Acceptable)
         {
             // 若为节
@@ -193,6 +194,7 @@ void coursepage::resetPage()
 {
 }
 
+// 页面初始化时，向后端请求课程大纲内容
 void coursepage::selectedPage()
 {
     connect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&coursepage::setOutLine);
@@ -213,6 +215,7 @@ void coursepage::back()
 {
 }
 
+// 接收后端响应，设置页面课程大纲内容
 void coursepage::setOutLine(QNetworkReply* reply)
 {
     disconnect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&coursepage::setOutLine);
