@@ -1,13 +1,12 @@
 #include "managementpage.h"
 #include "ui_managementpage.h"
 
-#include <QJsonObject>
-#include <QJsonDocument>
+#include "jsonFile.hpp"
 
 // 当前操作应当请求的 url
-SINGLETONE(urlOfOperation,QString)
+SINGLETONE(currUrl,QString)
 // 当前操作
-SINGLETONE(indexOfOperation,int)
+SINGLETONE(currOperation,operationOfManagement)
 
 managementpage::managementpage(QWidget *parent)
     : basepage("在线管理",parent)
@@ -30,52 +29,58 @@ void managementpage::back()
 {
 }
 
-QString managementpage::getUrlByOperation(int index)
+QString managementpage::getUrlByOperation(operationOfManagement op)
 {
     QString url="http://"
         SERVER_IP
         ":"
         SERVER_PORT_S
-        "/Manager/"
     ;
 
-    switch (index)
+    switch (op)
     {
-    case 0:
+    case operationOfManagement::ADD_USER:
         /* 添加用户 */
-        url+="addUser";
+        url+="/Manager/addUser";
         break;
 
-    case 1:
+    case operationOfManagement::REMOVE_USER:
         /* 删除用户 */
+        url+="/Manager/removeUser";
         break;
         
-    case 2:
+    case operationOfManagement::ALTER_USER:
         /* 修改用户 */
+        url+="/Manager/alterUser";
         break;
 
-    case 3:
+    case operationOfManagement::ADD_CLASS:
         /* 添加班级 */
+        url+="/Manager/addClass";
         break;
     
-    case 4:
+    case operationOfManagement::REMOVE_CLASS:
         /* 删除班级 */
+        url+="/Manager/removeClass";
         break;
 
-    case 5:
+    case operationOfManagement::ALTER_CLASS:
         /* 修改班级 */
+        url+="/Manager/alterClass";
         break;
 
-    case 6:
+    case operationOfManagement::CLASS_ALLOC:
         /* 班级分配 */
         break;
     
-    case 7:
+    case operationOfManagement::USER_SEARCH:
         /* 用户查询 */
+        url+="/User/info";
         break;
 
-    case 8:
+    case operationOfManagement::CLASS_SERACH:
         /* 班级查询 */
+        url+="/Class/info";
         break;
 
     default:
@@ -89,7 +94,29 @@ void managementpage::operationOfUser(QNetworkReply *reply)
 {
     disconnect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&managementpage::operationOfUser);
 
-    ui->textOfOutput->setText(reply->readAll());
+    QString str=reply->readAll();
+    ui->textOfOutput->setText(str);
+
+    jsonFile json;
+    json.fromJson(str);
+
+    QString result=json.value("result").toString();
+
+    if(!result.isEmpty())
+    {
+        ui->textOfOutput->setText(json.value("info").toString());
+
+        if(result=="true")
+        {
+            clearUserInfo();
+        }
+    }
+    else
+    {
+        emit logoff();
+    }
+
+    lockUserInfo(false);
 }
 
 void managementpage::operationOfClass(QNetworkReply *reply)
@@ -122,6 +149,7 @@ void managementpage::initalManagementPage()
         ui->optionsOfSubFunc->addItems(subOptions[i]);
     });
 
+    // 子功能就为当前操作
     connect(ui->optionsOfSubFunc,&QComboBox::currentIndexChanged,this,[=](int i)
     {
         int index=0;
@@ -131,37 +159,144 @@ void managementpage::initalManagementPage()
             index+=subOptions[i].length();
         }
 
-        indexOfOperation::getInstance().set(index);
-        urlOfOperation::getInstance().set(getUrlByOperation(index));
+        operationOfManagement op=(operationOfManagement)index;
+
+        currOperation::getInstance().set(op);
+        currUrl::getInstance().set(getUrlByOperation(op));
+
+        if(op==operationOfManagement::ADD_USER)
+        {
+            ui->loadOfUser->hide();
+        }
+        else
+        {
+            ui->loadOfUser->show();
+        }
+
+        if(op==operationOfManagement::ADD_CLASS)
+        {
+            ui->loadOfClass->hide();
+        }
+        else
+        {
+            ui->loadOfClass->show();
+        }
     });
 
     ui->optionsOfFunc->addItems(options);
 
     connect(ui->submitOfUser,&QPushButton::clicked,this,[=]()
     {
-        connect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&managementpage::operationOfUser);
-
-        QNetworkRequest request;
-        request.setUrl(QUrl(urlOfOperation::getInstance().get()));
-        request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
-        request.setRawHeader("Accept","text/html");
-
         if(ui->idOfUser->text().isEmpty()||ui->nameOfUser->text().isEmpty())
         {
             ui->textOfOutput->setText("未输入用户id与用户姓名，无法进行提交");
             return;
         }
 
+        if(!userInfoIsLock&&currOperation::getInstance().get()!=operationOfManagement::ADD_USER)
+        {
+            ui->textOfOutput->setText("请先载入用户信息");
+            return;
+        }
+
+        connect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&managementpage::operationOfUser);
+
+        QNetworkRequest request;
+        request.setUrl(QUrl(currUrl::getInstance().get()));
+        request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
+        request.setRawHeader("Accept","text/html");
+
         QJsonObject obj;
 
+        // token required
         obj.insert("token",tokenOfAdmin::getInstance().get());
+        // id required
         obj.insert("id",ui->idOfUser->text());
-        obj.insert("name",ui->nameOfUser->text());
-        obj.insert("role",ui->roleOfUser->currentIndex());
-        obj.insert("password",ui->passwdOfUser->text().isEmpty()?"123456":ui->passwdOfUser->text());
+        // 在添加用户、修改用户时使用，在删除用户时不使用
+        if(currOperation::getInstance().get()!=operationOfManagement::REMOVE_USER)
+        {
+            obj.insert("name",ui->nameOfUser->text());
+            obj.insert("role",ui->roleOfUser->currentIndex());
+            obj.insert("password",ui->passwdOfUser->text().isEmpty()?"123456":ui->passwdOfUser->text());
+        }
+
+        QJsonDocument doc(obj);
+
+        lockUserInfo(true);
+
+        httpManager::getInstance().get()->post(request,doc.toJson());
+    });
+
+    connect(ui->loadOfUser,&QPushButton::clicked,this,[=]()
+    {
+        if(userInfoIsLock&&ui->loadOfUser->text()=="取消载入")
+        {
+            clearUserInfo();
+            ui->textOfOutput->setText("已取消");
+            return;
+        }
+
+        if(ui->idOfUser->text().isEmpty()||ui->nameOfUser->text().isEmpty())
+        {
+            ui->textOfOutput->setText("未输入用户id，无法载入");
+            return;
+        }
+
+        connect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&managementpage::operationOfUser);
+
+        QNetworkRequest request;
+        request.setUrl(QUrl(currUrl::getInstance().get()));
+        request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
+        request.setRawHeader("Accept","text/html");
+
+        QJsonObject obj;
+
+        // token required
+        obj.insert("token",tokenOfAdmin::getInstance().get());
+        // id required
+        obj.insert("id",ui->idOfUser->text());
 
         QJsonDocument doc(obj);
 
         httpManager::getInstance().get()->post(request,doc.toJson());
     });
+}
+
+void managementpage::lockUserInfo(bool shouldLock)
+{
+    userInfoIsLock=shouldLock;
+    if(shouldLock)
+    {
+        ui->nameOfUser->setEnabled(false);
+        ui->roleOfUser->setEnabled(false);
+        ui->passwdOfUser->setEnabled(false);
+    }
+    else
+    {
+        ui->nameOfUser->setEnabled(true);
+        ui->roleOfUser->setEnabled(true);
+        ui->passwdOfUser->setEnabled(true);
+    }
+}
+
+void managementpage::lockClassInfo(bool shouldLock)
+{
+    classInfoIsLock=shouldLock;
+    if(shouldLock)
+    {
+        ui->nameOfClass->setEnabled(false);
+        ui->teacherOfClass->setEnabled(false);
+    }
+    else
+    {
+        ui->nameOfClass->setEnabled(true);
+        ui->teacherOfClass->setEnabled(true);
+    }
+}
+
+void managementpage::clearUserInfo()
+{
+    ui->nameOfUser->setText("");
+    ui->roleOfUser->setCurrentIndex(0);
+    ui->passwdOfUser->setText("");
 }

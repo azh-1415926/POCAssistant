@@ -6,12 +6,21 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class managementpage; }
 QT_END_NAMESPACE
 
+enum class operationOfManagement
+{
+    ADD_USER=0,REMOVE_USER,ALTER_USER,
+    ADD_CLASS,REMOVE_CLASS,ALTER_CLASS,CLASS_ALLOC,
+    USER_SEARCH,CLASS_SERACH
+};
+
 class managementpage : public basepage
 {
     Q_OBJECT
 
     private:
         Ui::managementpage* ui;
+        bool userInfoIsLock;
+        bool classInfoIsLock;
 
     protected:
         ;
@@ -29,7 +38,7 @@ class managementpage : public basepage
         void back();
         
         // 获取当前操作的后端请求 url
-        QString getUrlByOperation(int index);
+        QString getUrlByOperation(operationOfManagement op);
 
         // 分别对应用户管理、班级管理、查询
         void operationOfUser(QNetworkReply* reply);
@@ -41,4 +50,8 @@ class managementpage : public basepage
 
     private:
         void initalManagementPage();
+        void lockUserInfo(bool shouldLock);
+        void lockClassInfo(bool shouldLock);
+
+        void clearUserInfo();
 };

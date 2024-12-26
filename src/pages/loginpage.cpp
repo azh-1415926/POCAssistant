@@ -83,15 +83,17 @@ void loginpage::initalLoginPage()
         connect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&loginpage::toLogin);
 
         QNetworkRequest request;
-        request.setUrl("http://"
+        request.setUrl(QUrl("http://"
         SERVER_IP
         ":"
         SERVER_PORT_S
-        "/User/login?userId="+ui->inputOfAccount->text()+"&passwd="+ui->inputOfPassword->text());
+        "/User/login"));
         request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
         request.setRawHeader("Accept","text/html");
 
         QJsonObject obj;
+        obj.insert("id",ui->inputOfAccount->text());
+        obj.insert("password",ui->inputOfPassword->text());
         QJsonDocument doc(obj);
 
         httpManager::getInstance().get()->post(request,doc.toJson());

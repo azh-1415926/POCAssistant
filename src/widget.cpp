@@ -51,15 +51,19 @@ void widget::hideLoginPage()
     connect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&widget::getInfo);
 
     QNetworkRequest request;
-    request.setUrl("http://"
+    request.setUrl(QUrl("http://"
     SERVER_IP
     ":"
     SERVER_PORT_S
-    "/User/info?userId="+userId::getInstance().get());
+    "/User/info"));
     request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
     request.setRawHeader("Accept","text/html");
 
-    httpManager::getInstance().get()->get(request);
+    QJsonObject obj;
+    obj.insert("id",userId::getInstance().get());
+    QJsonDocument doc(obj);
+
+    httpManager::getInstance().get()->post(request,doc.toJson());
 
     selectPage(0);
 }
