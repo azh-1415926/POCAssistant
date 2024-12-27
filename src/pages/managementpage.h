@@ -50,8 +50,12 @@ class managementpage : public basepage
 
     private:
         void initalManagementPage();
+
+        void loadUserInfo(bool needToLoad,bool needToClearId=false);
+
         void lockUserInfo(bool shouldLock);
         void lockClassInfo(bool shouldLock);
 
         void clearUserInfo();
+        void clearClassInfo();
 };

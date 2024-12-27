@@ -5,8 +5,10 @@
 
 // 当前操作应当请求的 url
 SINGLETONE(currUrl,QString)
-// 当前操作
+// 当前提交按钮对应的操作
 SINGLETONE(currOperation,operationOfManagement)
+// 当前是否为导入操作
+SINGLETONE(isLoad,bool)
 
 managementpage::managementpage(QWidget *parent)
     : basepage("在线管理",parent)
@@ -95,7 +97,8 @@ void managementpage::operationOfUser(QNetworkReply *reply)
     disconnect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&managementpage::operationOfUser);
 
     QString str=reply->readAll();
-    ui->textOfOutput->setText(str);
+    
+    qDebug()<<"operationOfUser:"<<str;
 
     jsonFile json;
     json.fromJson(str);
@@ -106,17 +109,40 @@ void managementpage::operationOfUser(QNetworkReply *reply)
     {
         ui->textOfOutput->setText(json.value("info").toString());
 
+        // 若为载入操作，更新控件，并锁住id输入框
+        if(isLoad::getInstance().get())
+        {
+            if(result=="true")
+            {
+                ui->nameOfUser->setText(json.value("name").toString());
+                ui->roleOfUser->setCurrentIndex(json.value("role").toInt());
+                ui->passwdOfUser->setText(json.value("password").toString());
+
+                ui->idOfUser->setEnabled(false);
+
+                ui->loadOfUser->setText("取消载入");
+            }
+            
+            isLoad::getInstance().set(false);
+
+            return;
+        }
+
+        // 若为提交操作，则取消载入的数据
         if(result=="true")
         {
-            clearUserInfo();
+            loadUserInfo(false,currOperation::getInstance().get()==operationOfManagement::ALTER_USER?false:true);
+        }
+        else
+        {
+            lockUserInfo(false);
         }
     }
+    // 若响应为空，则说明请求超时，直接退出登陆
     else
     {
         emit logoff();
     }
-
-    lockUserInfo(false);
 }
 
 void managementpage::operationOfClass(QNetworkReply *reply)
@@ -154,10 +180,12 @@ void managementpage::initalManagementPage()
     {
         int index=0;
 
-        for(int ii=0;ii<i;ii++)
+        for(int ii=0;ii<ui->optionsOfFunc->currentIndex();ii++)
         {
-            index+=subOptions[i].length();
+            index+=subOptions[ii].length();
         }
+
+        index+=i;
 
         operationOfManagement op=(operationOfManagement)index;
 
@@ -167,10 +195,22 @@ void managementpage::initalManagementPage()
         if(op==operationOfManagement::ADD_USER)
         {
             ui->loadOfUser->hide();
+            loadUserInfo(false);
         }
         else
         {
             ui->loadOfUser->show();
+        }
+
+        if(op==operationOfManagement::REMOVE_USER)
+        {
+            ui->labelOfPasswd->hide();
+            ui->passwdOfUser->hide();
+        }
+        else
+        {
+            ui->labelOfPasswd->show();
+            ui->passwdOfUser->show();
         }
 
         if(op==operationOfManagement::ADD_CLASS)
@@ -187,15 +227,15 @@ void managementpage::initalManagementPage()
 
     connect(ui->submitOfUser,&QPushButton::clicked,this,[=]()
     {
-        if(ui->idOfUser->text().isEmpty()||ui->nameOfUser->text().isEmpty())
+        if(ui->loadOfUser->text()!="取消载入"&&currOperation::getInstance().get()!=operationOfManagement::ADD_USER)
         {
-            ui->textOfOutput->setText("未输入用户id与用户姓名，无法进行提交");
+            ui->textOfOutput->setText("请先载入用户信息");
             return;
         }
 
-        if(!userInfoIsLock&&currOperation::getInstance().get()!=operationOfManagement::ADD_USER)
+        if(ui->idOfUser->text().isEmpty()||ui->nameOfUser->text().isEmpty())
         {
-            ui->textOfOutput->setText("请先载入用户信息");
+            ui->textOfOutput->setText("未输入用户id与用户姓名，无法进行提交");
             return;
         }
 
@@ -229,37 +269,65 @@ void managementpage::initalManagementPage()
 
     connect(ui->loadOfUser,&QPushButton::clicked,this,[=]()
     {
-        if(userInfoIsLock&&ui->loadOfUser->text()=="取消载入")
+        if(ui->loadOfUser->text()=="载入")
         {
-            clearUserInfo();
-            ui->textOfOutput->setText("已取消");
-            return;
+            loadUserInfo(true);
         }
-
-        if(ui->idOfUser->text().isEmpty()||ui->nameOfUser->text().isEmpty())
+        else
         {
-            ui->textOfOutput->setText("未输入用户id，无法载入");
-            return;
+            loadUserInfo(false);
         }
-
-        connect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&managementpage::operationOfUser);
-
-        QNetworkRequest request;
-        request.setUrl(QUrl(currUrl::getInstance().get()));
-        request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
-        request.setRawHeader("Accept","text/html");
-
-        QJsonObject obj;
-
-        // token required
-        obj.insert("token",tokenOfAdmin::getInstance().get());
-        // id required
-        obj.insert("id",ui->idOfUser->text());
-
-        QJsonDocument doc(obj);
-
-        httpManager::getInstance().get()->post(request,doc.toJson());
     });
+}
+
+void managementpage::loadUserInfo(bool needToLoad,bool needToClearId)
+{
+    if(needToClearId)
+    {
+        ui->idOfUser->clear();
+    }
+
+    // 取消载入
+    if(!needToLoad)
+    {
+        ui->loadOfUser->setText("载入");
+        ui->idOfUser->setEnabled(true);
+        lockUserInfo(false);
+        clearUserInfo();
+
+        // ui->textOfOutput->setText("已取消载入");
+
+        return;
+    }
+    
+    
+    // 载入成功后再锁定用户信息，并修改控件文本
+
+    if(ui->idOfUser->text().isEmpty())
+    {
+        ui->textOfOutput->setText("未输入用户id，无法载入");
+        return;
+    }
+
+    isLoad::getInstance().set(true);
+
+    connect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&managementpage::operationOfUser);
+
+    QNetworkRequest request;
+    request.setUrl(QUrl(getUrlByOperation(operationOfManagement::USER_SEARCH)));
+    request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
+    request.setRawHeader("Accept","text/html");
+
+    QJsonObject obj;
+
+    // token required
+    obj.insert("token",tokenOfAdmin::getInstance().get());
+    // id required
+    obj.insert("id",ui->idOfUser->text());
+
+    QJsonDocument doc(obj);
+
+    httpManager::getInstance().get()->post(request,doc.toJson());
 }
 
 void managementpage::lockUserInfo(bool shouldLock)
@@ -296,7 +364,13 @@ void managementpage::lockClassInfo(bool shouldLock)
 
 void managementpage::clearUserInfo()
 {
-    ui->nameOfUser->setText("");
+    ui->nameOfUser->clear();
     ui->roleOfUser->setCurrentIndex(0);
-    ui->passwdOfUser->setText("");
+    ui->passwdOfUser->clear();
+}
+
+void managementpage::clearClassInfo()
+{
+    ui->nameOfClass->clear();
+    ui->teacherOfClass->clear();
 }

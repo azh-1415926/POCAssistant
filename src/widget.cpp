@@ -128,8 +128,8 @@ void widget::getInfo(QNetworkReply *reply)
         break;
     }
 
-    if(!json.value("user_name").toString().isEmpty())
-        currInfo=prefix+json.value("user_name").toString()+suffix;
+    if(!json.value("name").toString().isEmpty())
+        currInfo=prefix+json.value("name").toString()+suffix;
 
     ui->TopPages->setCurrentIndex(1);
     ui->MainPage->select();
