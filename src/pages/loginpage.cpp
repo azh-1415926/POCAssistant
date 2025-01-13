@@ -30,7 +30,7 @@ void loginpage::back()
 
 void loginpage::toLogin(QNetworkReply *reply)
 {
-    disconnect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&loginpage::toLogin);
+    disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&loginpage::toLogin);
 
     QString str(reply->readAll());
     qDebug()<<"login:"<<str;
@@ -80,14 +80,10 @@ void loginpage::initalLoginPage()
 
     connect(ui->btnOfLogin,&QPushButton::clicked,this,[=]()
     {
-        connect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&loginpage::toLogin);
+        connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&loginpage::toLogin);
 
         QNetworkRequest request;
-        request.setUrl(QUrl("http://"
-        SERVER_IP
-        ":"
-        SERVER_PORT_S
-        "/User/login"));
+        request.setUrl(URL_OF_SERVER+"/User/login");
         request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
         request.setRawHeader("Accept","text/html");
 
@@ -96,6 +92,6 @@ void loginpage::initalLoginPage()
         obj.insert("password",ui->inputOfPassword->text());
         QJsonDocument doc(obj);
 
-        httpManager::getInstance().get()->post(request,doc.toJson());
+        HTTP_MANAGER->post(request,doc.toJson());
     });
 }

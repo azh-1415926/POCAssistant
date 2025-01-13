@@ -197,18 +197,14 @@ void coursepage::resetPage()
 // 页面初始化时，向后端请求课程大纲内容
 void coursepage::selectedPage()
 {
-    connect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&coursepage::setOutLine);
+    connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&coursepage::setOutLine);
 
     QNetworkRequest request;
-    request.setUrl(QUrl("http://"
-    SERVER_IP
-    ":"
-    SERVER_PORT_S
-    "/Course/getOutline"));
+    request.setUrl(URL_OF_SERVER+"/Course/getOutline");
     request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
     request.setRawHeader("Accept","text/html");
 
-    httpManager::getInstance().get()->get(request);
+    HTTP_MANAGER->get(request);
 }
 
 void coursepage::back()
@@ -218,7 +214,7 @@ void coursepage::back()
 // 接收后端响应，设置页面课程大纲内容
 void coursepage::setOutLine(QNetworkReply* reply)
 {
-    disconnect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&coursepage::setOutLine);
+    disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&coursepage::setOutLine);
 
     QString str=reply->readAll();
 
@@ -259,7 +255,7 @@ void coursepage::setOutLine(QNetworkReply* reply)
 
 void coursepage::setContent(QNetworkReply *reply)
 {
-    disconnect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&coursepage::setContent);
+    disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&coursepage::setContent);
 
     QString str=reply->readAll();
     QJsonObject obj=jsonFile::toJson(str);
@@ -305,18 +301,14 @@ void coursepage::initalCoursePage()
                 section="0";
             }
 
-            connect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&coursepage::setContent);
+            connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&coursepage::setContent);
 
             QNetworkRequest request;
-            request.setUrl(QUrl("http://"
-            SERVER_IP
-            ":"
-            SERVER_PORT_S
-            "/Course/getCourse?chapter="+chapter+"&section="+section));
+            request.setUrl(URL_OF_SERVER+"/Course/getCourse?chapter="+chapter+"&section="+section);
             request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
             request.setRawHeader("Accept","text/html");
 
-            httpManager::getInstance().get()->get(request);
+            HTTP_MANAGER->get(request);
         }
     });
 }

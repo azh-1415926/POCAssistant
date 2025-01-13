@@ -25,18 +25,14 @@ void programpage::resetPage()
 
 void programpage::selectedPage()
 {
-    connect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&programpage::getExperiment);
+    connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getExperiment);
 
     QNetworkRequest request;
-    request.setUrl(QUrl("http://"
-    SERVER_IP
-    ":"
-    SERVER_PORT_S
-    "/Code/getExperiment?studentId="+userId::getInstance().get()));
+    request.setUrl(URL_OF_SERVER+"/Code/getExperiment?studentId="+userId::getInstance().get());
     request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
     request.setRawHeader("Accept","text/html");
 
-    httpManager::getInstance().get()->get(request);
+    HTTP_MANAGER->get(request);
 }
 
 void programpage::back()
@@ -45,7 +41,7 @@ void programpage::back()
 
 void programpage::getExperiment(QNetworkReply *reply)
 {
-    disconnect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&programpage::getExperiment);
+    disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getExperiment);
 
     QString str(reply->readAll());
     qDebug()<<"getExperiment:"<<str;
@@ -82,7 +78,7 @@ void programpage::getExperiment(QNetworkReply *reply)
 
 void programpage::getResult(QNetworkReply *reply)
 {
-    disconnect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&programpage::getResult);
+    disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getResult);
 
     QString str(reply->readAll());
     qDebug()<<"compile:"<<str;
@@ -95,7 +91,7 @@ void programpage::getResult(QNetworkReply *reply)
 
 void programpage::getSubmitState(QNetworkReply *reply)
 {
-    disconnect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&programpage::getSubmitState);
+    disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getSubmitState);
 
     QString str(reply->readAll());
     qDebug()<<"submit:"<<str;
@@ -116,17 +112,13 @@ void programpage::initalProgramPage()
 
     connect(ui->btnOfRun,&QPushButton::clicked,this,[=]()
     {
-        connect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&programpage::getResult);
+        connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getResult);
 
         QString code=ui->CodeEdit->toPlainText();
         QString input=ui->inputOfProgram->toPlainText();
 
         QNetworkRequest request;
-        request.setUrl(QUrl("http://"
-        SERVER_IP
-        ":"
-        SERVER_PORT_S
-        "/Code/compile"));
+        request.setUrl(URL_OF_SERVER+"/Code/compile");
         request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
         request.setRawHeader("Accept","text/html");
 
@@ -135,12 +127,12 @@ void programpage::initalProgramPage()
         obj.insert("input",input);
         QJsonDocument doc(obj);
 
-        httpManager::getInstance().get()->post(request,doc.toJson());
+        HTTP_MANAGER->post(request,doc.toJson());
     });
 
     connect(ui->btnOfSubmit,&QPushButton::clicked,this,[=]()
     {
-        connect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&programpage::getSubmitState);
+        connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getSubmitState);
 
         QString code=ui->CodeEdit->toPlainText();
 
@@ -158,11 +150,7 @@ void programpage::initalProgramPage()
         qDebug()<<"experimentId:"<<experimentId;
 
         QNetworkRequest request;
-        request.setUrl(QUrl("http://"
-        SERVER_IP
-        ":"
-        SERVER_PORT_S
-        "/Code/submit?experimentId="+experimentId));
+        request.setUrl(URL_OF_SERVER+"/Code/submit?experimentId="+experimentId);
         request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
         request.setRawHeader("Accept","text/html");
 
@@ -170,7 +158,7 @@ void programpage::initalProgramPage()
         obj.insert("data",code);
         QJsonDocument doc(obj);
 
-        httpManager::getInstance().get()->post(request,doc.toJson());
+        HTTP_MANAGER->post(request,doc.toJson());
     });
 }
 

@@ -48,14 +48,10 @@ void widget::showLoginPage()
 
 void widget::hideLoginPage()
 {
-    connect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&widget::getInfo);
+    connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&widget::getInfo);
 
     QNetworkRequest request;
-    request.setUrl(QUrl("http://"
-    SERVER_IP
-    ":"
-    SERVER_PORT_S
-    "/User/info"));
+    request.setUrl(URL_OF_SERVER+"/User/info");
     request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
     request.setRawHeader("Accept","text/html");
 
@@ -63,7 +59,7 @@ void widget::hideLoginPage()
     obj.insert("id",userId::getInstance().get());
     QJsonDocument doc(obj);
 
-    httpManager::getInstance().get()->post(request,doc.toJson());
+    HTTP_MANAGER->post(request,doc.toJson());
 
     selectPage(0);
 }
@@ -97,7 +93,7 @@ void widget::selectPage(int i)
 
 void widget::getInfo(QNetworkReply *reply)
 {
-    disconnect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&widget::getInfo);
+    disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&widget::getInfo);
 
     QString str(reply->readAll());
     qDebug()<<"getInfo:"<<str;

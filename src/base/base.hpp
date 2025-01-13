@@ -20,6 +20,26 @@ class Name : QObject \
         Type m_Instance; \
 };
 
+// 单例模式，设置初始值
+#define SINGLETONE_WITH_VALUE(Name,Type,Value) \
+class Name : QObject \
+{ \
+    public: \
+        static Name& getInstance() \
+        { \
+            static Name instance; \
+            return instance; \
+        } \
+        Type get() {  return m_Instance; } \
+        void set(Type data) { m_Instance=data; } \
+    private: \
+        explicit Name(QObject* parent=nullptr): QObject(parent) \
+        { \
+            m_Instance=Value; \
+        } \
+        Type m_Instance; \
+};
+
 // 单例模式，存储动态对象
 #define SINGLETONE_P(Name,Type) \
 class Name : QObject \
@@ -36,18 +56,6 @@ class Name : QObject \
         Type* m_Instance; \
 };
 
-// 页面的基本信息
-struct StatusOfPage
-{
-    QString currPage;
-    QPixmap currIcon;
-    QString currInfo;
-};
-
-// 用户类型
-enum class UserRole : int
-{
-    STUDENT=0,
-    TEACHER=1,
-    ADMIN=2
-};
+// 取出指定单例类中的值
+#define SINGLETONE_VALUE(Name) \
+    Name::getInstance().get()

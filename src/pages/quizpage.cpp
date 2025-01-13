@@ -31,7 +31,7 @@ void quizpage::back()
 
 void quizpage::updateTest(QNetworkReply *reply)
 {
-    disconnect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&quizpage::updateTest);
+    disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&quizpage::updateTest);
 
     QString str(reply->readAll());
     qDebug()<<"getquiz:"<<str;
@@ -44,12 +44,12 @@ void quizpage::updateTest(QNetworkReply *reply)
 
 void quizpage::updateCollection(QNetworkReply *reply)
 {
-    disconnect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&quizpage::updateCollection);
+    disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&quizpage::updateCollection);
 }
 
 void quizpage::updateWrong(QNetworkReply *reply)
 {
-    disconnect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&quizpage::updateWrong);
+    disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&quizpage::updateWrong);
 }
 
 void quizpage::initalQuizPage()
@@ -66,18 +66,14 @@ void quizpage::initalQuizPage()
 
     connect(ui->btnOfTest,&QPushButton::clicked,this,[=]()
     {
-        connect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&quizpage::updateTest);
+        connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&quizpage::updateTest);
 
         QNetworkRequest request;
-        request.setUrl(QUrl("http://"
-        SERVER_IP
-        ":"
-        SERVER_PORT_S
-        "/Quiz/getquiz?chapter=1"));
+        request.setUrl(URL_OF_SERVER+"/Quiz/getquiz?chapter=1");
         request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
         request.setRawHeader("Accept","text/html");
 
-        httpManager::getInstance().get()->get(request);
+        HTTP_MANAGER->get(request);
 
         ui->stackedWidget->setCurrentIndex(1);
     });

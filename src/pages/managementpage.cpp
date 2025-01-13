@@ -33,12 +33,8 @@ void managementpage::back()
 
 QString managementpage::getUrlByOperation(operationOfManagement op)
 {
-    QString url="http://"
-        SERVER_IP
-        ":"
-        SERVER_PORT_S
-    ;
-
+    QString url=URL_OF_SERVER;
+    
     switch (op)
     {
     case operationOfManagement::ADD_USER:
@@ -94,7 +90,7 @@ QString managementpage::getUrlByOperation(operationOfManagement op)
 
 void managementpage::operationOfUser(QNetworkReply *reply)
 {
-    disconnect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&managementpage::operationOfUser);
+    disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&managementpage::operationOfUser);
 
     QString str=reply->readAll();
     
@@ -147,7 +143,7 @@ void managementpage::operationOfUser(QNetworkReply *reply)
 
 void managementpage::operationOfClass(QNetworkReply *reply)
 {
-    disconnect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&managementpage::operationOfClass);
+    disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&managementpage::operationOfClass);
 
     QString str=reply->readAll();
     
@@ -199,7 +195,7 @@ void managementpage::operationOfClass(QNetworkReply *reply)
 
 void managementpage::operationOfSearch(QNetworkReply *reply)
 {
-    disconnect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&managementpage::operationOfSearch);
+    disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&managementpage::operationOfSearch);
 }
 
 void managementpage::initalManagementPage()
@@ -298,7 +294,7 @@ void managementpage::initalManagementPage()
             return;
         }
 
-        connect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&managementpage::operationOfUser);
+        connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&managementpage::operationOfUser);
 
         QNetworkRequest request;
         request.setUrl(QUrl(currUrl::getInstance().get()));
@@ -323,7 +319,7 @@ void managementpage::initalManagementPage()
 
         lockUserInfo(true);
 
-        httpManager::getInstance().get()->post(request,doc.toJson());
+        HTTP_MANAGER->post(request,doc.toJson());
     });
 
     connect(ui->submitOfClass,&QPushButton::clicked,this,[=]()
@@ -340,7 +336,7 @@ void managementpage::initalManagementPage()
             return;
         }
 
-        connect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&managementpage::operationOfClass);
+        connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&managementpage::operationOfClass);
 
         QNetworkRequest request;
         request.setUrl(QUrl(currUrl::getInstance().get()));
@@ -364,7 +360,7 @@ void managementpage::initalManagementPage()
 
         lockClassInfo(true);
 
-        httpManager::getInstance().get()->post(request,doc.toJson());
+        HTTP_MANAGER->post(request,doc.toJson());
     });
 
     connect(ui->loadOfUser,&QPushButton::clicked,this,[=]()
@@ -423,7 +419,7 @@ void managementpage::loadUserInfo(bool needToLoad,bool needToClearId)
 
     isLoad::getInstance().set(true);
 
-    connect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&managementpage::operationOfUser);
+    connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&managementpage::operationOfUser);
 
     QNetworkRequest request;
     request.setUrl(QUrl(getUrlByOperation(operationOfManagement::USER_INFO)));
@@ -439,7 +435,7 @@ void managementpage::loadUserInfo(bool needToLoad,bool needToClearId)
 
     QJsonDocument doc(obj);
 
-    httpManager::getInstance().get()->post(request,doc.toJson());
+    HTTP_MANAGER->post(request,doc.toJson());
 }
 
 void managementpage::loadClassInfo(bool needToLoad, bool needToClearId)
@@ -473,7 +469,7 @@ void managementpage::loadClassInfo(bool needToLoad, bool needToClearId)
 
     isLoad::getInstance().set(true);
 
-    connect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&managementpage::operationOfClass);
+    connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&managementpage::operationOfClass);
 
     QNetworkRequest request;
     request.setUrl(QUrl(getUrlByOperation(operationOfManagement::CLASS_INFO)));
@@ -489,7 +485,7 @@ void managementpage::loadClassInfo(bool needToLoad, bool needToClearId)
 
     QJsonDocument doc(obj);
 
-    httpManager::getInstance().get()->post(request,doc.toJson());
+    HTTP_MANAGER->post(request,doc.toJson());
 }
 
 void managementpage::lockUserInfo(bool shouldLock)

@@ -7,6 +7,22 @@
 #include "global.hpp"
 #include "constant.h"
 
+// 页面的基本信息
+struct StatusOfPage
+{
+    QString currPage;
+    QPixmap currIcon;
+    QString currInfo;
+};
+
+// 用户类型
+enum class UserRole : int
+{
+    STUDENT=0,
+    TEACHER=1,
+    ADMIN=2
+};
+
 // 页面基类，方便切换页面时与主界面按钮交互
 class basepage : public QWidget
 {
