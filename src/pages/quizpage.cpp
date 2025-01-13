@@ -69,11 +69,15 @@ void quizpage::initalQuizPage()
         connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&quizpage::updateTest);
 
         QNetworkRequest request;
-        request.setUrl(URL_OF_SERVER+"/Quiz/getquiz?chapter=1");
+        request.setUrl(URL_OF_SERVER+"/Quiz/getquiz");
         request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
         request.setRawHeader("Accept","text/html");
 
-        HTTP_MANAGER->get(request);
+        QJsonObject obj;
+        obj.insert("chapter",1);
+        QJsonDocument doc(obj);
+
+        HTTP_MANAGER->get(request,doc.toJson());
 
         ui->stackedWidget->setCurrentIndex(1);
     });

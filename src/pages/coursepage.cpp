@@ -204,7 +204,10 @@ void coursepage::selectedPage()
     request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
     request.setRawHeader("Accept","text/html");
 
-    HTTP_MANAGER->get(request);
+    QJsonObject obj;
+    QJsonDocument doc(obj);
+
+    HTTP_MANAGER->post(request,doc.toJson());
 }
 
 void coursepage::back()
@@ -304,11 +307,16 @@ void coursepage::initalCoursePage()
             connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&coursepage::setContent);
 
             QNetworkRequest request;
-            request.setUrl(URL_OF_SERVER+"/Course/getCourse?chapter="+chapter+"&section="+section);
+            request.setUrl(URL_OF_SERVER+"/Course/getCourse");
             request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
             request.setRawHeader("Accept","text/html");
 
-            HTTP_MANAGER->get(request);
+            QJsonObject obj;
+            obj.insert("chapter",chapter);
+            obj.insert("section",section);
+            QJsonDocument doc(obj);
+
+            HTTP_MANAGER->post(request,doc.toJson());
         }
     });
 }

@@ -28,11 +28,15 @@ void programpage::selectedPage()
     connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getExperiment);
 
     QNetworkRequest request;
-    request.setUrl(URL_OF_SERVER+"/Code/getExperiment?studentId="+userId::getInstance().get());
+    request.setUrl(URL_OF_SERVER+"/Code/getExperiment");
     request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
     request.setRawHeader("Accept","text/html");
 
-    HTTP_MANAGER->get(request);
+    QJsonObject obj;
+    obj.insert("studentId",userId::getInstance().get());
+    QJsonDocument doc(obj);
+
+    HTTP_MANAGER->post(request,doc.toJson());
 }
 
 void programpage::back()
@@ -150,12 +154,13 @@ void programpage::initalProgramPage()
         qDebug()<<"experimentId:"<<experimentId;
 
         QNetworkRequest request;
-        request.setUrl(URL_OF_SERVER+"/Code/submit?experimentId="+experimentId);
+        request.setUrl(URL_OF_SERVER+"/Code/submit");
         request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
         request.setRawHeader("Accept","text/html");
 
         QJsonObject obj;
-        obj.insert("data",code);
+        obj.insert("code",code);
+        obj.insert("experimentId",experimentId);
         QJsonDocument doc(obj);
 
         HTTP_MANAGER->post(request,doc.toJson());
