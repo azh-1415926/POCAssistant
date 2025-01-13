@@ -10,6 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # 请自行填写 qt 工具链所在路径
 # set(CMAKE_PREFIX_PATH "D:/Qt/6.5.3/msvc2019_64") # Qt Kit Dir
+# set(CMAKE_PREFIX_PATH "/Users/azh/Qt/6.7.3/macos") # Qt Kit Dir
 
 # 默认使用 Qt6 版本，其次 Qt5(用Qt5的时候不要打开中文路径的题库)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Network )
