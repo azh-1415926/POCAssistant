@@ -10,6 +10,7 @@ enum class operationOfManagement
 {
     ADD_USER=0,REMOVE_USER,ALTER_USER,
     ADD_CLASS,REMOVE_CLASS,ALTER_CLASS,CLASS_ALLOC,
+    USER_INFO,CLASS_INFO,
     USER_SEARCH,CLASS_SERACH
 };
 
@@ -52,6 +53,7 @@ class managementpage : public basepage
         void initalManagementPage();
 
         void loadUserInfo(bool needToLoad,bool needToClearId=false);
+        void loadClassInfo(bool needToLoad,bool needToClearId=false);
 
         void lockUserInfo(bool shouldLock);
         void lockClassInfo(bool shouldLock);

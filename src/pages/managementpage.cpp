@@ -75,12 +75,12 @@ QString managementpage::getUrlByOperation(operationOfManagement op)
         /* 班级分配 */
         break;
     
-    case operationOfManagement::USER_SEARCH:
+    case operationOfManagement::USER_INFO:
         /* 用户查询 */
         url+="/User/info";
         break;
 
-    case operationOfManagement::CLASS_SERACH:
+    case operationOfManagement::CLASS_INFO:
         /* 班级查询 */
         url+="/Class/info";
         break;
@@ -148,6 +148,53 @@ void managementpage::operationOfUser(QNetworkReply *reply)
 void managementpage::operationOfClass(QNetworkReply *reply)
 {
     disconnect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&managementpage::operationOfClass);
+
+    QString str=reply->readAll();
+    
+    qDebug()<<"operationOfClass:"<<str;
+
+    jsonFile json;
+    json.fromJson(str);
+
+    QString result=json.value("result").toString();
+
+    if(!result.isEmpty())
+    {
+        ui->textOfOutput->setText(json.value("info").toString());
+
+        // 若为载入操作，更新控件，并锁住id输入框
+        if(isLoad::getInstance().get())
+        {
+            if(result=="true")
+            {
+                ui->nameOfClass->setText(json.value("name").toString());
+                ui->teacherOfClass->setText(json.value("teacher").toString());
+
+                ui->idOfClass->setEnabled(false);
+
+                ui->loadOfClass->setText("取消载入");
+            }
+            
+            isLoad::getInstance().set(false);
+
+            return;
+        }
+
+        // 若为提交操作，则取消载入的数据
+        if(result=="true")
+        {
+            loadClassInfo(false,currOperation::getInstance().get()==operationOfManagement::ALTER_CLASS?false:true);
+        }
+        else
+        {
+            lockClassInfo(false);
+        }
+    }
+    // 若响应为空，则说明请求超时，直接退出登陆
+    else
+    {
+        emit logoff();
+    }
 }
 
 void managementpage::operationOfSearch(QNetworkReply *reply)
@@ -173,6 +220,7 @@ void managementpage::initalManagementPage()
     {
         ui->optionsOfSubFunc->clear();
         ui->optionsOfSubFunc->addItems(subOptions[i]);
+        ui->pages->setCurrentIndex(i);
     });
 
     // 子功能就为当前操作
@@ -211,6 +259,17 @@ void managementpage::initalManagementPage()
         {
             ui->labelOfPasswd->show();
             ui->passwdOfUser->show();
+        }
+
+        if(op==operationOfManagement::ALTER_USER)
+        {
+            ui->labelOfRole->hide();
+            ui->roleOfUser->hide();
+        }
+        else
+        {
+            ui->labelOfRole->show();
+            ui->roleOfUser->show();
         }
 
         if(op==operationOfManagement::ADD_CLASS)
@@ -267,6 +326,47 @@ void managementpage::initalManagementPage()
         httpManager::getInstance().get()->post(request,doc.toJson());
     });
 
+    connect(ui->submitOfClass,&QPushButton::clicked,this,[=]()
+    {
+        if(ui->loadOfClass->text()!="取消载入"&&currOperation::getInstance().get()!=operationOfManagement::ADD_CLASS)
+        {
+            ui->textOfOutput->setText("请先载入班级信息");
+            return;
+        }
+
+        if(ui->idOfClass->text().isEmpty()||ui->nameOfClass->text().isEmpty()||ui->teacherOfClass->text().isEmpty())
+        {
+            ui->textOfOutput->setText("未输入班级id与班级名称、任课老师，无法进行提交");
+            return;
+        }
+
+        connect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&managementpage::operationOfClass);
+
+        QNetworkRequest request;
+        request.setUrl(QUrl(currUrl::getInstance().get()));
+        request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
+        request.setRawHeader("Accept","text/html");
+
+        QJsonObject obj;
+
+        // token required
+        obj.insert("token",tokenOfAdmin::getInstance().get());
+        // id required
+        obj.insert("id",ui->idOfUser->text());
+        // 在添加班级、修改班级时使用，在删除班级时不使用
+        if(currOperation::getInstance().get()!=operationOfManagement::REMOVE_CLASS)
+        {
+            obj.insert("name",ui->nameOfUser->text());
+            obj.insert("teacher",ui->teacherOfClass->text());
+        }
+
+        QJsonDocument doc(obj);
+
+        lockClassInfo(true);
+
+        httpManager::getInstance().get()->post(request,doc.toJson());
+    });
+
     connect(ui->loadOfUser,&QPushButton::clicked,this,[=]()
     {
         if(ui->loadOfUser->text()=="载入")
@@ -276,6 +376,18 @@ void managementpage::initalManagementPage()
         else
         {
             loadUserInfo(false);
+        }
+    });
+
+    connect(ui->loadOfClass,&QPushButton::clicked,this,[=]()
+    {
+        if(ui->loadOfClass->text()=="载入")
+        {
+            loadClassInfo(true);
+        }
+        else
+        {
+            loadClassInfo(false);
         }
     });
 }
@@ -314,7 +426,7 @@ void managementpage::loadUserInfo(bool needToLoad,bool needToClearId)
     connect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&managementpage::operationOfUser);
 
     QNetworkRequest request;
-    request.setUrl(QUrl(getUrlByOperation(operationOfManagement::USER_SEARCH)));
+    request.setUrl(QUrl(getUrlByOperation(operationOfManagement::USER_INFO)));
     request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
     request.setRawHeader("Accept","text/html");
 
@@ -324,6 +436,56 @@ void managementpage::loadUserInfo(bool needToLoad,bool needToClearId)
     obj.insert("token",tokenOfAdmin::getInstance().get());
     // id required
     obj.insert("id",ui->idOfUser->text());
+
+    QJsonDocument doc(obj);
+
+    httpManager::getInstance().get()->post(request,doc.toJson());
+}
+
+void managementpage::loadClassInfo(bool needToLoad, bool needToClearId)
+{
+    if(needToClearId)
+    {
+        ui->idOfClass->clear();
+    }
+
+    // 取消载入
+    if(!needToLoad)
+    {
+        ui->loadOfClass->setText("载入");
+        ui->idOfClass->setEnabled(true);
+        lockClassInfo(false);
+        clearClassInfo();
+
+        // ui->textOfOutput->setText("已取消载入");
+
+        return;
+    }
+    
+    
+    // 载入成功后再锁定信息，并修改控件文本
+
+    if(ui->idOfClass->text().isEmpty())
+    {
+        ui->textOfOutput->setText("未输入班级id，无法载入");
+        return;
+    }
+
+    isLoad::getInstance().set(true);
+
+    connect(httpManager::getInstance().get(), &QNetworkAccessManager::finished,this,&managementpage::operationOfClass);
+
+    QNetworkRequest request;
+    request.setUrl(QUrl(getUrlByOperation(operationOfManagement::CLASS_INFO)));
+    request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
+    request.setRawHeader("Accept","text/html");
+
+    QJsonObject obj;
+
+    // token required
+    obj.insert("token",tokenOfAdmin::getInstance().get());
+    // id required
+    obj.insert("id",ui->idOfClass->text());
 
     QJsonDocument doc(obj);
 
