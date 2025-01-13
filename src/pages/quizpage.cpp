@@ -77,7 +77,7 @@ void quizpage::initalQuizPage()
         obj.insert("chapter",1);
         QJsonDocument doc(obj);
 
-        HTTP_MANAGER->get(request,doc.toJson());
+        HTTP_MANAGER->post(request,doc.toJson());
 
         ui->stackedWidget->setCurrentIndex(1);
     });
