@@ -164,7 +164,7 @@ void managementpage::operationOfClass(QNetworkReply *reply)
             if(result=="true")
             {
                 ui->nameOfClass->setText(json.value("name").toString());
-                ui->teacherOfClass->setText(json.value("teacher").toString());
+                ui->teacherOfClass->setText(json.value("teacherId").toString());
 
                 ui->idOfClass->setEnabled(false);
 
@@ -348,11 +348,11 @@ void managementpage::initalManagementPage()
         // token required
         obj.insert("token",tokenOfAdmin::getInstance().get());
         // id required
-        obj.insert("id",ui->idOfUser->text());
+        obj.insert("id",ui->idOfClass->text());
         // 在添加班级、修改班级时使用，在删除班级时不使用
         if(currOperation::getInstance().get()!=operationOfManagement::REMOVE_CLASS)
         {
-            obj.insert("name",ui->nameOfUser->text());
+            obj.insert("name",ui->nameOfClass->text());
             obj.insert("teacherId",ui->teacherOfClass->text());
         }
 
