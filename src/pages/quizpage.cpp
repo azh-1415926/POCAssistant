@@ -69,7 +69,7 @@ void quizpage::initalQuizPage()
         connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&quizpage::updateTest);
 
         QNetworkRequest request;
-        request.setUrl(URL_OF_SERVER+"/Quiz/getquiz");
+        request.setUrl(URL_OF_SERVER+"/Quiz/getQuiz");
         request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
         request.setRawHeader("Accept","text/html");
 

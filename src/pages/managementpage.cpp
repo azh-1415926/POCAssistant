@@ -353,7 +353,7 @@ void managementpage::initalManagementPage()
         if(currOperation::getInstance().get()!=operationOfManagement::REMOVE_CLASS)
         {
             obj.insert("name",ui->nameOfUser->text());
-            obj.insert("teacher",ui->teacherOfClass->text());
+            obj.insert("teacherId",ui->teacherOfClass->text());
         }
 
         QJsonDocument doc(obj);
