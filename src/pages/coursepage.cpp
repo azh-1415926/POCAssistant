@@ -108,6 +108,7 @@ const QString number_Transfer_BigChinese(const double &Fnumber)
 coursepage::coursepage(QWidget *parent)
     : basepage("在线学习",parent)
     , ui(new Ui::coursepage)
+    , m_CurrChapter(-1), m_CurrSection(-1)
 {
     initalCoursePage();
 }
@@ -190,6 +191,18 @@ QString coursepage::getOutLine(QTreeWidget* w)
     return json.toString();
 }
 
+QPair<QPair<int, int>, QString> coursepage::getCurrCourse()
+{
+    QPair<QPair<int,int>,QString> data;
+    QPair<int,int> index;
+    index.first=m_CurrChapter;
+    index.second=m_CurrSection;
+    data.first=index;
+    data.second=ui->content->toPlainText();
+
+    return data;
+}
+
 void coursepage::resetPage()
 {
 }
@@ -263,9 +276,14 @@ void coursepage::setContent(QNetworkReply *reply)
     QString str=reply->readAll();
     QJsonObject obj=jsonFile::toJson(str);
 
-    ui->test->setAutoTextOptions(QMarkdownTextEdit::BracketRemoval);
-    ui->test->setPlainText(obj.value("content").toString());
-    ui->test->setReadOnly(true);
+    ui->content->setAutoTextOptions(QMarkdownTextEdit::BracketRemoval);
+    ui->content->setPlainText(obj.value("content").toString());
+    ui->content->setReadOnly(true);
+}
+
+void coursepage::setEditable(bool status)
+{
+    ui->content->setReadOnly(!status);
 }
 
 void coursepage::initalCoursePage()
@@ -303,6 +321,9 @@ void coursepage::initalCoursePage()
                 chapter=QString::number(bigChinese_Transfer_Number(str[1])-1);;
                 section="0";
             }
+
+            m_CurrChapter=chapter.toInt();
+            m_CurrSection=section.toInt();
 
             connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&coursepage::setContent);
 

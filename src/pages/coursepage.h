@@ -14,6 +14,8 @@ class coursepage : public basepage
 
     private:
         Ui::coursepage* ui;
+        int m_CurrChapter;
+        int m_CurrSection;
 
     protected:
         ;
@@ -24,6 +26,8 @@ class coursepage : public basepage
 
         // 获取页面中课程大纲内容
         QString getOutLine(QTreeWidget* w);
+
+        QPair<QPair<int,int>,QString> getCurrCourse();
 
     protected:
         // bool eventFilter(QObject* obj,QEvent* e) override;
@@ -38,6 +42,8 @@ class coursepage : public basepage
         void setOutLine(QNetworkReply* reply);
         // 设置当前章节课程展示的内容
         void setContent(QNetworkReply* reply);
+
+        void setEditable(bool status);
 
     signals:
         ;
