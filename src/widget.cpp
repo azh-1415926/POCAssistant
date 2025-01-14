@@ -130,14 +130,7 @@ void widget::getInfo(QNetworkReply *reply)
     ui->TopPages->setCurrentIndex(1);
     ui->MainPage->select();
 
-    if(userRole::getInstance().get()==(int)(UserRole::ADMIN))
-    {
-        ui->MainPage->switchToAdmin(true);
-    }
-    else
-    {
-        ui->MainPage->switchToAdmin(false);
-    }
+    ui->MainPage->switchTo(userRole::getInstance().get());
 }
 
 void widget::initalWidget()

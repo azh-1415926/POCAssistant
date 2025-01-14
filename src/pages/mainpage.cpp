@@ -63,36 +63,72 @@ void mainpage::selectLabel(const clicklabel* label)
     }
 }
 
-void mainpage::switchToAdmin(bool state)
+void mainpage::switchTo(int role)
 {
-    if(state)
-    {
-        ui->iconOfCourse->setPixmap(QPixmap(":/img/main/management"));
-        ui->course->setText("在线管理");
-        ui->textOfCourse->setText("<html><head/><body><p>提供在线管理功能，管理员管理学生、教师账号，创建班级，分配教师、学生</p></body></html>");
+    UserRole userRole=(UserRole)role;
 
-        ui->iconOfProgram->setPixmap(QPixmap(":/img/main/statement"));
-        ui->program->setText("在线统计");
-        ui->textOfProgram->setText("<html><head/><body><p>提供在线统计功能，管理员可统计所有用户的学习情况、实验完成情况、答题情况</p></body></html>");
-
-        ui->iconOfQuiz->setPixmap(QPixmap(":/img/main/update"));
-        ui->quiz->setText("在线更新");
-        ui->textOfQuiz->setText("<html><head/><body><p>提供在线管理功能，管理员负责对编译原理课程大纲进行更新，对题目进行更新</p></body></html>");
-    }
-    else
+    QString textOfFirst;
+    QString textOfSecond;
+    QString textOfThird;
+    QList<QPixmap> icons=
     {
-        ui->iconOfCourse->setPixmap(QPixmap(":/img/main/course"));
+        QPixmap(),
+        QPixmap(),
+        QPixmap()
+    };
+
+    switch (userRole)
+    {
+    case UserRole::STUDENT:
         ui->course->setText("在线课程");
-        ui->textOfCourse->setText("<html><head/><body><p>提供编译原理的学习路线，涵盖编译原理的各个方面，如词法分析、语法分析、语义分析等</p></body></html>");
-
-        ui->iconOfProgram->setPixmap(QPixmap(":/img/main/code"));
         ui->program->setText("在线实验");
-        ui->textOfProgram->setText("<html><head/><body><p>提供在线代码编辑器，支持C语言，用户可以在线编写代码并进行编译，查看编译结果</p></body></html>");
-
-        ui->iconOfQuiz->setPixmap(QPixmap(":/img/main/quiz"));
         ui->quiz->setText("在线测试");
-        ui->textOfQuiz->setText("<html><head/><body><p>提供编译原理相关的在线测试题目，包括选择题、填空题、编程题等，帮助用户检验学习成果</p></body></html>");
+        icons[0].load(":/img/main/course");
+        icons[1].load(":/img/main/code");
+        icons[2].load(":/img/main/quiz");
+        
+        textOfFirst="<html><head/><body><p>提供编译原理的学习路线，涵盖编译原理的各个方面，如词法分析、语法分析、语义分析等</p></body></html>";
+        textOfSecond="<html><head/><body><p>提供在线代码编辑器，支持C语言，用户可以在线编写代码并进行编译，查看编译结果</p></body></html>";
+        textOfThird="<html><head/><body><p>提供编译原理相关的在线测试题目，包括选择题、填空题、编程题等，帮助用户检验学习成果</p></body></html>";
+        break;
+    
+    case UserRole::TEACHER:
+        ui->course->setText("在线课程");
+        ui->program->setText("在线实验");
+        ui->quiz->setText("在线测试");
+        icons[0].load(":/img/main/course");
+        icons[1].load(":/img/main/code");
+        icons[2].load(":/img/main/quiz");
+
+        textOfFirst="<html><head/><body><p>提供编译原理的学习路线，涵盖编译原理的各个方面，如词法分析、语法分析、语义分析等</p></body></html>";
+        textOfSecond="<html><head/><body><p>可在线批改学生代码功能，对所属班级中学生的代码查阅并编译运行，查看编译结果</p></body></html>";
+        textOfThird="<html><head/><body><p>可在线批改学生课后习题，仅需批改简答题，自动批改选择填空题，编程题位于在线实验中</p></body></html>";
+        break;
+    
+    case UserRole::ADMIN:
+        ui->course->setText("在线管理");
+        ui->program->setText("在线统计");
+        ui->quiz->setText("在线更新");
+        icons[0].load(":/img/main/management");
+        icons[1].load(":/img/main/statement");
+        icons[2].load(":/img/main/update");
+        
+        textOfFirst="<html><head/><body><p>提供在线管理功能，管理员管理学生、教师账号，创建班级，分配教师、学生</p></body></html>";
+        textOfSecond="<html><head/><body><p>提供在线统计功能，管理员可统计所有用户的学习情况、实验完成情况、答题情况</p></body></html>";
+        textOfThird="<html><head/><body><p>提供在线管理功能，管理员负责对编译原理课程大纲进行更新，对题目进行更新</p></body></html>";
+        break;
+    
+    default:
+        break;
     }
+
+    ui->iconOfCourse->setPixmap(icons[0]);
+    ui->iconOfProgram->setPixmap(icons[1]);
+    ui->iconOfQuiz->setPixmap(icons[2]);
+
+    ui->textOfCourse->setText(textOfFirst);
+    ui->textOfProgram->setText(textOfSecond);
+    ui->textOfQuiz->setText(textOfThird);
 }
 
 void mainpage::initalMainPage()
