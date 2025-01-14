@@ -1,8 +1,8 @@
 # About POCAssistant
 
-编译原理课程教学小助手
+编译原理课程教学小助手(PrincipleOfCompilation Assistant)
 
-本项目为毕业设计，基于 Qt+WebAssembly 技术，在浏览器运行 Qt 项目，同样该项目也可作为客户端。
+本项目为毕业设计，前端基于 Qt+WebAssembly 技术，[前端链接](https://github.com/azh-1415926/POCAssistant)，在浏览器运行 Qt 项目，同样也可作为客户端，后端基于 C++ Drogon 框架，[后端链接](https://github.com/azh-1415926/POCBackend)。
 
 **功能设计**
 
