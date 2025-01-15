@@ -36,6 +36,14 @@ list(APPEND CMAKE_AUTOUIC_SEARCH_PATHS "ui")
 add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
 add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 
+if(EMSCRIPTEN)
+    message("编译网页端，使用 WebAssembly")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --preload-file cfg/config.json")
+else()
+    message("编译客户端")
+endif()
+# 
+
 set(PROJECT_SOURCES
     ${srcs}
     ${qrcs}

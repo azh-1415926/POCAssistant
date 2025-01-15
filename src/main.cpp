@@ -4,6 +4,8 @@
 #include <QFontDatabase>
 #include <QFile>
 
+#include "jsonFile.hpp"
+
 int main(int argc, char *argv[])
 {
     if (qEnvironmentVariableIsEmpty("QTGLESSTREAM_DISPLAY"))
@@ -32,6 +34,14 @@ int main(int argc, char *argv[])
         QFont font;
         font.setFamily(fontFamilies[0]);//设置全局字体
         app.setFont(font);
+    }
+
+     // 初始化后端服务器配置信息
+    jsonFile json;
+    json.load("/cfg/config.json");
+    if(json.isLoad())
+    {
+        urlOfServer::getInstance().set("http://"+json.value("ip").toString()+":"+QString::number(json.value("port").toInt()));
     }
 
     widget w;
