@@ -60,4 +60,7 @@ class managementpage : public basepage
 
         void clearUserInfo();
         void clearClassInfo();
+
+        void postByOperationWithData(int funcId,const operationOfManagement& op,const QJsonObject& obj);
+        void postByCurrOperationWithData(int funId,const QJsonObject& obj);
 };

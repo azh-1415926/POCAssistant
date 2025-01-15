@@ -25,6 +25,14 @@ void managementpage::resetPage()
 {
     ui->optionsOfFunc->setCurrentIndex(0);
     ui->optionsOfSubFunc->setCurrentIndex(0);
+
+    ui->idOfUser->clear();
+    lockUserInfo(false);
+    clearUserInfo();
+
+    ui->idOfClass->clear();
+    lockClassInfo(false);
+    clearClassInfo();
 }
 
 void managementpage::back()
@@ -79,6 +87,15 @@ QString managementpage::getUrlByOperation(operationOfManagement op)
     case operationOfManagement::CLASS_INFO:
         /* 班级查询 */
         url+="/Class/info";
+        break;
+
+    case operationOfManagement::USER_SEARCH:
+        /* 班级查询 */
+        url+="/Manager/getUser";
+        break;
+    case operationOfManagement::CLASS_SERACH:
+        /* 班级查询 */
+        url+="/Manager/getClass";
         break;
 
     default:
@@ -294,17 +311,7 @@ void managementpage::initalManagementPage()
             return;
         }
 
-        connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&managementpage::operationOfUser);
-
-        QNetworkRequest request;
-        request.setUrl(QUrl(currUrl::getInstance().get()));
-        request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
-        request.setRawHeader("Accept","text/html");
-
         QJsonObject obj;
-
-        // token required
-        obj.insert("token",tokenOfAdmin::getInstance().get());
         // id required
         obj.insert("id",ui->idOfUser->text());
         // 在添加用户、修改用户时使用，在删除用户时不使用
@@ -319,7 +326,7 @@ void managementpage::initalManagementPage()
 
         lockUserInfo(true);
 
-        HTTP_MANAGER->post(request,doc.toJson());
+        postByCurrOperationWithData(0,obj);
     });
 
     connect(ui->submitOfClass,&QPushButton::clicked,this,[=]()
@@ -336,17 +343,7 @@ void managementpage::initalManagementPage()
             return;
         }
 
-        connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&managementpage::operationOfClass);
-
-        QNetworkRequest request;
-        request.setUrl(QUrl(currUrl::getInstance().get()));
-        request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
-        request.setRawHeader("Accept","text/html");
-
         QJsonObject obj;
-
-        // token required
-        obj.insert("token",tokenOfAdmin::getInstance().get());
         // id required
         obj.insert("id",ui->idOfClass->text());
         // 在添加班级、修改班级时使用，在删除班级时不使用
@@ -356,11 +353,9 @@ void managementpage::initalManagementPage()
             obj.insert("teacherId",ui->teacherOfClass->text());
         }
 
-        QJsonDocument doc(obj);
-
         lockClassInfo(true);
 
-        HTTP_MANAGER->post(request,doc.toJson());
+        postByCurrOperationWithData(1,obj);
     });
 
     connect(ui->loadOfUser,&QPushButton::clicked,this,[=]()
@@ -408,7 +403,6 @@ void managementpage::loadUserInfo(bool needToLoad,bool needToClearId)
         return;
     }
     
-    
     // 载入成功后再锁定用户信息，并修改控件文本
 
     if(ui->idOfUser->text().isEmpty())
@@ -419,23 +413,11 @@ void managementpage::loadUserInfo(bool needToLoad,bool needToClearId)
 
     isLoad::getInstance().set(true);
 
-    connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&managementpage::operationOfUser);
-
-    QNetworkRequest request;
-    request.setUrl(QUrl(getUrlByOperation(operationOfManagement::USER_INFO)));
-    request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
-    request.setRawHeader("Accept","text/html");
-
     QJsonObject obj;
-
-    // token required
-    obj.insert("token",tokenOfAdmin::getInstance().get());
     // id required
     obj.insert("id",ui->idOfUser->text());
 
-    QJsonDocument doc(obj);
-
-    HTTP_MANAGER->post(request,doc.toJson());
+    postByOperationWithData(0,operationOfManagement::USER_INFO,obj);
 }
 
 void managementpage::loadClassInfo(bool needToLoad, bool needToClearId)
@@ -458,7 +440,6 @@ void managementpage::loadClassInfo(bool needToLoad, bool needToClearId)
         return;
     }
     
-    
     // 载入成功后再锁定信息，并修改控件文本
 
     if(ui->idOfClass->text().isEmpty())
@@ -469,23 +450,11 @@ void managementpage::loadClassInfo(bool needToLoad, bool needToClearId)
 
     isLoad::getInstance().set(true);
 
-    connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&managementpage::operationOfClass);
-
-    QNetworkRequest request;
-    request.setUrl(QUrl(getUrlByOperation(operationOfManagement::CLASS_INFO)));
-    request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
-    request.setRawHeader("Accept","text/html");
-
     QJsonObject obj;
-
-    // token required
-    obj.insert("token",tokenOfAdmin::getInstance().get());
     // id required
     obj.insert("id",ui->idOfClass->text());
 
-    QJsonDocument doc(obj);
-
-    HTTP_MANAGER->post(request,doc.toJson());
+    postByOperationWithData(1,operationOfManagement::CLASS_INFO,obj);
 }
 
 void managementpage::lockUserInfo(bool shouldLock)
@@ -531,4 +500,42 @@ void managementpage::clearClassInfo()
 {
     ui->nameOfClass->clear();
     ui->teacherOfClass->clear();
+}
+
+void managementpage::postByOperationWithData(int funcId, const operationOfManagement &op, const QJsonObject &obj)
+{
+    switch (funcId)
+    {
+    case 0:
+        connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&managementpage::operationOfUser);
+        break;
+    case 1:
+        connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&managementpage::operationOfClass);
+        break;
+    case 2:
+        connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&managementpage::operationOfSearch);
+        break;
+    
+    default:
+        break;
+    }
+
+    QNetworkRequest request;
+    request.setUrl(getUrlByOperation(op));
+    request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
+    request.setRawHeader("Accept","text/html");
+
+    QJsonObject data=obj;
+
+    // token required
+    data.insert("token",tokenOfAdmin::getInstance().get());
+
+    QJsonDocument doc(data);
+
+    HTTP_MANAGER->post(request,doc.toJson());
+}
+
+void managementpage::postByCurrOperationWithData(int funcId, const QJsonObject &obj)
+{
+    postByOperationWithData(funcId,currOperation::getInstance().get(),obj);
 }
