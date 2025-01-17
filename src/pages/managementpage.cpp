@@ -78,6 +78,15 @@ QString managementpage::getUrlByOperation(operationOfManagement op)
     case operationOfManagement::CLASS_ALLOC:
         /* 班级分配 */
         break;
+
+    case operationOfManagement::USER_SEARCH:
+        /* 班级查询 */
+        url+="/Manager/getUser";
+        break;
+    case operationOfManagement::CLASS_SERACH:
+        /* 班级查询 */
+        url+="/Manager/getClass";
+        break;
     
     case operationOfManagement::USER_INFO:
         /* 用户查询 */
@@ -87,15 +96,6 @@ QString managementpage::getUrlByOperation(operationOfManagement op)
     case operationOfManagement::CLASS_INFO:
         /* 班级查询 */
         url+="/Class/info";
-        break;
-
-    case operationOfManagement::USER_SEARCH:
-        /* 班级查询 */
-        url+="/Manager/getUser";
-        break;
-    case operationOfManagement::CLASS_SERACH:
-        /* 班级查询 */
-        url+="/Manager/getClass";
         break;
 
     default:
@@ -213,6 +213,54 @@ void managementpage::operationOfClass(QNetworkReply *reply)
 void managementpage::operationOfSearch(QNetworkReply *reply)
 {
     disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&managementpage::operationOfSearch);
+
+    QString str=reply->readAll();
+    
+    qDebug()<<"operationOfSearch:"<<str;
+
+    jsonFile json;
+    json.fromJson(str);
+
+    QString result=json.value("result").toString();
+
+    if(!result.isEmpty())
+    {
+        ui->textOfOutput->setText(json.value("info").toString());
+
+        if(result=="true")
+        {
+            int row=json.value("row").toInt();
+            int col=json.value("col").toInt();
+            ui->tableOfSearch->clear();
+            ui->tableOfSearch->setRowCount(row-1);
+            ui->tableOfSearch->setColumnCount(col);
+
+            QStringList title;
+
+            for(int i=0;i<col;i++)
+            {
+                QJsonObject recordOfTitle=json.value("0").toObject();
+                title<<recordOfTitle.value(QString::number(i)).toString();
+            }
+
+            ui->tableOfSearch->setHorizontalHeaderLabels(title);
+
+            for(int i=1;i<row;i++)
+            {
+                QJsonObject record=json.value(QString::number(i)).toObject();
+                
+                for(int j=0;j<col;j++)
+                {
+                    ui->tableOfSearch->setItem(i-1,j,new QTableWidgetItem(record.value(QString::number(j)).toString()));
+                }
+            }
+        }
+    }
+    // 若响应为空，则说明请求超时，直接退出登陆
+    else
+    {
+        emit logoff();
+    }
 }
 
 void managementpage::initalManagementPage()
@@ -292,6 +340,12 @@ void managementpage::initalManagementPage()
         else
         {
             ui->loadOfClass->show();
+        }
+
+        if(op==operationOfManagement::USER_SEARCH||op==operationOfManagement::CLASS_SERACH)
+        {
+            QJsonObject obj;
+            postByCurrOperationWithData(2,obj);
         }
     });
 

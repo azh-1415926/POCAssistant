@@ -10,8 +10,8 @@ enum class operationOfManagement
 {
     ADD_USER=0,REMOVE_USER,ALTER_USER,
     ADD_CLASS,REMOVE_CLASS,ALTER_CLASS,CLASS_ALLOC,
-    USER_INFO,CLASS_INFO,
-    USER_SEARCH,CLASS_SERACH
+    USER_SEARCH,CLASS_SERACH,
+    USER_INFO,CLASS_INFO
 };
 
 class managementpage : public basepage
