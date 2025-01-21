@@ -33,7 +33,7 @@ void loginpage::toLogin(QNetworkReply *reply)
     disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&loginpage::toLogin);
 
     QString str(reply->readAll());
-    qDebug()<<"login:"<<str;
+    azh::logger()<<"loginpage login:"<<str;
     
     jsonFile json;
     json.fromJson(str);

@@ -111,7 +111,7 @@ void managementpage::operationOfUser(QNetworkReply *reply)
 
     QString str=reply->readAll();
     
-    qDebug()<<"operationOfUser:"<<str;
+    azh::logger()<<"managementpage operationOfUser:"<<str;
 
     jsonFile json;
     json.fromJson(str);
@@ -164,7 +164,7 @@ void managementpage::operationOfClass(QNetworkReply *reply)
 
     QString str=reply->readAll();
     
-    qDebug()<<"operationOfClass:"<<str;
+    azh::logger()<<"managementpage operationOfClass:"<<str;
 
     jsonFile json;
     json.fromJson(str);
@@ -216,7 +216,7 @@ void managementpage::operationOfSearch(QNetworkReply *reply)
 
     QString str=reply->readAll();
     
-    qDebug()<<"operationOfSearch:"<<str;
+    azh::logger()<<"managementpage operationOfSearch:"<<str;
 
     jsonFile json;
     json.fromJson(str);

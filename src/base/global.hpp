@@ -25,3 +25,5 @@ SINGLETONE(tokenOfAdmin,QString)
 // 简化变量
 #define HTTP_MANAGER SINGLETONE_VALUE(httpManager)
 #define URL_OF_SERVER SINGLETONE_VALUE(urlOfServer)
+
+#include <logger.hpp>

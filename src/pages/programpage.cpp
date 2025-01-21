@@ -48,7 +48,7 @@ void programpage::getExperiment(QNetworkReply *reply)
     disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getExperiment);
 
     QString str(reply->readAll());
-    qDebug()<<"getExperiment:"<<str;
+    azh::logger()<<"programpage getExperiment:"<<str;
 
     jsonFile json;
     json.fromJson(str);
@@ -85,7 +85,7 @@ void programpage::getResult(QNetworkReply *reply)
     disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getResult);
 
     QString str(reply->readAll());
-    qDebug()<<"compile:"<<str;
+    azh::logger()<<"programpage compile:"<<str;
 
     jsonFile json;
     json.fromJson(str);
@@ -98,7 +98,7 @@ void programpage::getSubmitState(QNetworkReply *reply)
     disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getSubmitState);
 
     QString str(reply->readAll());
-    qDebug()<<"submit:"<<str;
+    azh::logger()<<"programpage submit:"<<str;
 
     jsonFile json;
     json.fromJson(str);
@@ -151,7 +151,7 @@ void programpage::initalProgramPage()
             }
         }
 
-        qDebug()<<"experimentId:"<<experimentId;
+        azh::logger()<<"programpage experimentId:"<<experimentId;
 
         QNetworkRequest request;
         request.setUrl(URL_OF_SERVER+"/Code/submit");

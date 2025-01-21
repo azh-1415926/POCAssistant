@@ -138,7 +138,7 @@ class jsonFile : public QObject
             m_Doc=QJsonDocument::fromJson(str.toUtf8(),&error);
             if(error.error!=QJsonParseError::NoError&&!m_Doc.isNull())
             {
-                qDebug()<<"json parse error","json 格式错误!";
+                azh::logger()<<"json parse error!";
                 return;
             }
             /* json 接收 QJson 文件对象里的 QJson 根节点 */
@@ -158,7 +158,7 @@ class jsonFile : public QObject
             QJsonDocument doc=QJsonDocument::fromJson(str.toUtf8(),&error);
             if(error.error!=QJsonParseError::NoError&&!doc.isNull())
             {
-                qDebug()<<"json parse error","json 格式错误!";
+                azh::logger()<<"json parse error!";
                 return QJsonObject();
             }
             return doc.object();
@@ -188,7 +188,7 @@ class jsonFile : public QObject
                 emit saved();
             }
             else
-                qDebug()<<"error","save \""+path+"\" is failed!";
+                azh::logger()<<"error save json to \""+path+"\" is failed!";
         }
 
     signals:

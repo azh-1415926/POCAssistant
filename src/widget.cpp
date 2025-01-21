@@ -96,7 +96,7 @@ void widget::getInfo(QNetworkReply *reply)
     disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&widget::getInfo);
 
     QString str(reply->readAll());
-    qDebug()<<"getInfo:"<<str;
+    azh::logger()<<"widget getInfo:"<<str;
 
     jsonFile json;
     json.fromJson(str);

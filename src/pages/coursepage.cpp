@@ -234,7 +234,7 @@ void coursepage::setOutLine(QNetworkReply* reply)
 
     QString str=reply->readAll();
 
-    qDebug()<<"getOutline:"<<str;
+    azh::logger()<<"coursepage getOutline:"<<str;
 
     QTreeWidget* widgetOfOutLine=ui->outline;
 

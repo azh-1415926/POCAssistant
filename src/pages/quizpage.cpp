@@ -34,7 +34,7 @@ void quizpage::updateTest(QNetworkReply *reply)
     disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&quizpage::updateTest);
 
     QString str(reply->readAll());
-    qDebug()<<"getquiz:"<<str;
+    azh::logger()<<"quizpage getquiz:"<<str;
 
     jsonFile json;
     json.fromJson(str);

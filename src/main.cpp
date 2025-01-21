@@ -4,6 +4,7 @@
 #include <QFontDatabase>
 #include <QFile>
 
+#include "logger.hpp"
 #include "jsonFile.hpp"
 
 int main(int argc, char *argv[])
@@ -28,7 +29,7 @@ int main(int argc, char *argv[])
     // 设置全局字体，用于解决Qt for WebAssembly中文显示异常
     int fontId = QFontDatabase::addApplicationFont(":/font/Alibaba-PuHuiTi-Light.otf");
     QStringList fontFamilies = QFontDatabase::applicationFontFamilies(fontId);
-    qDebug() << "fontfamilies:" << fontFamilies;
+    // azh::logger() << "fontfamilies:" << fontFamilies;
     if (fontFamilies.size() > 0)
     {
         QFont font;
