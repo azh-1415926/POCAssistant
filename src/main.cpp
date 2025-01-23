@@ -4,9 +4,6 @@
 #include <QFontDatabase>
 #include <QFile>
 
-#include "logger.hpp"
-#include "jsonFile.hpp"
-
 int main(int argc, char *argv[])
 {
     if (qEnvironmentVariableIsEmpty("QTGLESSTREAM_DISPLAY"))

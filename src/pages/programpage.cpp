@@ -6,8 +6,6 @@
 #include <QNetworkRequest>
 #include <QFile>
 
-#include "jsonFile.hpp"
-
 programpage::programpage(QWidget *parent)
     : basepage("在线实验",parent)
     , ui(new Ui::programpage)

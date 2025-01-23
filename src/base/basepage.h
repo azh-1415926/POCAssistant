@@ -6,6 +6,7 @@
 #include "base.hpp"
 #include "global.hpp"
 #include "constant.h"
+#include "jsonFile.hpp"
 
 // 页面的基本信息
 struct StatusOfPage

@@ -1,8 +1,6 @@
 #include "loginpage.h"
 #include "ui_loginpage.h"
 
-#include "jsonFile.hpp"
-
 #include <QTimer>
 
 #define ERROR_TEXT(str) "<p><span style=\"color: rgb(231, 95, 51);\">" \

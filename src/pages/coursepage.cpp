@@ -1,8 +1,6 @@
 #include "coursepage.h"
 #include "ui_coursepage.h"
 
-#include <jsonFile.hpp>
-
 #include "markdownhighlighter.h"
 
 int bigChinese_Transfer_Number(const QString& str)

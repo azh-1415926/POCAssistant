@@ -1,8 +1,6 @@
 #include "managementpage.h"
 #include "ui_managementpage.h"
 
-#include "jsonFile.hpp"
-
 // 当前操作应当请求的 url
 SINGLETONE(currUrl,QString)
 // 当前提交按钮对应的操作
