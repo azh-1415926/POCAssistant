@@ -8,10 +8,14 @@ QT_END_NAMESPACE
 
 enum class operationOfManagement
 {
+    // user
     ADD_USER=0,REMOVE_USER,ALTER_USER,
+    // class
     ADD_CLASS,REMOVE_CLASS,ALTER_CLASS,CLASS_ALLOC,
+    // search
     USER_SEARCH,CLASS_SERACH,
-    USER_INFO,CLASS_INFO
+    // extra
+    USER_INFO,CLASS_INFO,UNALLOC_USER
 };
 
 class managementpage : public basepage
@@ -45,6 +49,7 @@ class managementpage : public basepage
         void operationOfUser(QNetworkReply* reply);
         void operationOfClass(QNetworkReply* reply);
         void operationOfSearch(QNetworkReply* reply);
+        void loadUnallocatedStudent(QNetworkReply* reply);
 
     signals:
         ;
@@ -54,6 +59,7 @@ class managementpage : public basepage
 
         void loadUserInfo(bool needToLoad,bool needToClearId=false);
         void loadClassInfo(bool needToLoad,bool needToClearId=false);
+        
 
         void lockUserInfo(bool shouldLock);
         void lockClassInfo(bool shouldLock);

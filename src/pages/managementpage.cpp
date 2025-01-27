@@ -8,6 +8,18 @@ SINGLETONE(currOperation,operationOfManagement)
 // 当前是否为导入操作
 SINGLETONE(isLoad,bool)
 
+void hideLayout(QLayout* layout,bool status)
+{
+    for(auto i =0;i<layout->count();i++)
+    {
+        QWidget *w = layout->itemAt(i)->widget();
+        if(w != nullptr)
+        {
+            w->setVisible(!status);
+        } 
+    }
+}
+
 managementpage::managementpage(QWidget *parent)
     : basepage("在线管理",parent)
     , ui(new Ui::managementpage)
@@ -75,6 +87,7 @@ QString managementpage::getUrlByOperation(operationOfManagement op)
 
     case operationOfManagement::CLASS_ALLOC:
         /* 班级分配 */
+        url+="/Class/allocate";
         break;
 
     case operationOfManagement::USER_SEARCH:
@@ -94,6 +107,11 @@ QString managementpage::getUrlByOperation(operationOfManagement op)
     case operationOfManagement::CLASS_INFO:
         /* 班级查询 */
         url+="/Class/info";
+        break;
+
+    case operationOfManagement::UNALLOC_USER:
+        /* 未分配班级用户查询 */
+        url+="/User/getUnallocatedStudent";
         break;
 
     default:
@@ -194,6 +212,14 @@ void managementpage::operationOfClass(QNetworkReply *reply)
         // 若为提交操作，则取消载入的数据
         if(result=="true")
         {
+            if(currOperation::getInstance().get()==operationOfManagement::CLASS_ALLOC)
+            {
+                QJsonObject obj;
+                postByOperationWithData(3,operationOfManagement::UNALLOC_USER,obj);
+
+                return;
+            }
+
             loadClassInfo(false,currOperation::getInstance().get()==operationOfManagement::ALTER_CLASS?false:true);
         }
         else
@@ -251,6 +277,46 @@ void managementpage::operationOfSearch(QNetworkReply *reply)
                 {
                     ui->tableOfSearch->setItem(i-1,j,new QTableWidgetItem(record.value(QString::number(j)).toString()));
                 }
+            }
+        }
+    }
+    // 若响应为空，则说明请求超时，直接退出登陆
+    else
+    {
+        emit logoff();
+    }
+}
+
+void managementpage::loadUnallocatedStudent(QNetworkReply *reply)
+{
+    disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&managementpage::loadUnallocatedStudent);
+
+    QString str=reply->readAll();
+    
+    azh::logger()<<"managementpage loadUnallocatedStudent:"<<str;
+
+    jsonFile json;
+    json.fromJson(str);
+
+    QString result=json.value("result").toString();
+
+    if(!result.isEmpty())
+    {
+        ui->textOfOutput->setText(json.value("info").toString());
+
+        if(result=="true")
+        {
+            int count=json.value("count").toInt();
+
+            ui->userTable->clear();
+            ui->userTable->setRowCount(count);
+            ui->userTable->setColumnCount(1);
+
+            ui->userTable->setHorizontalHeaderLabels(QStringList()<<"未分配班级的用户id");
+
+            for(int i=0;i<count;i++)
+            {                
+                ui->userTable->setItem(i,0,new QTableWidgetItem(json.value(QString::number(i)).toString()));
             }
         }
     }
@@ -340,6 +406,22 @@ void managementpage::initalManagementPage()
             ui->loadOfClass->show();
         }
 
+        if(op==operationOfManagement::CLASS_ALLOC)
+        {
+            hideLayout(ui->layoutOfUserTable,false);
+            hideLayout(ui->layoutOfAlloc,false);
+            ui->frameOfClass->hide();
+
+            QJsonObject obj;
+            postByOperationWithData(3,operationOfManagement::UNALLOC_USER,obj);
+        }
+        else
+        {
+            hideLayout(ui->layoutOfUserTable,true);
+            hideLayout(ui->layoutOfAlloc,true);
+            ui->frameOfClass->show();
+        }
+
         if(op==operationOfManagement::USER_SEARCH||op==operationOfManagement::CLASS_SERACH)
         {
             QJsonObject obj;
@@ -406,6 +488,22 @@ void managementpage::initalManagementPage()
         }
 
         lockClassInfo(true);
+
+        postByCurrOperationWithData(1,obj);
+    });
+
+    connect(ui->allocOfClass,&QPushButton::clicked,this,[=]()
+    {
+        if(ui->idOfUserForAlloc->text().isEmpty()||ui->idOfClassForAlloc->text().isEmpty())
+        {
+            ui->textOfOutput->setText("未输入用户id与班级id，无法进行分配");
+            return;
+        }
+
+        QJsonObject obj;
+        // id required
+        obj.insert("id",ui->idOfClassForAlloc->text());
+        obj.insert("userId",ui->idOfUserForAlloc->text());
 
         postByCurrOperationWithData(1,obj);
     });
@@ -566,6 +664,10 @@ void managementpage::postByOperationWithData(int funcId, const operationOfManage
         break;
     case 2:
         connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&managementpage::operationOfSearch);
+        break;
+
+    case 3:
+        connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&managementpage::loadUnallocatedStudent);
         break;
     
     default:
