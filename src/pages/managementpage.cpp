@@ -351,6 +351,9 @@ void managementpage::initalManagementPage()
     // 子功能就为当前操作
     connect(ui->optionsOfSubFunc,&QComboBox::currentIndexChanged,this,[=](int i)
     {
+        if(i<0)
+            return;
+            
         int index=0;
 
         for(int ii=0;ii<ui->optionsOfFunc->currentIndex();ii++)

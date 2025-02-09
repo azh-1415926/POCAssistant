@@ -54,7 +54,7 @@
       <item>
        <widget class="QStackedWidget" name="pages">
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="userPage">
          <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -355,37 +355,11 @@
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_7">
              <item>
-              <spacer name="horizontalSpacer_5">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>58</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
               <layout class="QGridLayout" name="gridLayout_2">
                <item row="0" column="0" colspan="2">
                 <widget class="QTableWidget" name="tableOfSearch"/>
                </item>
               </layout>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_6">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>58</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
              </item>
             </layout>
            </widget>
