@@ -87,22 +87,19 @@ void programpage::getExperiment(QNetworkReply *reply)
     int countOfNeedFinish=0;
     int count=experimentInfo.value("count").toInt();
 
-    ui->optionOfSubmit->blockSignals(true);
-    ui->optionOfSubmit->clear();
+    ui->optionOfProgram->clear();
 
     for(int i=0;i<count;i++)
     {
         QJsonObject experiment=experimentInfo.value(QString::number(i)).toObject();
 
-        ui->optionOfSubmit->addItem(experiment.value("name").toString());
+        ui->optionOfProgram->addItem(experiment.value("name").toString());
 
         experimentNeedFinish[QString::number(countOfNeedFinish++)]=experiment;
     }
 
     experimentNeedFinish["count"]=countOfNeedFinish;
     m_UnFinishedExperimentInfo=experimentNeedFinish;
-
-    ui->optionOfSubmit->blockSignals(false);
 
     if(countOfNeedFinish==0)
     {
@@ -111,6 +108,11 @@ void programpage::getExperiment(QNetworkReply *reply)
     else
     {
         ui->btnOfSubmit->setEnabled(true);
+
+        QJsonObject experiment=m_UnFinishedExperimentInfo.value(QString::number(0)).toObject();
+        QString content=experiment.value("content").toString();
+
+        ui->contentOfProgram->setText(content);
     }
 }
 
@@ -154,8 +156,6 @@ void programpage::getClassInfo(QNetworkReply *reply)
 
     int count=classInfo.value("count").toInt();
 
-    ui->optionOfClass->blockSignals(true);
-    ui->optionOfClass->clear();
     m_ClassInfo.clear();
 
     for(int i=0;i<count;i++)
@@ -166,8 +166,6 @@ void programpage::getClassInfo(QNetworkReply *reply)
 
         m_ClassInfo.push_back(QPair<QString,QString>(info.value("id").toString(),info.value("name").toString()));
     }
-
-    ui->optionOfSubmit->blockSignals(false);
 }
 
 void programpage::getReleaseState(QNetworkReply *reply)
@@ -218,18 +216,17 @@ void programpage::initalProgramPage()
 
     connect(ui->btnOfSubmit,&QPushButton::clicked,this,[=]()
     {
+        int index=ui->optionOfProgram->currentIndex();
+
+        if(index==-1)
+        {
+            return;
+        }
+
         QString code=ui->CodeEdit->toPlainText();
 
-        QString experimentId;
-
-        for(int i=0;i<m_UnFinishedExperimentInfo.value("count").toInt();i++)
-        {
-            QJsonObject experiment=m_UnFinishedExperimentInfo.value(QString::number(i)).toObject();
-            if(ui->optionOfSubmit->currentText()==experiment.value("name").toString())
-            {
-                experimentId=QString::number(experiment.value("id").toInt());
-            }
-        }
+        QJsonObject experiment=m_UnFinishedExperimentInfo.value(QString::number(index)).toObject();
+        QString experimentId=experiment.value("experimentId").toString();
 
         if(experimentId.isEmpty())
         {
@@ -248,6 +245,7 @@ void programpage::initalProgramPage()
 
         QJsonObject obj;
         obj.insert("code",code);
+        obj.insert("studentId",userId::getInstance().get());
         obj.insert("experimentId",experimentId);
         QJsonDocument doc(obj);
 
@@ -287,6 +285,19 @@ void programpage::initalProgramPage()
         QJsonDocument doc(obj);
 
         HTTP_MANAGER->post(request,doc.toJson());
+    });
+
+    connect(ui->optionOfProgram,&QComboBox::currentIndexChanged,this,[=](int i)
+    {
+        if(i==-1)
+        {
+            return;
+        }
+
+        QJsonObject experiment=m_UnFinishedExperimentInfo.value(QString::number(i)).toObject();
+        QString content=experiment.value("content").toString();
+
+        ui->contentOfProgram->setText(content);
     });
 }
 
