@@ -17,7 +17,8 @@ class programpage : public basepage
     private:
         Ui::programpage* ui;
         Highlighter* highlighter;
-        QJsonObject m_ExperimentInfo;
+        QJsonObject m_UnFinishedExperimentInfo;
+        QList<QPair<QString,QString>> m_ClassInfo;
 
     protected:
         ;
@@ -41,6 +42,10 @@ class programpage : public basepage
         void getResult(QNetworkReply* reply);
         // 获取提交结果
         void getSubmitState(QNetworkReply* reply);
+        // 获取班级列表
+        void getClassInfo(QNetworkReply* reply);
+        // 获取新增实验的结果
+        void getReleaseState(QNetworkReply* reply);
 
     signals:
         ;

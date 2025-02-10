@@ -19,22 +19,52 @@ programpage::~programpage()
 
 void programpage::resetPage()
 {
+    if(userRole::getInstance().get()==(int)UserRole::STUDENT)
+    {
+        ui->stackedWidget->setCurrentIndex(0);
+    }
+    else if(userRole::getInstance().get()==(int)UserRole::TEACHER)
+    {
+        ui->stackedWidget->setCurrentIndex(1);
+    }
 }
 
 void programpage::selectedPage()
 {
-    connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getExperiment);
+    if(userRole::getInstance().get()==(int)UserRole::STUDENT)
+    {
+        ui->stackedWidget->setCurrentIndex(0);
 
-    QNetworkRequest request;
-    request.setUrl(URL_OF_SERVER+"/Code/getExperiment");
-    request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
-    request.setRawHeader("Accept","text/html");
+        connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getExperiment);
 
-    QJsonObject obj;
-    obj.insert("studentId",userId::getInstance().get());
-    QJsonDocument doc(obj);
+        QNetworkRequest request;
+        request.setUrl(URL_OF_SERVER+"/Code/getUnfinishedExperiment");
+        request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
+        request.setRawHeader("Accept","text/html");
 
-    HTTP_MANAGER->post(request,doc.toJson());
+        QJsonObject obj;
+        obj.insert("studentId",userId::getInstance().get());
+        QJsonDocument doc(obj);
+
+        HTTP_MANAGER->post(request,doc.toJson());
+    }
+    else if(userRole::getInstance().get()==(int)UserRole::TEACHER)
+    {
+        ui->stackedWidget->setCurrentIndex(1);
+
+        connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getClassInfo);
+
+        QNetworkRequest request;
+        request.setUrl(URL_OF_SERVER+"/Class/getClassByTeacher");
+        request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
+        request.setRawHeader("Accept","text/html");
+
+        QJsonObject obj;
+        obj.insert("id",userId::getInstance().get());
+        QJsonDocument doc(obj);
+
+        HTTP_MANAGER->post(request,doc.toJson());
+    }
 }
 
 void programpage::back()
@@ -57,25 +87,31 @@ void programpage::getExperiment(QNetworkReply *reply)
     int countOfNeedFinish=0;
     int count=experimentInfo.value("count").toInt();
 
-    ui->optionOfSubmit->clear();
     ui->optionOfSubmit->blockSignals(true);
+    ui->optionOfSubmit->clear();
 
     for(int i=0;i<count;i++)
     {
         QJsonObject experiment=experimentInfo.value(QString::number(i)).toObject();
 
-        if(experiment.value("isfinish").toInt()==0)
-        {
-            ui->optionOfSubmit->addItem(experiment.value("name").toString());
+        ui->optionOfSubmit->addItem(experiment.value("name").toString());
 
-            experimentNeedFinish[QString::number(countOfNeedFinish++)]=experiment;
-        }
+        experimentNeedFinish[QString::number(countOfNeedFinish++)]=experiment;
     }
 
     experimentNeedFinish["count"]=countOfNeedFinish;
-    m_ExperimentInfo=experimentNeedFinish;
+    m_UnFinishedExperimentInfo=experimentNeedFinish;
 
     ui->optionOfSubmit->blockSignals(false);
+
+    if(countOfNeedFinish==0)
+    {
+        ui->btnOfSubmit->setEnabled(false);
+    }
+    else
+    {
+        ui->btnOfSubmit->setEnabled(true);
+    }
 }
 
 void programpage::getResult(QNetworkReply *reply)
@@ -100,6 +136,54 @@ void programpage::getSubmitState(QNetworkReply *reply)
 
     jsonFile json;
     json.fromJson(str);
+
+    ui->infoOfOutput->setText(json.value("info").toString());
+}
+
+void programpage::getClassInfo(QNetworkReply *reply)
+{
+    disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getClassInfo);
+
+    QString str(reply->readAll());
+    azh::logger()<<"programpage getClassInfo:"<<str;
+
+    jsonFile json;
+    json.fromJson(str);
+
+    QJsonObject classInfo=json.toJson();
+
+    int count=classInfo.value("count").toInt();
+
+    ui->optionOfClass->blockSignals(true);
+    ui->optionOfClass->clear();
+    m_ClassInfo.clear();
+
+    for(int i=0;i<count;i++)
+    {
+        QJsonObject info=classInfo.value(QString::number(i)).toObject();
+
+        ui->optionOfClass->addItem(info.value("name").toString());
+
+        m_ClassInfo.push_back(QPair<QString,QString>(info.value("id").toString(),info.value("name").toString()));
+    }
+
+    ui->optionOfSubmit->blockSignals(false);
+}
+
+void programpage::getReleaseState(QNetworkReply *reply)
+{
+    disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getReleaseState);
+
+    QString str(reply->readAll());
+    azh::logger()<<"programpage release:"<<str;
+
+    jsonFile json;
+    json.fromJson(str);
+
+    ui->outputOfRelease->setText(json.value("info").toString());
+
+    ui->inputOfProgramTitle->clear();
+    ui->inputOfProgramContent->clear();
 }
 
 void programpage::initalProgramPage()
@@ -134,22 +218,28 @@ void programpage::initalProgramPage()
 
     connect(ui->btnOfSubmit,&QPushButton::clicked,this,[=]()
     {
-        connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getSubmitState);
-
         QString code=ui->CodeEdit->toPlainText();
 
         QString experimentId;
 
-        for(int i=0;i<m_ExperimentInfo.value("count").toInt();i++)
+        for(int i=0;i<m_UnFinishedExperimentInfo.value("count").toInt();i++)
         {
-            QJsonObject experiment=m_ExperimentInfo.value(QString::number(i)).toObject();
+            QJsonObject experiment=m_UnFinishedExperimentInfo.value(QString::number(i)).toObject();
             if(ui->optionOfSubmit->currentText()==experiment.value("name").toString())
             {
                 experimentId=QString::number(experiment.value("id").toInt());
             }
         }
 
+        if(experimentId.isEmpty())
+        {
+            ui->infoOfOutput->setText("提交实验失败，未选择任何实验");
+            return;
+        }
+
         azh::logger()<<"programpage experimentId:"<<experimentId;
+
+        connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getSubmitState);
 
         QNetworkRequest request;
         request.setUrl(URL_OF_SERVER+"/Code/submit");
@@ -159,6 +249,41 @@ void programpage::initalProgramPage()
         QJsonObject obj;
         obj.insert("code",code);
         obj.insert("experimentId",experimentId);
+        QJsonDocument doc(obj);
+
+        HTTP_MANAGER->post(request,doc.toJson());
+    });
+
+    connect(ui->btnOfRelease,&QPushButton::clicked,this,[=]()
+    {
+        int index=ui->optionOfClass->currentIndex();
+
+        if(index==-1)
+        {
+            ui->outputOfRelease->setText("未选择班级");
+            return;
+        }
+
+        QString name=ui->inputOfProgramTitle->text();
+        QString content=ui->inputOfProgramContent->toPlainText();
+
+        if(name.isEmpty()||content.isEmpty())
+        {
+            ui->outputOfRelease->setText("请输入实验名称以及实验内容以便发布实验");
+            return;
+        }
+
+        connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getReleaseState);
+
+        QNetworkRequest request;
+        request.setUrl(URL_OF_SERVER+"/Code/releaseExperiment");
+        request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
+        request.setRawHeader("Accept","text/html");
+
+        QJsonObject obj;
+        obj.insert("classId",m_ClassInfo.at(index).first);
+        obj.insert("name",name);
+        obj.insert("content",content);
         QJsonDocument doc(obj);
 
         HTTP_MANAGER->post(request,doc.toJson());
