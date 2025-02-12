@@ -33,7 +33,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="optionsOfFunc"/>
+         <widget class="QComboBox" name="optionOfFunc"/>
         </item>
        </layout>
       </item>
@@ -47,7 +47,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="optionsOfSubFunc"/>
+         <widget class="QComboBox" name="optionOfSubFunc"/>
         </item>
        </layout>
       </item>
@@ -124,7 +124,7 @@
                 </widget>
                </item>
                <item row="5" column="1">
-                <widget class="QPushButton" name="submitOfUser">
+                <widget class="QPushButton" name="btnOfUserManagement">
                  <property name="text">
                   <string>提交</string>
                  </property>
@@ -168,7 +168,7 @@
                 </widget>
                </item>
                <item row="5" column="0">
-                <widget class="QPushButton" name="loadOfUser">
+                <widget class="QPushButton" name="btnOfLoadUser">
                  <property name="text">
                   <string>载入</string>
                  </property>
@@ -239,7 +239,7 @@
              <widget class="QLineEdit" name="idOfUserForAlloc"/>
             </item>
             <item row="2" column="1">
-             <widget class="QPushButton" name="allocOfClass">
+             <widget class="QPushButton" name="btnOfClassAlloc">
               <property name="text">
                <string>分配</string>
               </property>
@@ -310,14 +310,14 @@
                 </widget>
                </item>
                <item row="4" column="1">
-                <widget class="QPushButton" name="submitOfClass">
+                <widget class="QPushButton" name="btnOfClassManagement">
                  <property name="text">
                   <string>提交</string>
                  </property>
                 </widget>
                </item>
                <item row="4" column="0">
-                <widget class="QPushButton" name="loadOfClass">
+                <widget class="QPushButton" name="btnOfLoadClass">
                  <property name="text">
                   <string>载入</string>
                  </property>

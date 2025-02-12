@@ -17,6 +17,7 @@ programpage::~programpage()
 {
 }
 
+// 重置页面的时候，切换到学生、教师页面
 void programpage::resetPage()
 {
     if(userRole::getInstance().get()==(int)UserRole::STUDENT)
@@ -29,13 +30,14 @@ void programpage::resetPage()
     }
 }
 
+// 初始化展示该页面的时候，对于学生，更新当前所需完成的实验列表，对于教师，更新当前管理的班级列表
 void programpage::selectedPage()
 {
     if(userRole::getInstance().get()==(int)UserRole::STUDENT)
     {
         ui->stackedWidget->setCurrentIndex(0);
 
-        connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getExperiment);
+        connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getUnfinishedExperiment);
 
         QNetworkRequest request;
         request.setUrl(URL_OF_SERVER+"/Code/getUnfinishedExperiment");
@@ -71,12 +73,13 @@ void programpage::back()
 {
 }
 
-void programpage::getExperiment(QNetworkReply *reply)
+// 接收后端数据，更新学生当前未完成的实验列表
+void programpage::getUnfinishedExperiment(QNetworkReply *reply)
 {
-    disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getExperiment);
+    disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getUnfinishedExperiment);
 
     QString str(reply->readAll());
-    azh::logger()<<"programpage getExperiment:"<<str;
+    azh::logger()<<"programpage getUnfinishedExperiment:"<<str;
 
     jsonFile json;
     json.fromJson(str);
@@ -116,9 +119,10 @@ void programpage::getExperiment(QNetworkReply *reply)
     }
 }
 
-void programpage::getResult(QNetworkReply *reply)
+// 接收后端数据，得到学生编译结果
+void programpage::getCompileOutput(QNetworkReply *reply)
 {
-    disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getResult);
+    disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getCompileOutput);
 
     QString str(reply->readAll());
     azh::logger()<<"programpage compile:"<<str;
@@ -129,6 +133,7 @@ void programpage::getResult(QNetworkReply *reply)
     ui->infoOfOutput->setText(json.value("output").toString());
 }
 
+// 接收后端数据，得到学生实验提交的结果
 void programpage::getSubmitState(QNetworkReply *reply)
 {
     disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getSubmitState);
@@ -142,6 +147,7 @@ void programpage::getSubmitState(QNetworkReply *reply)
     ui->infoOfOutput->setText(json.value("info").toString());
 }
 
+// 接收后端数据，更新教师所管理的班级列表
 void programpage::getClassInfo(QNetworkReply *reply)
 {
     disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getClassInfo);
@@ -168,6 +174,7 @@ void programpage::getClassInfo(QNetworkReply *reply)
     }
 }
 
+// 接收后端数据，得到教师发布实验的结果
 void programpage::getReleaseState(QNetworkReply *reply)
 {
     disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getReleaseState);
@@ -196,7 +203,7 @@ void programpage::initalProgramPage()
 
     connect(ui->btnOfRun,&QPushButton::clicked,this,[=]()
     {
-        connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getResult);
+        connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getCompileOutput);
 
         QString code=ui->CodeEdit->toPlainText();
         QString input=ui->inputOfProgram->toPlainText();
@@ -214,6 +221,7 @@ void programpage::initalProgramPage()
         HTTP_MANAGER->post(request,doc.toJson());
     });
 
+    // 学生提交实验的逻辑
     connect(ui->btnOfSubmit,&QPushButton::clicked,this,[=]()
     {
         int index=ui->optionOfProgram->currentIndex();
@@ -252,6 +260,7 @@ void programpage::initalProgramPage()
         HTTP_MANAGER->post(request,doc.toJson());
     });
 
+    // 教师发布实验的逻辑
     connect(ui->btnOfRelease,&QPushButton::clicked,this,[=]()
     {
         int index=ui->optionOfClass->currentIndex();
@@ -287,6 +296,7 @@ void programpage::initalProgramPage()
         HTTP_MANAGER->post(request,doc.toJson());
     });
 
+    // 更新学生的实验内容
     connect(ui->optionOfProgram,&QComboBox::currentIndexChanged,this,[=](int i)
     {
         if(i==-1)
@@ -301,6 +311,7 @@ void programpage::initalProgramPage()
     });
 }
 
+// 设置代码输入框的语法高亮
 void programpage::setupEditor()
 {
     QFont font;

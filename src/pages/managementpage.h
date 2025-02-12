@@ -6,24 +6,28 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class managementpage; }
 QT_END_NAMESPACE
 
+// 管理页面子操作的枚举
 enum class operationOfManagement
 {
-    // user
+    // 用户管理模块
     ADD_USER=0,REMOVE_USER,ALTER_USER,
-    // class
+    // 班级管理模块
     ADD_CLASS,REMOVE_CLASS,ALTER_CLASS,CLASS_ALLOC,
-    // search
+    // 查询模块
     USER_SEARCH,CLASS_SERACH,
-    // extra
+    // 额外模块，仅请求用于展示的数据
     USER_INFO,CLASS_INFO,UNALLOC_USER
 };
 
+// 在线管理页面，建议对管理员显示，对普通用户隐藏
 class managementpage : public basepage
 {
     Q_OBJECT
 
     private:
         Ui::managementpage* ui;
+
+        // 用户、班级信息展示框是否被锁定
         bool userInfoIsLock;
         bool classInfoIsLock;
 
@@ -42,7 +46,6 @@ class managementpage : public basepage
 
         void back();
         
-        // 获取当前操作的后端请求 url
         QString getUrlByOperation(operationOfManagement op);
 
         // 分别对应用户管理、班级管理、查询
@@ -59,7 +62,6 @@ class managementpage : public basepage
 
         void loadUserInfo(bool needToLoad,bool needToClearId=false);
         void loadClassInfo(bool needToLoad,bool needToClearId=false);
-        
 
         void lockUserInfo(bool shouldLock);
         void lockClassInfo(bool shouldLock);
