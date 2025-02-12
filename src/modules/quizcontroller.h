@@ -33,7 +33,9 @@ class quizcontroller : public QObject
         void goPrevQuiz();
         void goNextQuiz();
 
-        void InitalView();
+        void initalView();
+        void collectCurrQuiz();
+        void uncollectCurrQuiz();
 
     signals:
         ;

@@ -17,13 +17,15 @@ void quizcontroller::bind(quizview *v)
     
     connect(view,&quizview::prevQuiz,this,&quizcontroller::goPrevQuiz);
     connect(view,&quizview::nextQuiz,this,&quizcontroller::goNextQuiz);
+    connect(view,&quizview::collectQuestion,this,&quizcontroller::collectCurrQuiz);
+    connect(view,&quizview::uncollectQuestion,this,&quizcontroller::uncollectCurrQuiz);
 }
 
 void quizcontroller::bind(quizmodel *m)
 {
     model=m;
 
-    connect(model,&quizmodel::dataChanged,this,&quizcontroller::InitalView);
+    connect(model,&quizmodel::dataChanged,this,&quizcontroller::initalView);
 }
 
 void quizcontroller::unbind()
@@ -32,13 +34,15 @@ void quizcontroller::unbind()
     {
         disconnect(view,&quizview::prevQuiz,this,&quizcontroller::goPrevQuiz);
         disconnect(view,&quizview::nextQuiz,this,&quizcontroller::goNextQuiz);
+        disconnect(view,&quizview::collectQuestion,this,&quizcontroller::collectCurrQuiz);
+        disconnect(view,&quizview::uncollectQuestion,this,&quizcontroller::uncollectCurrQuiz);
 
         view=nullptr;
     }
 
     if(model)
     {
-        disconnect(model,&quizmodel::dataChanged,this,&quizcontroller::InitalView);
+        disconnect(model,&quizmodel::dataChanged,this,&quizcontroller::initalView);
 
         model=nullptr;
     }
@@ -60,12 +64,28 @@ void quizcontroller::goNextQuiz()
     updateQuiz(++this->m_Index);
 }
 
-void quizcontroller::InitalView()
+void quizcontroller::initalView()
 {
     if(view==nullptr)
         return;
 
     updateQuiz(0);
+}
+
+void quizcontroller::collectCurrQuiz()
+{
+    if(model==nullptr)
+        return;
+
+    model->setCollected(m_Index,true);
+}
+
+void quizcontroller::uncollectCurrQuiz()
+{
+    if(model==nullptr)
+        return;
+
+    model->setCollected(m_Index,false);
 }
 
 void quizcontroller::initalController()
@@ -86,5 +106,6 @@ void quizcontroller::updateQuiz(int index)
     }
     view->setIndex(index);
     view->setSum(model->count());
+    view->setCollect(model->getCollectedStatus(index));
     view->updateQuiz(model->get(index));
 }

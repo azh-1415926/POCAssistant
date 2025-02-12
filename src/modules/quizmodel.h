@@ -16,12 +16,14 @@ class quizmodel : public QObject
         
         inline int count() { return m_Data.count(); }
         QJsonObject get(int i) { return m_Data[i]; }
+        bool getCollectedStatus(int i) { return m_Data[i].value("collected").toInt(); }
 
     protected:
         ;
 
     public slots:
         void load(QJsonObject json);
+        void setCollected(int i,bool isCollected);
 
     signals:
         void dataChanged();
