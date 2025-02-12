@@ -6,6 +6,7 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class loginpage; }
 QT_END_NAMESPACE
 
+// 登录页面
 class loginpage : public basepage
 {
     Q_OBJECT
@@ -28,7 +29,6 @@ class loginpage : public basepage
 
         void back();
 
-        // 接收后端响应，判断返回结果是否正确
         void toLogin(QNetworkReply* reply);
 
     signals:

@@ -26,6 +26,7 @@ void loginpage::back()
 {
 }
 
+// 接收后端响应，判断是否登陆成功，成功便发送 logon 信号
 void loginpage::toLogin(QNetworkReply *reply)
 {
     disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&loginpage::toLogin);
@@ -39,10 +40,10 @@ void loginpage::toLogin(QNetworkReply *reply)
     if(json.value("result").toString()=="true")
     {
         ui->textOfError->hide();
-        // 设置当前用户 id 到全局变量
+        // 存储当前用户 id 到全局变量 userId 中，在后续操作中需要用到用户 id
         userId::getInstance().set(ui->inputOfAccount->text());
 
-        // 管理员额外多一个 token
+        // 管理员额外存储 token 数据到全局变量 tokenOfAdmin 中，管理员请求高级权限的 api 时需要带上 token
         QString token=json.value("token").toString();
         if(!token.isEmpty())
         {

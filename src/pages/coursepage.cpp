@@ -3,6 +3,7 @@
 
 #include "markdownhighlighter.h"
 
+// 中文数字文本转 int
 int bigChinese_Transfer_Number(const QString& str)
 {
     QStringList numerical_value  = {"零","一","二","三","四","五","六","七","八","九"};
@@ -16,6 +17,7 @@ int bigChinese_Transfer_Number(const QString& str)
     return -1;
 }
 
+// 数字转中文数字
 const QString number_Transfer_BigChinese(const double &Fnumber)
 {
  
@@ -106,6 +108,7 @@ const QString number_Transfer_BigChinese(const double &Fnumber)
 coursepage::coursepage(QWidget *parent)
     : basepage("在线学习",parent)
     , ui(new Ui::coursepage)
+    // 初始化的时候，章、节初始化为 -1
     , m_CurrChapter(-1), m_CurrSection(-1)
 {
     initalCoursePage();
@@ -115,6 +118,7 @@ coursepage::~coursepage()
 {
 }
 
+// 获取指定 QTreeWidget 控件内的大纲数据
 QString coursepage::getOutLine(QTreeWidget* w)
 {
     QTreeWidgetItemIterator it(w);
@@ -189,6 +193,7 @@ QString coursepage::getOutLine(QTreeWidget* w)
     return json.toString();
 }
 
+// 获取当前章节的课程信息，包含章节下标、课程内容
 QPair<QPair<int, int>, QString> coursepage::getCurrCourse()
 {
     QPair<QPair<int,int>,QString> data;
@@ -205,9 +210,11 @@ void coursepage::resetPage()
 {
 }
 
-// 页面初始化时，向后端请求课程大纲内容
+// 页面初始化时自动调用该函数
 void coursepage::selectedPage()
 {
+    // 向后端请求课程大纲内容，由 setOutLine 更新到指定控件上
+
     connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&coursepage::setOutLine);
 
     QNetworkRequest request;
@@ -267,6 +274,7 @@ void coursepage::setOutLine(QNetworkReply* reply)
     }
 }
 
+// 设置当前课程内容
 void coursepage::setContent(QNetworkReply *reply)
 {
     disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&coursepage::setContent);
@@ -276,9 +284,12 @@ void coursepage::setContent(QNetworkReply *reply)
 
     ui->content->setAutoTextOptions(QMarkdownTextEdit::BracketRemoval);
     ui->content->setPlainText(obj.value("content").toString());
+
+    // 默认只读，管理员才可编辑并推送到后端
     ui->content->setReadOnly(true);
 }
 
+// 设置课程内容可编辑
 void coursepage::setEditable(bool status)
 {
     ui->content->setReadOnly(!status);
@@ -290,11 +301,8 @@ void coursepage::initalCoursePage()
 
     m_Status.currIcon.load(":/img/main/course");
 
+    // 暂时不用该控件
     ui->btnOfMark->hide();
-
-    ui->outline->columnCount();
-
-    getOutLine(ui->outline);
 
     connect(ui->outline,&QTreeWidget::clicked,this,[=]()
     {
@@ -316,10 +324,16 @@ void coursepage::initalCoursePage()
             }
             else
             {
+                // 若为章，则设置节为 0
                 chapter=QString::number(bigChinese_Transfer_Number(str[1])-1);;
                 section="0";
             }
 
+            /*
+                章的下标从 0 开始，节的下标从 1 开始
+                    例如chapter&section分别为0、0，则为第一章
+                    例如chapter&section分别为1、1，则为第二章第一节
+            */
             m_CurrChapter=chapter.toInt();
             m_CurrSection=section.toInt();
 

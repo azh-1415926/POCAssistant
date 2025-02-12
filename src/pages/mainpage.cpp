@@ -20,6 +20,7 @@ void mainpage::back()
 {
 }
 
+// 所在图标的标签被点击，发送 selectPage 信号
 void mainpage::selectLabel(const clicklabel* label)
 {
     // course(management)
@@ -63,6 +64,7 @@ void mainpage::selectLabel(const clicklabel* label)
     }
 }
 
+// 切换不同的用户形态
 void mainpage::switchTo(int role)
 {
     UserRole userRole=(UserRole)role;
@@ -137,6 +139,7 @@ void mainpage::initalMainPage()
 
     m_Status.currIcon.load(":/img/home");
 
+    // 绑定图标标签、按钮到 selectLabel 槽函数
     connect(ui->course,&clicklabel::clicked,this,&mainpage::selectLabel);
     connect(ui->program,&clicklabel::clicked,this,&mainpage::selectLabel);
     connect(ui->quiz,&clicklabel::clicked,this,&mainpage::selectLabel);

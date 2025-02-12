@@ -8,6 +8,7 @@ QT_END_NAMESPACE
 
 class clicklabel;
 
+// 主界面页面
 class mainpage : public basepage
 {
     Q_OBJECT
@@ -30,9 +31,7 @@ class mainpage : public basepage
 
         void back();
 
-        // 图标被点击，跳转至对应模块
         void selectLabel(const clicklabel* label);
-        // 切换至管理员界面
         void switchTo(int role);
 
     signals:
