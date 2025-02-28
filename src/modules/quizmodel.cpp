@@ -13,7 +13,7 @@ void quizmodel::setCollected(int i, bool isCollected)
     if(i<0||i>=m_Data.size())
         return;
     
-    m_Data[i].value("collected")=(int)isCollected;
+    m_Data[i].insert("collected",(int)isCollected);
 }
 
 void quizmodel::load(QJsonObject json)

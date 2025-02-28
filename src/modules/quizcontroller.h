@@ -37,6 +37,8 @@ class quizcontroller : public QObject
         void collectCurrQuiz();
         void uncollectCurrQuiz();
 
+        void setAnswer(const QString& str);
+
     signals:
         ;
 

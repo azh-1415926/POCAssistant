@@ -19,6 +19,7 @@ void quizcontroller::bind(quizview *v)
     connect(view,&quizview::nextQuiz,this,&quizcontroller::goNextQuiz);
     connect(view,&quizview::collectQuestion,this,&quizcontroller::collectCurrQuiz);
     connect(view,&quizview::uncollectQuestion,this,&quizcontroller::uncollectCurrQuiz);
+    connect(view,&quizview::setAnswer,this,&quizcontroller::setAnswer);
 }
 
 void quizcontroller::bind(quizmodel *m)
@@ -36,6 +37,7 @@ void quizcontroller::unbind()
         disconnect(view,&quizview::nextQuiz,this,&quizcontroller::goNextQuiz);
         disconnect(view,&quizview::collectQuestion,this,&quizcontroller::collectCurrQuiz);
         disconnect(view,&quizview::uncollectQuestion,this,&quizcontroller::uncollectCurrQuiz);
+        disconnect(view,&quizview::setAnswer,this,&quizcontroller::setAnswer);
 
         view=nullptr;
     }
@@ -86,6 +88,14 @@ void quizcontroller::uncollectCurrQuiz()
         return;
 
     model->setCollected(m_Index,false);
+}
+
+void quizcontroller::setAnswer(const QString& str)
+{
+    if(model==nullptr)
+        return;
+
+    model->setAnswer(m_Index,str);
 }
 
 void quizcontroller::initalController()

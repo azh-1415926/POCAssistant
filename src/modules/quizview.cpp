@@ -227,6 +227,36 @@ void quizview::initalQuestion()
 
     connect(this,&quizview::updateSelectOption,optionOfSelectQuiz,&clickoptions::setTextOfOption);
     connect(this,&quizview::updateJudgeOption,optionOfJudgeQuiz,&clickoptions::setTextOfOption);
+
+    connect(optionOfSelectQuiz,&clickoptions::selectOption,this,[=](int i)
+    {
+        if(i<0||i>3)
+            return;
+
+        QStringList list={"A","B","C","D"};
+
+        emit setAnswer(list[i]);
+    });
+
+    connect(optionOfJudgeQuiz,&clickoptions::selectOption,this,[=](int i)
+    {
+        if(i<0||i>1)
+            return;
+
+        QStringList list={"对","错"};
+
+        emit setAnswer(list[i]);
+    });
+
+    connect(fillQuiz,&QTextEdit::textChanged,this,[=]()
+    {
+        emit setAnswer(fillQuiz->toPlainText());
+    });
+
+    connect(codeQuiz,&QTextEdit::textChanged,this,[=]()
+    {
+        emit setAnswer(codeQuiz->toPlainText());
+    });
 }
 
 void quizview::initalCodeQuiz()
