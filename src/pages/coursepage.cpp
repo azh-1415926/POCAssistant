@@ -106,7 +106,7 @@ const QString number_Transfer_BigChinese(const double &Fnumber)
 }
 
 coursepage::coursepage(QWidget *parent)
-    : basepage("在线学习",parent)
+    : basepage("在线课程",parent)
     , ui(new Ui::coursepage)
     // 初始化的时候，章、节初始化为 -1
     , m_CurrChapter(-1), m_CurrSection(-1)

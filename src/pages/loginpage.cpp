@@ -68,7 +68,7 @@ void loginpage::initalLoginPage()
 {
     ui->setupUi(this);
 
-    ui->inputOfAccount->setPlaceholderText("请输入学号/职工号");
+    ui->inputOfAccount->setPlaceholderText("请输入用户ID");
     ui->inputOfPassword->setPlaceholderText("请输入密码");
 
     ui->inputOfPassword->setEchoMode(QLineEdit::Password);
