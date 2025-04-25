@@ -25,6 +25,7 @@ class updatepage : public basepage
 
     public slots:
         virtual void resetPage();
+        virtual void selectedPage();
 
         void back();
 

@@ -20,6 +20,11 @@ void updatepage::resetPage()
     ui->allWidgets->setCurrentIndex(0);
 }
 
+void updatepage::selectedPage()
+{
+    static_cast<basepage*>(ui->course)->select();
+}
+
 void updatepage::back()
 {
 }
@@ -61,6 +66,4 @@ void updatepage::initalUpdatePage()
 
         HTTP_MANAGER->post(request,doc.toJson());
     });
-
-    static_cast<basepage*>(ui->course)->select();
 }
