@@ -52,7 +52,7 @@ class quizmodel : public QObject
             return data;
         }
 
-        void setAnswer(int i,const QString& str) { m_Data[i].insert("answer",str); }
+        void setAnswer(int i,const QString& str) { if(i<=m_Data.length()) return; m_Data[i].insert("answer",str); }
         QStringList getAnswer()
         {
             QStringList list;

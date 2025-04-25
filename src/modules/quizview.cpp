@@ -130,6 +130,18 @@ void quizview::hideCollection(bool b)
         collectBtn->show();
 }
 
+void quizview::hideHover(bool b)
+{
+    optionOfSelectQuiz->hideHoverBox(b);
+    optionOfJudgeQuiz->hideHoverBox(b);
+}
+
+void quizview::setReadOnly(bool b)
+{
+    optionOfSelectQuiz->setReadOnly(b);
+    optionOfJudgeQuiz->setReadOnly(b);
+}
+
 void quizview::updateQuiz(const QJsonObject &quiz)
 {
     int type=quiz.value("type").toInt();
@@ -164,6 +176,25 @@ void quizview::updateQuiz(const QJsonObject &quiz)
     default:
         break;
     }
+}
+
+void quizview::setOption(int i)
+{
+    if(i<0||i>3)
+        return;
+
+    optionOfSelectQuiz->setOption(i);
+
+    if(i>1)
+        return;
+        
+    optionOfJudgeQuiz->setOption(i);
+}
+
+void quizview::setAnswerIndex(int i)
+{
+    optionOfSelectQuiz->setAnswer(i);
+    optionOfJudgeQuiz->setAnswer(i);
 }
 
 void quizview::reset()

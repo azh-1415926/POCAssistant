@@ -21,7 +21,10 @@ class clickoptions : public QGroupBox
         QRect* hoverBox;
         QRect* checkedBox;
         QRect* correctBox;
-        QRect* incorrectBox; 
+        QRect* incorrectBox;
+
+        bool flagOfHideHoverBox;
+        bool flagOfReadOnly;
 
     public:
         explicit clickoptions(QWidget* parent = nullptr);
@@ -39,6 +42,10 @@ class clickoptions : public QGroupBox
         void displayHover(const clicklabel* label);
         void displayAnswer(bool state);
         void resetOption();
+
+        void hideHoverBox(bool status) { flagOfHideHoverBox=status; }
+        void setReadOnly(bool status) { flagOfReadOnly=status; hideHoverBox(status);  }
+        void setOption(int i);
 
     signals:
         void selectOption(int);

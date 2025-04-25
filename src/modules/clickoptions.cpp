@@ -12,6 +12,7 @@ clickoptions::clickoptions(QWidget *parent)
     , numOfOptions(4)
     , answerOfOptions(-1), hoverOption(-1), checkedOption(-1)
     , hoverBox(nullptr), checkedBox(nullptr), correctBox(nullptr), incorrectBox(nullptr)
+    , flagOfHideHoverBox(false)
 {
     initalOptions();
     initalEvent();
@@ -49,7 +50,14 @@ bool clickoptions::eventFilter(QObject *obj, QEvent *e)
     if(index!=-1&&(e->type()==QEvent::HoverEnter||e->type()==QEvent::HoverLeave))
     {
         hoverBox=setOptionOfBox(index,hoverBox);
+
         hoverOption=index;
+
+        if(flagOfHideHoverBox)
+        {
+            hoverOption=-1;
+        }
+        
         this->update();
         return true;
     }
@@ -58,7 +66,11 @@ bool clickoptions::eventFilter(QObject *obj, QEvent *e)
     /* 若为当前对象的绘制事件，则一并绘制悬浮、正确、错误选框 */
     if(obj==this&&e->type()==QEvent::Paint)
     {
-        paintBox(this,hoverBox);
+        if(!flagOfHideHoverBox)
+        {
+            paintBox(this,hoverBox);
+        }
+        
         paintBox(this,checkedBox);
         paintBox(this,correctBox);
         paintBox(this,incorrectBox);
@@ -150,6 +162,15 @@ void clickoptions::resetOption()
     answerOfOptions=-1;
 }
 
+void clickoptions::setOption(int i)
+{
+    this->checkedOption=i;
+    checkedBox=setOptionOfBox(checkedOption,checkedBox);
+
+    emit selectOption(i);
+    this->update();
+}
+
 /* 设置指定选项的文本内容 */
 void clickoptions::setTextOfOption(int i,const QString& text)
 {
@@ -181,18 +202,27 @@ void clickoptions::initalOptions()
         /* 按钮被点击，则更新被选中的选项，且发送 selectOption 信号，传递当前被选中的选项下标 */
         connect(buttons[i],&QRadioButton::clicked,this,[=]()
         {
-            this->checkedOption=i;
+            if(!flagOfReadOnly)
+            {
+                this->checkedOption=i;
+                checkedBox=setOptionOfBox(checkedOption,checkedBox);
+            }
+            
             emit selectOption(i);
-            checkedBox=setOptionOfBox(checkedOption,checkedBox);
             this->update();
         });
         /* 标签被点击，则选中对应的按钮、更新被选中的选项，且发送 selectOption 信号 */
         connect(labels[i],&clicklabel::clicked,this,[=]()
         {
             buttons[i]->setChecked(true);
-            this->checkedOption=i;
+            
+            if(!flagOfReadOnly)
+            {
+                this->checkedOption=i;
+                checkedBox=setOptionOfBox(checkedOption,checkedBox);
+            }
+
             emit selectOption(i);
-            checkedBox=setOptionOfBox(checkedOption,checkedBox);
             this->update();
         });
         #ifdef __ANDROID__

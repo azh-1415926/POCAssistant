@@ -45,7 +45,12 @@ class quizview : public QWidget
 
         void setQuizType(int type);
         void hideCollection(bool b);
+        void hideHover(bool b);
+        void setReadOnly(bool b);
         void updateQuiz(const QJsonObject& quiz);
+
+        void setOption(int i);
+        void setAnswerIndex(int i);
 
         void reset();
 
