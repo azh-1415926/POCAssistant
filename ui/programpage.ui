@@ -6,16 +6,26 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>620</width>
+    <width>638</width>
     <height>396</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>programpage</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
     <widget class="QFrame" name="frame">
+     <property name="styleSheet">
+      <string notr="true">QFrame#frame
+{
+	background-color: rgba(0,118,98,50);
+	border-radius: 15px;
+}</string>
+     </property>
      <property name="frameShape">
       <enum>QFrame::Shape::StyledPanel</enum>
      </property>
@@ -26,6 +36,9 @@
       <item>
        <widget class="QStackedWidget" name="stackedWidget">
         <widget class="QWidget" name="student">
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
          <layout class="QVBoxLayout" name="verticalLayout_5">
           <property name="leftMargin">
            <number>0</number>
@@ -41,6 +54,21 @@
           </property>
           <item>
            <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0,0,0,0,0" columnminimumwidth="0,0,0,0,0,0">
+            <property name="leftMargin">
+             <number>10</number>
+            </property>
+            <property name="topMargin">
+             <number>10</number>
+            </property>
+            <property name="rightMargin">
+             <number>10</number>
+            </property>
+            <property name="bottomMargin">
+             <number>10</number>
+            </property>
+            <property name="spacing">
+             <number>10</number>
+            </property>
             <item row="0" column="0">
              <widget class="QLabel" name="label_2">
               <property name="maximumSize">
@@ -66,6 +94,9 @@
             </item>
             <item row="3" column="0" colspan="6">
              <widget class="QScrollArea" name="scrollArea">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
               <property name="widgetResizable">
                <bool>true</bool>
               </property>
@@ -74,18 +105,40 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>566</width>
+                 <width>568</width>
                  <height>69</height>
                 </rect>
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_3">
+                <property name="leftMargin">
+                 <number>10</number>
+                </property>
+                <property name="topMargin">
+                 <number>10</number>
+                </property>
+                <property name="rightMargin">
+                 <number>10</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>10</number>
+                </property>
                 <item>
                  <widget class="QLabel" name="infoOfOutput">
+                  <property name="styleSheet">
+                   <string notr="true">#infoOfOutput
+{
+	background-color: rgba(64, 81, 78,50);
+	border-radius: 5px;
+}</string>
+                  </property>
                   <property name="text">
                    <string/>
                   </property>
                   <property name="wordWrap">
                    <bool>true</bool>
+                  </property>
+                  <property name="indent">
+                   <number>5</number>
                   </property>
                  </widget>
                 </item>
@@ -94,7 +147,14 @@
              </widget>
             </item>
             <item row="1" column="1" colspan="5">
-             <widget class="QTextEdit" name="CodeEdit"/>
+             <widget class="QTextEdit" name="CodeEdit">
+              <property name="styleSheet">
+               <string notr="true">QWidget
+{
+	border: 1px solid gray;/*设置边框的粗细，以及颜色*/
+}</string>
+              </property>
+             </widget>
             </item>
             <item row="2" column="0" colspan="6">
              <widget class="QTextEdit" name="inputOfProgram">
@@ -109,6 +169,12 @@
                 <width>16777215</width>
                 <height>30</height>
                </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QWidget
+{
+	border: 1px solid gray;/*设置边框的粗细，以及颜色*/
+}</string>
               </property>
               <property name="placeholderText">
                <string>程序输入</string>
@@ -152,6 +218,9 @@
                 <width>300</width>
                 <height>16777215</height>
                </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
               </property>
               <property name="text">
                <string/>
@@ -260,8 +329,18 @@
           </item>
           <item row="5" column="1" colspan="2">
            <widget class="QLabel" name="outputOfRelease">
+            <property name="styleSheet">
+             <string notr="true">QWidget
+{
+	background-color: rgba(0,118,98,50);
+	border-radius: 5px;
+}</string>
+            </property>
             <property name="text">
              <string/>
+            </property>
+            <property name="indent">
+             <number>5</number>
             </property>
            </widget>
           </item>

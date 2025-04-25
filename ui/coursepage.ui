@@ -13,6 +13,24 @@
   <property name="windowTitle">
    <string>coursepage</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">coursepage#coursepage
+{
+	background-color: rgba(64, 81, 78,50);
+	border-radius: 15px;
+}
+
+QFrame#frame
+{
+	background-color: rgba(0,118,98,50);
+	border-radius: 15px;
+}
+
+QWidget#outline
+{
+	border-radius: 15px;
+}</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QFrame" name="frame">
@@ -23,8 +41,26 @@
       <enum>QFrame::Shadow::Raised</enum>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,2">
+      <property name="spacing">
+       <number>15</number>
+      </property>
+      <property name="leftMargin">
+       <number>20</number>
+      </property>
+      <property name="topMargin">
+       <number>20</number>
+      </property>
+      <property name="rightMargin">
+       <number>20</number>
+      </property>
+      <property name="bottomMargin">
+       <number>20</number>
+      </property>
       <item>
        <widget class="QTreeWidget" name="outline">
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
         <column>
          <property name="text">
           <string>章节</string>
@@ -344,7 +380,22 @@
         </item>
         <item row="1" column="0" colspan="2">
          <widget class="QWidget" name="widget" native="true">
+          <property name="styleSheet">
+           <string notr="true">border-color: rgb(254, 255, 222);</string>
+          </property>
           <layout class="QVBoxLayout" name="verticalLayout_2">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
            <item>
             <widget class="QMarkdownTextEdit" name="content"/>
            </item>

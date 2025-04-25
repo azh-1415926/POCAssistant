@@ -16,6 +16,13 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QTabWidget" name="allWidgets">
+     <property name="styleSheet">
+      <string notr="true">QWidget#updateCourse
+{
+	background-color: rgba(64, 81, 78,50);
+	border-radius: 15px;
+}</string>
+     </property>
      <property name="currentIndex">
       <number>0</number>
      </property>
@@ -60,11 +67,6 @@
         </layout>
        </item>
       </layout>
-     </widget>
-     <widget class="QWidget" name="updateQuiz">
-      <attribute name="title">
-       <string>更新题目</string>
-      </attribute>
      </widget>
     </widget>
    </item>
