@@ -28,6 +28,8 @@ class statementpage : public basepage
 
         void back();
 
+        void getStatement(QNetworkReply *reply);
+
     signals:
         ;
 

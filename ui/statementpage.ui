@@ -1,10 +1,8 @@
-<ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>statementpage</class>
- <widget class="statementpage" name="statementpage" >
-  <property name="geometry" >
+ <widget class="statementpage" name="statementpage">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -12,10 +10,58 @@
     <height>300</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>statementpage</string>
   </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QFrame" name="frame">
+     <property name="styleSheet">
+      <string notr="true">QFrame#frame
+{
+	background-color: rgba(0,118,98,50);
+	border-radius: 15px;
+}
+</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Shape::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Shadow::Raised</enum>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <property name="leftMargin">
+       <number>20</number>
+      </property>
+      <property name="topMargin">
+       <number>20</number>
+      </property>
+      <property name="rightMargin">
+       <number>20</number>
+      </property>
+      <property name="bottomMargin">
+       <number>20</number>
+      </property>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="optionOfStatement"/>
+      </item>
+      <item row="1" column="0" colspan="2">
+       <widget class="QTableWidget" name="tableOfStatement"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
  </widget>
- <pixmapfunction></pixmapfunction>
+ <customwidgets>
+  <customwidget>
+   <class>statementpage</class>
+   <extends>QWidget</extends>
+   <header>statementpage.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
  <connections/>
 </ui>
