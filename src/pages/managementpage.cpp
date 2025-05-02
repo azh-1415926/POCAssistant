@@ -1,6 +1,10 @@
 #include "managementpage.h"
 #include "ui_managementpage.h"
 
+#include <QBuffer>
+#include <qtcsv/reader.h>
+#include <qtcsv/stringdata.h>
+
 // 当前操作应当请求的 url
 SINGLETONE(currUrl,QString)
 // 当前提交按钮对应的操作
@@ -106,11 +110,11 @@ QString managementpage::getUrlByOperation(operationOfManagement op)
 
     case operationOfManagement::USER_BATCH:
         /* 用户批量处理 */
-        url+="/Manager/batchUser";
+        url+="/Manager/userBatch";
         break;
     case operationOfManagement::CLASS_BATCH:
         /* 班级批量处理 */
-        url+="/Manager/batchClass";
+        url+="/Manager/classBatch";
         break;
     
     case operationOfManagement::USER_INFO:
@@ -499,6 +503,15 @@ void managementpage::initalManagementPage()
             QJsonObject obj;
             postByCurrOperationWithData(2,obj);
         }
+
+        if(op==operationOfManagement::USER_BATCH)
+        {
+            ui->inputOfBatch->setPlaceholderText("示例输入(用户id，用户名，用户密码，用户类型(0/1))：\n2109104047,azh,123456,0\n2109104054,zty,123456,0\n");
+        }
+        else if(op==operationOfManagement::CLASS_BATCH)
+        {
+            ui->inputOfBatch->setPlaceholderText("示例输入(班级id，班级名，教师id)：\n21091040,21软件2班,20250115\n21091030,21软件1班,20250114\n");
+        }
     });
 
     // 设置子操作列表控件内容
@@ -598,7 +611,50 @@ void managementpage::initalManagementPage()
             return;
         }
 
+        bool isUser=currOperation::getInstance().get()==operationOfManagement::USER_BATCH?true:false;
+        int vaildSize=isUser?4:3;
+
+        // 解析 csv 字符串
+        QByteArray byte=str.toLocal8Bit();
+        QBuffer buffer(&byte);
+        auto data=QtCSV::Reader::readToList(buffer);
+
+        qDebug()<<"-------";
+        for (int i=0;i<data.size();i++)
+        {
+            qDebug()<<data[i];
+        }
+        qDebug()<<"-------";
+
         QJsonObject obj;
+        
+        for (int i=0;i<data.size();i++)
+        {
+            if(data[i].size()!=vaildSize)
+                ui->textOfOutput->setText("第"+QString::number(i+1)+"行数据异常，终止操作，请按照正确格式输入后重试");
+
+            if(isUser&&data[i].at(3).toInt()<0||data[i].at(3).toInt()>1)
+            {
+                ui->textOfOutput->setText("第"+QString::number(i+1)+"行数据必须为0或1，请重新输入");
+            }
+
+            QJsonObject row;
+            row.insert("id",data[i].at(0));
+            row.insert("name",data[i].at(1));
+
+            if(isUser)
+            {
+                row.insert("password",data[i].at(2));
+                row.insert("role",data[i].at(3));
+            }
+            else
+            {
+                row.insert("teacherId",data[i].at(2));
+            }
+            obj.insert(QString::number(i),row);
+        }
+
+        obj.insert("count",data.size());
 
         // 批处理操作
         postByCurrOperationWithData(3,obj);

@@ -21,6 +21,7 @@ endif()
 
 set(QMARKDOWNTEXTEDIT_EXE OFF)
 add_subdirectory(3rdparty/qmarkdowntextedit)
+set(STATIC_LIB ON)
 add_subdirectory(3rdparty/qtcsv)
 
 set(ROOT_DIR .)
