@@ -15,6 +15,8 @@ enum class operationOfManagement
     ADD_CLASS,REMOVE_CLASS,ALTER_CLASS,CLASS_ALLOC,
     // 查询模块
     USER_SEARCH,CLASS_SERACH,
+    // 批量处理模块
+    USER_BATCH,CLASS_BATCH,
     // 额外模块，仅请求用于展示的数据
     USER_INFO,CLASS_INFO,UNALLOC_USER
 };
@@ -48,10 +50,12 @@ class managementpage : public basepage
         
         QString getUrlByOperation(operationOfManagement op);
 
-        // 分别对应用户管理、班级管理、查询
+        // 分别对应用户管理、班级管理、查询、批处理
         void operationOfUser(QNetworkReply* reply);
         void operationOfClass(QNetworkReply* reply);
         void operationOfSearch(QNetworkReply* reply);
+        void operationOfBatch(QNetworkReply* reply);
+
         void loadUnallocatedStudent(QNetworkReply* reply);
 
     signals:

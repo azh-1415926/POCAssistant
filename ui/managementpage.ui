@@ -103,17 +103,7 @@
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_4">
              <item>
-              <layout class="QGridLayout" name="gridLayout">
-               <item row="1" column="1">
-                <widget class="QLineEdit" name="nameOfUser">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                </widget>
-               </item>
+              <layout class="QGridLayout" name="layoutOfUser">
                <item row="3" column="0">
                 <widget class="QLabel" name="labelOfPasswd">
                  <property name="text">
@@ -121,17 +111,10 @@
                  </property>
                 </widget>
                </item>
-               <item row="1" column="0">
-                <widget class="QLabel" name="label_5">
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_6">
                  <property name="text">
-                  <string>姓名</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="0">
-                <widget class="QLabel" name="labelOfRole">
-                 <property name="text">
-                  <string>用户类型</string>
+                  <string>编号</string>
                  </property>
                 </widget>
                </item>
@@ -145,10 +128,20 @@
                  </property>
                 </widget>
                </item>
-               <item row="5" column="1">
-                <widget class="QPushButton" name="btnOfUserManagement">
+               <item row="0" column="1">
+                <widget class="QLineEdit" name="idOfUser">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="0">
+                <widget class="QPushButton" name="btnOfLoadUser">
                  <property name="text">
-                  <string>提交</string>
+                  <string>载入</string>
                  </property>
                 </widget>
                </item>
@@ -172,27 +165,34 @@
                  </item>
                 </widget>
                </item>
-               <item row="0" column="0">
-                <widget class="QLabel" name="label_6">
+               <item row="4" column="0">
+                <widget class="QLabel" name="labelOfRole">
                  <property name="text">
-                  <string>编号</string>
+                  <string>用户类型</string>
                  </property>
                 </widget>
                </item>
-               <item row="0" column="1">
-                <widget class="QLineEdit" name="idOfUser">
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_5">
+                 <property name="text">
+                  <string>姓名</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="1">
+                <widget class="QPushButton" name="btnOfUserManagement">
+                 <property name="text">
+                  <string>提交</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QLineEdit" name="nameOfUser">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
-                 </property>
-                </widget>
-               </item>
-               <item row="5" column="0">
-                <widget class="QPushButton" name="btnOfLoadUser">
-                 <property name="text">
-                  <string>载入</string>
                  </property>
                 </widget>
                </item>
@@ -404,6 +404,50 @@
               <layout class="QGridLayout" name="gridLayout_2">
                <item row="0" column="0" colspan="2">
                 <widget class="QTableWidget" name="tableOfSearch"/>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="batchPage">
+         <property name="styleSheet">
+          <string notr="true">QWidget#batchPage
+{
+	background-color: rgba(0,118,98,50);
+	border-radius: 15px;
+}</string>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_10">
+          <item>
+           <widget class="QFrame" name="frameOfBatch">
+            <property name="styleSheet">
+             <string notr="true">QFrame#frameOfBatch
+{
+	background-color: rgba(0,118,120,50);
+	border-radius: 15px;
+}</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_11">
+             <item>
+              <layout class="QGridLayout" name="layoutOfBatch" rowstretch="0,0" columnstretch="0,0,0">
+               <item row="0" column="2">
+                <widget class="QPushButton" name="btnOfBatch">
+                 <property name="text">
+                  <string>批量操作</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0" rowspan="2" colspan="2">
+                <widget class="QTextEdit" name="inputOfBatch"/>
                </item>
               </layout>
              </item>

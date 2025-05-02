@@ -341,6 +341,11 @@ void quizpage::initalQuizPage()
         ui->stackedWidget->setCurrentIndex(1);
     });
 
+    connect(ui->optionOfChapter,&QComboBox::currentIndexChanged,this,[=]()
+    {
+        requestTestQuiz();
+    });
+
     // 错题回顾按钮
     connect(ui->btnOfWrong,&QPushButton::clicked,this,[=]()
     {

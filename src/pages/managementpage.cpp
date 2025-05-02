@@ -103,6 +103,15 @@ QString managementpage::getUrlByOperation(operationOfManagement op)
         /* 班级查询 */
         url+="/Manager/getClass";
         break;
+
+    case operationOfManagement::USER_BATCH:
+        /* 用户批量处理 */
+        url+="/Manager/batchUser";
+        break;
+    case operationOfManagement::CLASS_BATCH:
+        /* 班级批量处理 */
+        url+="/Manager/batchClass";
+        break;
     
     case operationOfManagement::USER_INFO:
         /* 用户查询 */
@@ -231,7 +240,7 @@ void managementpage::operationOfClass(QNetworkReply *reply)
             if(currOperation::getInstance().get()==operationOfManagement::CLASS_ALLOC)
             {
                 QJsonObject obj;
-                postByOperationWithData(3,operationOfManagement::UNALLOC_USER,obj);
+                postByOperationWithData(4,operationOfManagement::UNALLOC_USER,obj);
 
                 return;
             }
@@ -305,6 +314,35 @@ void managementpage::operationOfSearch(QNetworkReply *reply)
     }
 }
 
+// 接收批处理操作的响应
+void managementpage::operationOfBatch(QNetworkReply *reply)
+{
+    disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&managementpage::operationOfBatch);
+
+    QString str=reply->readAll();
+    
+    azh::logger()<<"managementpage operationOfBatch:"<<str;
+
+    jsonFile json;
+    json.fromJson(str);
+
+    ui->textOfOutput->setText(json.value("info").toString());
+    QString result=json.value("result").toString();
+
+    if(!result.isEmpty())
+    {
+        if(result=="true")
+        {
+            ;
+        }
+    }
+    // 若响应为空，则说明请求超时，直接退出登陆
+    else
+    {
+        emit logoff();
+    }
+}
+
 // 接收响应，更新未分配班级的用户列表
 void managementpage::loadUnallocatedStudent(QNetworkReply *reply)
 {
@@ -354,12 +392,13 @@ void managementpage::initalManagementPage()
     m_Status.currIcon.load(":/img/main/management");
 
     // 三个模块，用户管理、班级管理、查询，对于若干子模块
-    QStringList options={"用户管理","班级管理","查询"};
+    QStringList options={"用户管理","班级管理","查询","批量处理"};
     QList<QStringList> subOptions=
     {
         QStringList()<<"添加用户"<<"删除用户"<<"修改用户",
         QStringList()<<"添加班级"<<"删除班级"<<"修改班级"<<"班级分配",
-        QStringList()<<"用户查询"<<"班级查询"
+        QStringList()<<"用户查询"<<"班级查询",
+        QStringList()<<"用户批处理"<<"班级批处理"
     };
 
     connect(ui->optionOfFunc,&QComboBox::currentIndexChanged,this,[=](int i)
@@ -445,7 +484,7 @@ void managementpage::initalManagementPage()
             ui->frameOfClass->hide();
 
             QJsonObject obj;
-            postByOperationWithData(3,operationOfManagement::UNALLOC_USER,obj);
+            postByOperationWithData(4,operationOfManagement::UNALLOC_USER,obj);
         }
         else
         {
@@ -547,6 +586,22 @@ void managementpage::initalManagementPage()
 
         // 请求班级管理操作
         postByCurrOperationWithData(1,obj);
+    });
+
+    connect(ui->btnOfBatch,&QPushButton::clicked,this,[=]()
+    {
+        // 未输入为空，则返回
+        QString str=ui->inputOfBatch->toPlainText();
+        if(str.isEmpty())
+        {
+            ui->textOfOutput->setText("未输入内容，无法进行批量处理");
+            return;
+        }
+
+        QJsonObject obj;
+
+        // 批处理操作
+        postByCurrOperationWithData(3,obj);
     });
 
     connect(ui->btnOfLoadUser,&QPushButton::clicked,this,[=]()
@@ -713,8 +768,10 @@ void managementpage::postByOperationWithData(int funcId, const operationOfManage
     case 2:
         connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&managementpage::operationOfSearch);
         break;
-
     case 3:
+        connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&managementpage::operationOfBatch);
+        break;
+    case 4:
         connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&managementpage::loadUnallocatedStudent);
         break;
     

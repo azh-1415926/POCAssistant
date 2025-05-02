@@ -21,6 +21,7 @@ endif()
 
 set(QMARKDOWNTEXTEDIT_EXE OFF)
 add_subdirectory(3rdparty/qmarkdowntextedit)
+add_subdirectory(3rdparty/qtcsv)
 
 set(ROOT_DIR .)
 
@@ -68,7 +69,12 @@ else()
 endif()
 
 # 链接的头文件、库
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network qmarkdowntextedit)
+target_link_libraries(${PROJECT_NAME} PRIVATE 
+    Qt${QT_VERSION_MAJOR}::Widgets 
+    Qt${QT_VERSION_MAJOR}::Network 
+    qmarkdowntextedit 
+    qtcsv
+)
 target_include_directories(${PROJECT_NAME} PRIVATE ${ROOT_DIR}/src ${ROOT_DIR}/src/base ${ROOT_DIR}/src/pages ${ROOT_DIR}/src/tools ${ROOT_DIR}/src/modules 3rdparty/qmarkdowntextedit)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
