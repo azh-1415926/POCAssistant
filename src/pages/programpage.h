@@ -59,4 +59,6 @@ class programpage : public basepage
         void initalProgramPage();
 
         void setupEditor();
+
+        void requestUnfinishedExperiment();
 };

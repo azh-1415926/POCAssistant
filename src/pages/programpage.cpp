@@ -37,18 +37,7 @@ void programpage::selectedPage()
     {
         ui->stackedWidget->setCurrentIndex(0);
 
-        connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getUnfinishedExperiment);
-
-        QNetworkRequest request;
-        request.setUrl(URL_OF_SERVER+"/Code/getUnfinishedExperiment");
-        request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
-        request.setRawHeader("Accept","text/html");
-
-        QJsonObject obj;
-        obj.insert("studentId",userId::getInstance().get());
-        QJsonDocument doc(obj);
-
-        HTTP_MANAGER->post(request,doc.toJson());
+        requestUnfinishedExperiment();
     }
     else if(userRole::getInstance().get()==(int)UserRole::TEACHER)
     {
@@ -145,6 +134,22 @@ void programpage::getSubmitState(QNetworkReply *reply)
     json.fromJson(str);
 
     ui->infoOfOutput->setText(json.value("info").toString());
+
+    QString result=json.value("result").toString();
+
+    if(!result.isEmpty())
+    {
+        // 若为提交成功，刷新实验框
+        if(result=="true")
+        {
+            requestUnfinishedExperiment();
+        }
+    }
+    // 若响应为空，则说明请求超时，直接退出登陆
+    else
+    {
+        emit logoff();
+    }
 }
 
 // 接收后端数据，更新教师所管理的班级列表
@@ -301,6 +306,7 @@ void programpage::initalProgramPage()
     {
         if(i==-1)
         {
+            ui->contentOfProgram->setText("暂无实验");
             return;
         }
 
@@ -330,4 +336,20 @@ void programpage::setupEditor()
         if (file.open(QFile::ReadOnly | QFile::Text))
             ui->CodeEdit->setPlainText(file.readAll());
     });
+}
+
+void programpage::requestUnfinishedExperiment()
+{
+    connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getUnfinishedExperiment);
+
+    QNetworkRequest request;
+    request.setUrl(URL_OF_SERVER+"/Code/getUnfinishedExperiment");
+    request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
+    request.setRawHeader("Accept","text/html");
+
+    QJsonObject obj;
+    obj.insert("studentId",userId::getInstance().get());
+    QJsonDocument doc(obj);
+
+    HTTP_MANAGER->post(request,doc.toJson());
 }
