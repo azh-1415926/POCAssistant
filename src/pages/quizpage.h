@@ -56,6 +56,7 @@ class quizpage : public basepage
         void getClass(QNetworkReply* reply);
         void getStudent(QNetworkReply* reply);
         void getExperiment(QNetworkReply* reply);
+        void getSubmitScoreStatus(QNetworkReply* reply);
 
     signals:
         ;
@@ -70,6 +71,7 @@ class quizpage : public basepage
         void requestClass();
         void requestStudent(const QString& classId);
         void requestExperiment(const QString& studentId);
+        void submitScore(const QString& studentId,const QString& experimentId,int score);
 
         void updateCollectedStatus();
         void updateUncollectedStatus();

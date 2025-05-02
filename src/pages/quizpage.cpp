@@ -265,6 +265,34 @@ void quizpage::getExperiment(QNetworkReply *reply)
     ui->optionOfExperiment->addItems(listOfExperimentName);
 }
 
+void quizpage::getSubmitScoreStatus(QNetworkReply *reply)
+{
+    disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&quizpage::getSubmitScoreStatus);
+
+    QString str(reply->readAll());
+    azh::logger()<<"quizpage getsubmitscorestatus:"<<str;
+
+    jsonFile json;
+    json.fromJson(str);
+    
+    ui->outputOfSubmitScore->setText(json.value("info").toString());
+
+    QString result=json.value("result").toString();
+    if(!result.isEmpty())
+    {
+        // 若为提交成功，刷新实验框
+        if(result=="true")
+        {
+            requestExperiment(studentInfo.at(ui->optionOfStudent->currentIndex()).first);
+        }
+    }
+    // 若响应为空，则说明请求超时，直接退出登陆
+    else
+    {
+        emit logoff();
+    }
+}
+
 void quizpage::initalQuizPage()
 {
     ui->setupUi(this);
@@ -298,6 +326,11 @@ void quizpage::initalQuizPage()
     
     ui->wrongQuiz->setAnswerIndex(1);
     ui->wrongQuiz->setOption(0);
+
+    QRegularExpressionValidator* reg = new QRegularExpressionValidator(this);
+    // 正则匹配两位数字，或 100
+    reg->setRegularExpression(QRegularExpression(QString("\\d{1,2}|100")));
+    ui->inputOfScore->setValidator(reg);
 
     // 章节测试按钮
     connect(ui->btnOfTest,&QPushButton::clicked,this,[=]()
@@ -346,7 +379,11 @@ void quizpage::initalQuizPage()
     connect(ui->optionOfExperiment,&QComboBox::currentIndexChanged,this,[=](int i)
     {
         if(i==-1)
+        {
+            ui->contentOfQuiz->setText("暂无实验");
+            ui->contentOfAnswer->setText("实验已批改完成，或未提交实验");
             return;
+        }
 
         ui->contentOfQuiz->setText(experimentContent.at(i).first);
         ui->contentOfAnswer->setText(experimentContent.at(i).second);
@@ -355,7 +392,7 @@ void quizpage::initalQuizPage()
     // 教师提交批改分数的按钮
     connect(ui->btnOfSubmitScore,&QPushButton::clicked,this,[=]()
     {
-        ;
+        submitScore(studentInfo.at(ui->optionOfStudent->currentIndex()).first,experimentInfo.at(ui->optionOfExperiment->currentIndex()).first,ui->inputOfScore->text().toInt());
     });
 
     ui->frame3->hide();
@@ -533,5 +570,25 @@ void quizpage::updateUncollectedStatus()
     QJsonDocument doc(obj);
 
     request.setUrl(URL_OF_SERVER+"/Quiz/uncollectQuiz");
+    HTTP_MANAGER->post(request,doc.toJson());
+}
+
+void quizpage::submitScore(const QString &studentId,const QString &experimentId, int score)
+{
+    connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&quizpage::getSubmitScoreStatus);
+
+    QNetworkRequest request;
+    
+    request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
+    request.setRawHeader("Accept","text/html");
+
+    QJsonObject obj;
+    
+    obj.insert("studentId",studentId);
+    obj.insert("experimentId",experimentId);
+    obj.insert("score",score);
+    QJsonDocument doc(obj);
+
+    request.setUrl(URL_OF_SERVER+"/Code/submitScore");
     HTTP_MANAGER->post(request,doc.toJson());
 }
