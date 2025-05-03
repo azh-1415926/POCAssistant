@@ -196,6 +196,97 @@ void programpage::getReleaseState(QNetworkReply *reply)
     ui->inputOfProgramContent->clear();
 }
 
+void programpage::getAllExperiment(QNetworkReply *reply)
+{
+    disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getAllExperiment);
+
+    QString str(reply->readAll());
+    azh::logger()<<"programpage getAllExperiment:"<<str;
+
+    jsonFile json;
+    json.fromJson(str);
+
+    QString result=json.value("result").toString();
+
+    if(!result.isEmpty())
+    {
+        if(result=="true")
+        {
+            int count=json.value("count").toInt();
+            QString info="实验记录ID,实验ID,实验名称,提交时间,分数,是否已批改\n";
+
+            for(int i=0;i<count;i++)
+            {
+                QJsonObject row=json.value(QString::number(i)).toObject();
+                info+=QString::number(row.value("id").toInt())+","
+                    +row.value("experimentId").toString()+","
+                    +row.value("name").toString()+","
+                    +row.value("finishTime").toString()+","
+                    +QString::number(row.value("score").toInt())+","
+                    +(row.value("isCorrect").toInt()==0?"否":"是")+"\n";
+            }
+
+            ui->infoOfOutput->setText(info);
+        }
+    }
+    // 若响应为空，则说明请求超时，直接退出登陆
+    else
+    {
+        emit logoff();
+    }
+}
+
+void programpage::getExperimentByTeacher(QNetworkReply *reply)
+{
+    disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getExperimentByTeacher);
+
+    QString str(reply->readAll());
+    azh::logger()<<"programpage getExperimentByTeacher:"<<str;
+
+    jsonFile json;
+    json.fromJson(str);
+
+    QString result=json.value("result").toString();
+
+    ui->recordOfExperiment->clear();
+    
+    if(!result.isEmpty())
+    {
+        if(result=="true")
+        {
+            int count=json.value("count").toInt();
+
+            QStringList title=
+            {
+                "学生ID","实验记录ID","实验ID","实验名称","创建时间","提交时间","分数","是否已批改"
+            };
+
+            ui->recordOfExperiment->setRowCount(count);
+            ui->recordOfExperiment->setColumnCount(title.size());
+            ui->recordOfExperiment->setHorizontalHeaderLabels(title);
+
+            for(int i=0;i<count;i++)
+            {
+                QJsonObject row=json.value(QString::number(i)).toObject();
+
+                ui->recordOfExperiment->setItem(i,0,new QTableWidgetItem(row.value("studentId").toString()));
+                ui->recordOfExperiment->setItem(i,1,new QTableWidgetItem(QString::number(row.value("id").toInt())));
+                ui->recordOfExperiment->setItem(i,2,new QTableWidgetItem(row.value("experimentId").toString()));
+                ui->recordOfExperiment->setItem(i,3,new QTableWidgetItem(row.value("name").toString()));
+                ui->recordOfExperiment->setItem(i,4,new QTableWidgetItem(row.value("createTime").toString()));
+                ui->recordOfExperiment->setItem(i,5,new QTableWidgetItem(row.value("finishTime").toString()));
+                ui->recordOfExperiment->setItem(i,6,new QTableWidgetItem(QString::number(row.value("score").toInt())));
+                ui->recordOfExperiment->setItem(i,7,new QTableWidgetItem(row.value("isCorrect").toInt()==0?"否":"是"));
+            }
+        }
+    }
+    // 若响应为空，则说明请求超时，直接退出登陆
+    else
+    {
+        emit logoff();
+    }
+}
+
 void programpage::initalProgramPage()
 {
     ui->setupUi(this);
@@ -206,6 +297,24 @@ void programpage::initalProgramPage()
 
     ui->optionOfSample->addItems(QStringList()<<"hello"<<"sum");
 
+    //查询全部实验
+    connect(ui->btnOfSelectAll,&QPushButton::clicked,this,[=]()
+    {
+        connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getAllExperiment);
+
+        QNetworkRequest request;
+        request.setUrl(URL_OF_SERVER+"/Code/getExperiment");
+        request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
+        request.setRawHeader("Accept","text/html");
+
+        QJsonObject obj;
+        obj.insert("userId",userId::getInstance().get());
+        QJsonDocument doc(obj);
+
+        HTTP_MANAGER->post(request,doc.toJson());
+    });
+
+    // 编译运行代码
     connect(ui->btnOfRun,&QPushButton::clicked,this,[=]()
     {
         connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getCompileOutput);
@@ -263,6 +372,31 @@ void programpage::initalProgramPage()
         QJsonDocument doc(obj);
 
         HTTP_MANAGER->post(request,doc.toJson());
+    });
+
+    connect(ui->btnOfTeacher,&QPushButton::clicked,this,[=]()
+    {
+        // 切换至教师的查看实验记录
+        ui->stackedWidget->setCurrentIndex(2);
+
+        connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&programpage::getExperimentByTeacher);
+
+        QNetworkRequest request;
+        request.setUrl(URL_OF_SERVER+"/Code/getExperiment");
+        request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
+        request.setRawHeader("Accept","text/html");
+
+        QJsonObject obj;
+        obj.insert("userId",userId::getInstance().get());
+        QJsonDocument doc(obj);
+
+        HTTP_MANAGER->post(request,doc.toJson());
+    });
+
+    connect(ui->btnOfTeacher2,&QPushButton::clicked,this,[=]()
+    {
+        // 切换至教师的发布实验
+        ui->stackedWidget->setCurrentIndex(1);
     });
 
     // 教师发布实验的逻辑

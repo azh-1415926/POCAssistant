@@ -51,6 +51,10 @@ class programpage : public basepage
         void getClassInfo(QNetworkReply* reply);
         // 获取发布实验的结果
         void getReleaseState(QNetworkReply* reply);
+        // 获取当前用户全部实验
+        void getAllExperiment(QNetworkReply* reply);
+        // 获取当前教师管理班级的全部实验
+        void getExperimentByTeacher(QNetworkReply* reply);
 
     signals:
         ;
