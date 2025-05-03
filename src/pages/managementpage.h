@@ -48,6 +48,7 @@ class managementpage : public basepage
 
         void back();
         
+        // 获取当前操作的请求 url 地址
         QString getUrlByOperation(operationOfManagement op);
 
         // 分别对应用户管理、班级管理、查询、批处理
@@ -56,6 +57,7 @@ class managementpage : public basepage
         void operationOfSearch(QNetworkReply* reply);
         void operationOfBatch(QNetworkReply* reply);
 
+        // 加载未分配班级的学生列表
         void loadUnallocatedStudent(QNetworkReply* reply);
 
     signals:
@@ -64,15 +66,23 @@ class managementpage : public basepage
     private:
         void initalManagementPage();
 
+        // 读取用户信息，needToLoad 更新框内信息，needToClearId 是否清除id
         void loadUserInfo(bool needToLoad,bool needToClearId=false);
+        // 读取班级信息，needToLoad 更新框内信息，needToClearId 是否清除id
         void loadClassInfo(bool needToLoad,bool needToClearId=false);
 
+        // 锁定用户信息，shouldLock 是否锁住信息框
         void lockUserInfo(bool shouldLock);
+        // 锁定班级信息，shouldLock 是否锁住信息框
         void lockClassInfo(bool shouldLock);
 
+        // 清除用户信息
         void clearUserInfo();
+        // 清除班级信息
         void clearClassInfo();
 
+        // 使用指定的响应回调函数的 funcId 绑定指定请求的 op，发送指定数据 obj
         void postByOperationWithData(int funcId,const operationOfManagement& op,const QJsonObject& obj);
+        // 使用指定的响应回调函数的 funcId 绑定指定当前请求操作,发送指定数据 obj
         void postByCurrOperationWithData(int funId,const QJsonObject& obj);
 };

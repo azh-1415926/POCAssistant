@@ -52,7 +52,7 @@ class programpage : public basepage
         // 获取发布实验的结果
         void getReleaseState(QNetworkReply* reply);
         // 获取当前用户全部实验
-        void getAllExperiment(QNetworkReply* reply);
+        void getExperimentByStudent(QNetworkReply* reply);
         // 获取当前教师管理班级的全部实验
         void getExperimentByTeacher(QNetworkReply* reply);
 
@@ -64,5 +64,16 @@ class programpage : public basepage
 
         void setupEditor();
 
+        // 请求未完成的实验（学生）
         void requestUnfinishedExperiment();
+        // 请求编译（学生）
+        void requestCompile();
+        // 请求提交实验
+        void requestSubmitExperiment();
+        // 请求班级信息（教师）
+        void requestClassInfo();
+        // 请求实验记录（学生、教师）
+        void requestExperimentRecord();
+        // 发布实验（教师）
+        void requestReleaseExperiment();
 };

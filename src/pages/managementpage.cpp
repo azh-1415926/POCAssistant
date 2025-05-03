@@ -9,7 +9,7 @@
 SINGLETONE(currUrl,QString)
 // 当前提交按钮对应的操作
 SINGLETONE(currOperation,operationOfManagement)
-// 当前是否为导入操作
+// 当前是否为导入操作（用户管理、班级管理）
 SINGLETONE(isLoad,bool)
 
 // 隐藏布局中的全部控件，status 为 true 时隐藏
@@ -405,6 +405,7 @@ void managementpage::initalManagementPage()
         QStringList()<<"用户批处理"<<"班级批处理"
     };
 
+    // 功能下拉框触发操作
     connect(ui->optionOfFunc,&QComboBox::currentIndexChanged,this,[=](int i)
     {
         // 模块的切换将更新 optionOfSubFunc，即子模块列表，并切换管理页面
@@ -413,8 +414,10 @@ void managementpage::initalManagementPage()
         ui->pages->setCurrentIndex(i);
     });
 
+    // 子功能下拉框触发操作
     connect(ui->optionOfSubFunc,&QComboBox::currentIndexChanged,this,[=](int i)
     {
+        // 无子操作，立即返回
         if(i<0)
             return;
             
@@ -434,83 +437,94 @@ void managementpage::initalManagementPage()
         currOperation::getInstance().set(op);
         currUrl::getInstance().set(getUrlByOperation(op));
 
-        // 添加用户操作需要隐藏载入用户按钮
-        if(op==operationOfManagement::ADD_USER)
+        // 若为用户管理模块
+        if(op==operationOfManagement::ADD_USER||op==operationOfManagement::REMOVE_USER
+            ||op==operationOfManagement::ALTER_USER)
         {
-            ui->btnOfLoadUser->hide();
-            loadUserInfo(false);
-        }
-        else
-        {
-            ui->btnOfLoadUser->show();
-        }
+            // 添加用户操作需要隐藏载入用户按钮
+            if(op==operationOfManagement::ADD_USER)
+            {
+                ui->btnOfLoadUser->hide();
+                loadUserInfo(false);
+            }
+            else
+            {
+                ui->btnOfLoadUser->show();
+            }
 
-        // 删除用户操作需要隐藏密码输入框
-        if(op==operationOfManagement::REMOVE_USER)
-        {
-            ui->labelOfPasswd->hide();
-            ui->passwdOfUser->hide();
-        }
-        else
-        {
-            ui->labelOfPasswd->show();
-            ui->passwdOfUser->show();
-        }
+            // 删除用户操作需要隐藏密码输入框
+            if(op==operationOfManagement::REMOVE_USER)
+            {
+                ui->labelOfPasswd->hide();
+                ui->passwdOfUser->hide();
+            }
+            else
+            {
+                ui->labelOfPasswd->show();
+                ui->passwdOfUser->show();
+            }
 
-        // 修改用户操作需要隐藏用户类型展示框，用户类型一经创建无法修改
-        if(op==operationOfManagement::ALTER_USER)
-        {
-            ui->labelOfRole->hide();
-            ui->roleOfUser->hide();
+            // 修改用户操作需要隐藏用户类型展示框，用户类型一经创建无法修改
+            if(op==operationOfManagement::ALTER_USER)
+            {
+                ui->labelOfRole->hide();
+                ui->roleOfUser->hide();
+            }
+            else
+            {
+                ui->labelOfRole->show();
+                ui->roleOfUser->show();
+            }
         }
-        else
+        // 若为班级管理模块
+        else if(op==operationOfManagement::ADD_CLASS||op==operationOfManagement::REMOVE_CLASS
+            ||op==operationOfManagement::ALTER_CLASS||op==operationOfManagement::CLASS_ALLOC)
         {
-            ui->labelOfRole->show();
-            ui->roleOfUser->show();
-        }
+            // 添加班级操作需要隐藏载入班级按钮
+            if(op==operationOfManagement::ADD_CLASS)
+            {
+                ui->btnOfLoadClass->hide();
+                loadClassInfo(false);
+            }
+            else
+            {
+                ui->btnOfLoadClass->show();
+            }
 
-        // 添加班级操作需要隐藏载入班级按钮
-        if(op==operationOfManagement::ADD_CLASS)
-        {
-            ui->btnOfLoadClass->hide();
-            loadClassInfo(false);
-        }
-        else
-        {
-            ui->btnOfLoadClass->show();
-        }
+            // 班级分配操作需要隐藏载入班级管理模块的控件，并请求未分配班级的用户列表
+            if(op==operationOfManagement::CLASS_ALLOC)
+            {
+                hideLayout(ui->layoutOfUserTable,false);
+                hideLayout(ui->layoutOfAlloc,false);
+                ui->frameOfClass->hide();
 
-        // 班级分配操作需要隐藏载入班级管理模块的控件，并请求未分配班级的用户列表
-        if(op==operationOfManagement::CLASS_ALLOC)
-        {
-            hideLayout(ui->layoutOfUserTable,false);
-            hideLayout(ui->layoutOfAlloc,false);
-            ui->frameOfClass->hide();
-
-            QJsonObject obj;
-            postByOperationWithData(4,operationOfManagement::UNALLOC_USER,obj);
+                QJsonObject obj;
+                postByOperationWithData(4,operationOfManagement::UNALLOC_USER,obj);
+            }
+            else
+            {
+                hideLayout(ui->layoutOfUserTable,true);
+                hideLayout(ui->layoutOfAlloc,true);
+                ui->frameOfClass->show();
+            }
         }
-        else
-        {
-            hideLayout(ui->layoutOfUserTable,true);
-            hideLayout(ui->layoutOfAlloc,true);
-            ui->frameOfClass->show();
-        }
-
-        // 查询操作需要立即请求子操作对应的数据
-        if(op==operationOfManagement::USER_SEARCH||op==operationOfManagement::CLASS_SERACH)
+        // 若为查询模块,需要立即请求子操作对应的数据
+        else if(op==operationOfManagement::USER_SEARCH||op==operationOfManagement::CLASS_SERACH)
         {
             QJsonObject obj;
             postByCurrOperationWithData(2,obj);
         }
-
-        if(op==operationOfManagement::USER_BATCH)
+        // 若为批处理模块
+        else if(op==operationOfManagement::USER_BATCH||op==operationOfManagement::CLASS_BATCH)
         {
-            ui->inputOfBatch->setPlaceholderText("示例输入(用户id，用户名，用户密码，用户类型(0/1))：\n2109104047,azh,123456,0\n2109104054,zty,123456,0\n");
-        }
-        else if(op==operationOfManagement::CLASS_BATCH)
-        {
-            ui->inputOfBatch->setPlaceholderText("示例输入(班级id，班级名，教师id)：\n21091040,21软件2班,20250115\n21091030,21软件1班,20250114\n");
+            if(op==operationOfManagement::USER_BATCH)
+            {
+                ui->inputOfBatch->setPlaceholderText("示例输入(用户id，用户名，用户密码，用户类型(0/1))：\n2109104047,azh,123456,0\n2109104054,zty,123456,0\n");
+            }
+            else if(op==operationOfManagement::CLASS_BATCH)
+            {
+                ui->inputOfBatch->setPlaceholderText("示例输入(班级id，班级名，教师id)：\n21091040,21软件2班,20250115\n21091030,21软件1班,20250114\n");
+            }
         }
     });
 
@@ -553,6 +567,20 @@ void managementpage::initalManagementPage()
         postByCurrOperationWithData(0,obj);
     });
 
+    // 用户管理的载入按钮
+    connect(ui->btnOfLoadUser,&QPushButton::clicked,this,[=]()
+    {
+        if(ui->btnOfLoadUser->text()=="载入")
+        {
+            loadUserInfo(true);
+        }
+        else
+        {
+            loadUserInfo(false);
+        }
+    });
+
+    // 班级管理界面的提交按钮
     connect(ui->btnOfClassManagement,&QPushButton::clicked,this,[=]()
     {
         // 若未载入班级数据且不为添加班级，则返回
@@ -584,6 +612,20 @@ void managementpage::initalManagementPage()
         postByCurrOperationWithData(1,obj);
     });
 
+    // 班级管理的载入按钮
+    connect(ui->btnOfLoadClass,&QPushButton::clicked,this,[=]()
+    {
+        if(ui->btnOfLoadClass->text()=="载入")
+        {
+            loadClassInfo(true);
+        }
+        else
+        {
+            loadClassInfo(false);
+        }
+    });
+
+    // 班级管理界面的分配按钮
     connect(ui->btnOfClassAlloc,&QPushButton::clicked,this,[=]()
     {
         // 未输入用户 id、班级 id，则返回
@@ -601,6 +643,7 @@ void managementpage::initalManagementPage()
         postByCurrOperationWithData(1,obj);
     });
 
+    // 批处理界面的提交按钮
     connect(ui->btnOfBatch,&QPushButton::clicked,this,[=]()
     {
         // 未输入为空，则返回
@@ -618,13 +661,6 @@ void managementpage::initalManagementPage()
         QByteArray byte=str.toLocal8Bit();
         QBuffer buffer(&byte);
         auto data=QtCSV::Reader::readToList(buffer);
-
-        qDebug()<<"-------";
-        for (int i=0;i<data.size();i++)
-        {
-            qDebug()<<data[i];
-        }
-        qDebug()<<"-------";
 
         QJsonObject obj;
         
@@ -658,30 +694,6 @@ void managementpage::initalManagementPage()
 
         // 批处理操作
         postByCurrOperationWithData(3,obj);
-    });
-
-    connect(ui->btnOfLoadUser,&QPushButton::clicked,this,[=]()
-    {
-        if(ui->btnOfLoadUser->text()=="载入")
-        {
-            loadUserInfo(true);
-        }
-        else
-        {
-            loadUserInfo(false);
-        }
-    });
-
-    connect(ui->btnOfLoadClass,&QPushButton::clicked,this,[=]()
-    {
-        if(ui->btnOfLoadClass->text()=="载入")
-        {
-            loadClassInfo(true);
-        }
-        else
-        {
-            loadClassInfo(false);
-        }
     });
 }
 
