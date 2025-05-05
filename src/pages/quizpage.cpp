@@ -48,6 +48,7 @@ void quizpage::back()
 {
     int currIndex=ui->stackedWidget->currentIndex();
 
+    // 若为学生模块，重置到下标 0，教师页面下标为 4，且暂无子页面
     if(currIndex>=1&&currIndex<4)
         ui->stackedWidget->setCurrentIndex(0);
 }
@@ -69,27 +70,6 @@ void quizpage::updateChapter(QNetworkReply *reply)
     for(int i=0;i<chapter;i++)
     {
         ui->optionOfChapter->addItem("第"+number2bigChinese(i+1)+"章");
-    }
-
-    if(ui->btnOfSwitch->text()=="切换至收藏页")
-    {
-        // 当前应切换到收藏页
-        requestCollectedQuiz();
-
-        ui->btnOfSwitch->setText("切换至答题页");
-        ui->pagesOfTest->setCurrentIndex(1);
-
-        ui->btnOfSubmitTest->setEnabled(false);
-    }
-    else
-    {
-        // 当前应切换到答题页
-        requestTestQuiz();
-
-        ui->btnOfSwitch->setText("切换至收藏页");
-        ui->pagesOfTest->setCurrentIndex(0);
-
-        ui->btnOfSubmitTest->setEnabled(true);
     }
 }
 
@@ -135,7 +115,8 @@ void quizpage::getUncollectedStatus(QNetworkReply *reply)
 {
     disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&quizpage::getUncollectedStatus);
 
-    requestChapter();
+    // requestChapter();
+    switchQuizToTestOrCollection();
 }
 
 void quizpage::getAnswer(QNetworkReply *reply)
@@ -335,15 +316,14 @@ void quizpage::initalQuizPage()
     // 章节测试按钮
     connect(ui->btnOfTest,&QPushButton::clicked,this,[=]()
     {
-        ui->btnOfSwitch->setText("切换至答题页");
-        requestChapter();
-
         ui->stackedWidget->setCurrentIndex(1);
+
+        requestChapter();
     });
 
     connect(ui->optionOfChapter,&QComboBox::currentIndexChanged,this,[=]()
     {
-        requestTestQuiz();
+        switchQuizToTestOrCollection(false);
     });
 
     // 错题回顾按钮
@@ -466,6 +446,52 @@ void quizpage::requestAnswer()
     QJsonDocument doc(obj);
 
     HTTP_MANAGER->post(request,doc.toJson());
+}
+
+void quizpage::switchQuizToTestOrCollection(bool switchToNext)
+{
+    // 是否为答题页
+    static bool isTest=true;
+
+    if(!switchToNext)
+    {
+        if(isTest)
+        {
+            requestTestQuiz();
+        }
+        else
+        {
+            requestCollectedQuiz();
+        }
+        
+        return;
+    }
+        
+    if(isTest)
+    {
+        // 当前应切换到收藏页
+        requestCollectedQuiz();
+
+        ui->btnOfSwitch->setText("切换至答题页");
+        ui->pagesOfTest->setCurrentIndex(1);
+
+        ui->btnOfSubmitTest->setEnabled(false);
+        isTest=false;
+    }
+    else
+    {
+        // 当前应切换到答题页
+        requestTestQuiz();
+
+        if(switchToNext)
+        {
+            ui->btnOfSwitch->setText("切换至收藏页");
+            ui->pagesOfTest->setCurrentIndex(0);
+
+            ui->btnOfSubmitTest->setEnabled(true);
+            isTest=true;
+        }
+    }
 }
 
 void quizpage::requestClass()

@@ -68,6 +68,8 @@ class quizpage : public basepage
         void requestCollectedQuiz();
         void requestAnswer();
 
+        void switchQuizToTestOrCollection(bool switchToNext=true);
+
         void requestClass();
         void requestStudent(const QString& classId);
         void requestExperiment(const QString& studentId);
