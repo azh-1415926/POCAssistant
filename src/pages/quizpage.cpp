@@ -102,6 +102,14 @@ void quizpage::updateCollection(QNetworkReply *reply)
 void quizpage::updateWrong(QNetworkReply *reply)
 {
     disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&quizpage::updateWrong);
+
+    QString str(reply->readAll());
+    azh::logger()<<"quizpage updatewrong:"<<str;
+
+    jsonFile json;
+    json.fromJson(str);
+
+    modelOfWrongQuiz->load(json.toJson());
 }
 
 void quizpage::getCollectedStatus(QNetworkReply *reply)
@@ -116,6 +124,7 @@ void quizpage::getUncollectedStatus(QNetworkReply *reply)
     disconnect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&quizpage::getUncollectedStatus);
 
     // requestChapter();
+    // 切换到答题页或收藏页
     switchQuizToTestOrCollection();
 }
 
@@ -138,9 +147,9 @@ void quizpage::getAnswer(QNetworkReply *reply)
     {
         QJsonObject quiz=json.value(QString::number(i)).toObject();
 
-        if(listOfUserAnswer[i]==quiz.value("answer").toString())
+        if(listOfUserAnswer[i]!=quiz.value("answer").toString())
         {
-            listOfWrong.append(i);
+            listOfWrong.append(quiz.value("id").toInt());
         }
     }
 
@@ -301,12 +310,12 @@ void quizpage::initalQuizPage()
     ui->wrongQuiz->setReadOnly(true);
     ui->wrongQuiz->hideCollection(true);
 
-    jsonFile file;
-    file.load(":/json/test/quiz.json");
-    modelOfWrongQuiz->load(file.toJson());
+    // jsonFile file;
+    // file.load(":/json/test/quiz.json");
+    // modelOfWrongQuiz->load(file.toJson());
     
-    ui->wrongQuiz->setAnswerIndex(1);
-    ui->wrongQuiz->setOption(0);
+    // ui->wrongQuiz->setAnswerIndex(1);
+    // ui->wrongQuiz->setOption(0);
 
     QRegularExpressionValidator* reg = new QRegularExpressionValidator(this);
     // 正则匹配两位数字，或 100
@@ -318,11 +327,13 @@ void quizpage::initalQuizPage()
     {
         ui->stackedWidget->setCurrentIndex(1);
 
+        // 请求章节列表
         requestChapter();
     });
 
     connect(ui->optionOfChapter,&QComboBox::currentIndexChanged,this,[=]()
     {
+        // 刷新答题页或收藏页
         switchQuizToTestOrCollection(false);
     });
 
@@ -330,6 +341,9 @@ void quizpage::initalQuizPage()
     connect(ui->btnOfWrong,&QPushButton::clicked,this,[=]()
     {
         ui->stackedWidget->setCurrentIndex(2);
+
+        // 请求错题列表
+        requestWrongQuiz();
     });
 
     // 切换答题页与收藏页的按钮
@@ -443,6 +457,22 @@ void quizpage::requestAnswer()
 
     QJsonObject obj;
     obj.insert("chapter",ui->optionOfChapter->currentIndex()+1);
+    QJsonDocument doc(obj);
+
+    HTTP_MANAGER->post(request,doc.toJson());
+}
+
+void quizpage::requestWrongQuiz()
+{
+    connect(HTTP_MANAGER, &QNetworkAccessManager::finished,this,&quizpage::updateWrong);
+
+    QNetworkRequest request;
+    request.setUrl(URL_OF_SERVER+"/Quiz/getWrongQuiz");
+    request.setRawHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWe");
+    request.setRawHeader("Accept","text/html");
+
+    QJsonObject obj;
+    obj.insert("studentId",userId::getInstance().get());
     QJsonDocument doc(obj);
 
     HTTP_MANAGER->post(request,doc.toJson());

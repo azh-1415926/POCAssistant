@@ -67,6 +67,7 @@ class quizpage : public basepage
         void requestTestQuiz();
         void requestCollectedQuiz();
         void requestAnswer();
+        void requestWrongQuiz();
 
         void switchQuizToTestOrCollection(bool switchToNext=true);
 

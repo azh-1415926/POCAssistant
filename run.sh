@@ -78,6 +78,11 @@ else
 
     # 执行 cmake，构建、编译项目
 
+    if [ $BUILD_WASM -eq 1 ]; then
+        mkdir -p $BUILD_PATH/cfg
+        cp cfg/config.json $BUILD_PATH/cfg/config.json
+    fi
+
     cmake -GNinja -S . -B $BUILD_PATH \
         -DCMAKE_MAKE_PROGRAM=$QT_WEBASSEMBLY_TOOLCHAIN/../../Tools/Ninja/ninja \
         -DCMAKE_PREFIX_PATH:PATH=$QT_WEBASSEMBLY_TOOLCHAIN \
